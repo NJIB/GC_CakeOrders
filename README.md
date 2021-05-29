@@ -6,7 +6,7 @@
 
   1) Open the folder slacked out to you, run `npm install`
 
-  2) Create a new MySQL database and name it `sandpit`. Don't create any tables.
+  2) Create a new MySQL database and name it `gc_CakeOrders`. Don't create any tables.
   
   3) In terminal, type in the following commands (hit enter after each): 
      1) `npx sequelize init:models`

@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/NJIB/GC_CakeOrders/issues"
   },
-  "homepage": "https://github.com/NJIB/GC_CakeOrders#readme"
+  "homepage": "https://github.com/NJIB/GC_CakeOrders#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
+  }
 }
