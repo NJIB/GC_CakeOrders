@@ -45,9 +45,9 @@ module.exports = function(sequelize, DataTypes) {
     });
   
     Route.associate = function(models) {
-      // We're saying that a SubSegment should belong to an Segment
-      // A SubSegment can't be created without an Segment due to the foreign key constraint
-      Route.belongsTo(models.Segment, {
+      // We're saying that a OrderDetail should belong to an Order
+      // A OrderDetail can't be created without an Order due to the foreign key constraint
+      Route.belongsTo(models.Order, {
         foreignKey: {
           allowNull: false,
         },

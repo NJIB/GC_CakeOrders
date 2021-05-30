@@ -1,11 +1,11 @@
 SHOW TABLES;
 
-DESCRIBE Comments;
+DESCRIBE Orders;
 
-DESCRIBE Persons;
+DESCRIBE Order-Details;
 
-DESCRIBE SubSegments;
+DESCRIBE OrderDetails;
 
-DESCRIBE Segments;
+DESCRIBE Orders;
 
-SELECT * FROM Comments;
+SELECT * FROM Orders;

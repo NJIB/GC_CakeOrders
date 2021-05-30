@@ -1,18 +1,18 @@
 $(document).ready(function () {
   /* global moment */
 
-  // blogContainer holds all of our subsegments
-  const blogContainer = $('.subsegment-container');
-  const subsegmentCategorySelect = $('#category');
+  // blogContainer holds all of our orderdetails
+  const blogContainer = $('.orderdetail-container');
+  const orderdetailCategorySelect = $('#category');
 
   //Array of objects to hold data for upsert to Routes table
-  let subsegmentChangeLog = [];
+  let orderdetailChangeLog = [];
   let progfamChangeLog = [];
   let togChangeLog = [];
-  let subsegmentsData = [];
+  let orderdetailsData = [];
 
-  let blankSubsegment = {
-    SegmentId: '',
+  let blankOrderdetail = {
+    OrderId: '',
     RouteId: '',
     acquisition: '',
     buyers: '',
@@ -28,125 +28,125 @@ $(document).ready(function () {
   };
 
   const newTr = $('<tr>');
-  const segmentRowsToAdd = [];
-  const subsegmentRowsToAdd = [];
-  // const segmentList = $('.segment-list');
-  // const subsegmentList = $('.subsegment-list');
-  const segmentList = $('tbody');
-  const subsegmentList = $('tbody');
-  const segmentContainer = $('.segment-container');
-  const subsegmentContainer = $('.subsegment-container');
+  const orderRowsToAdd = [];
+  const orderdetailRowsToAdd = [];
+  // const orderList = $('.order-list');
+  // const orderdetailList = $('.orderdetail-list');
+  const orderList = $('tbody');
+  const orderdetailList = $('tbody');
+  const orderContainer = $('.order-container');
+  const orderdetailContainer = $('.orderdetail-container');
 
   // let chart1Data = [{}];
   // let chart2Data = [{}];
 
   // Click events for the edit and delete buttons
-  // $(document).on('click', 'button.delete-subsegment', handleSubSegmentDelete);
-  $(document).on('click', '.delete-subsegment', handleSubSegmentDelete);
-  $(document).on('click', 'button.edit', handleSubSegmentEdit);
+  // $(document).on('click', 'button.delete-orderdetail', handleOrderDetailDelete);
+  $(document).on('click', '.delete-orderdetail', handleOrderDetailDelete);
+  $(document).on('click', 'button.edit', handleOrderDetailEdit);
   $(document).on('click', '.form-check-input', handleCheckboxClick);
   $(document).on('change', '.progfam-input', programFamilyUpdate);
-  $(document).on('submit', '#subsegments-form', handleRoutesFormSubmit);
-  // $(document).on('click', '#subseg_submit', handleRoutesFormSubmit);
+  $(document).on('submit', '#orderdetails-form', handleRoutesFormSubmit);
+  // $(document).on('click', '#order_submit', handleRoutesFormSubmit);
   $(document).on('click', '.ddSelect', dropdownValue);
   $(document).on('click', '.update', handleRoutesFormSubmit);
 
-  // Variable to hold our subsegments
-  let subsegments;
-  const subsegmentIndex = "0123456789";
+  // Variable to hold our orderdetails
+  let orderdetails;
+  const orderdetailIndex = "0123456789";
   let rowCount = 0;
-  let nextSubsegmentId = '';
-  let subsegmentRecordFound = false;
+  let nextOrderdetailId = '';
+  let orderdetailRecordFound = false;
   let testId = '';
   let searchString = '';
   let RouteIdRef = '';
   let menuvar = '';
 
-  let NEWsegment = '';
-  let NEWsubsegments = '';
+  let NEWorder = '';
+  let NEWorderdetails = '';
 
-  // The code below handles the case where we want to get subsegments for a specific segment
-  // Looks for a query param in the url for segment_id - DO I NEED?
+  // The code below handles the case where we want to get orderdetails for a specific order
+  // Looks for a query param in the url for order_id - DO I NEED?
   const url = window.location.search;
   console.log("url: ", url);
 
-  //Identifying the segment ID for the page loaded
-  let segmentId;
+  //Identifying the order ID for the page loaded
+  let OrderId;
 
-  // Getting Segment info
-  // getSegments();
-  getSegData();
-  getSubsegData();
+  // Getting Order info
+  // getOrders();
+  getOrderData();
+  getOrderData();
 
 
-  //Pulling segment data from database
-  async function getSegData() {
-    const segData = await segAPICall();
+  //Pulling order data from database
+  async function getOrderData() {
+    const orderData = await orderAPICall();
   }
 
-  //Function to pull segment data
-  function segAPICall() {
-    return new Promise(nbSeg => {
-      $.get('/api/segments', function (data) {
-        NEWsegment = data;
-        console.log("NEWsegment: ", NEWsegment);
+  //Function to pull order data
+  function orderAPICall() {
+    return new Promise(nbOrder => {
+      $.get('/api/orders', function (data) {
+        NEWorder = data;
+        console.log("NEWorder: ", NEWorder);
 
-        segmentRevTotal = 0;
+        orderRevTotal = 0;
         nextyearSgmtRevTotal = 0;
 
-        for (let i = 0; i < NEWsegment.length; i++) {
-          const idMatch = ((NEWsegment[i].id / 1) - (segmentId / 1));
+        for (let i = 0; i < NEWorder.length; i++) {
+          const idMatch = ((NEWorder[i].id / 1) - (OrderId / 1));
           // console.log("idMatch: ", idMatch);
 
           if (idMatch == 0) {
-            // console.log("*** Segment id matches: ", segmentId, " ***")
-            // console.log("segment[i]: ", NEWsegment[i])
-            segmentRowsToAdd.push(createSegmentRow(NEWsegment[i], i));
+            // console.log("*** Order id matches: ", OrderId, " ***")
+            // console.log("order[i]: ", NEWorder[i])
+            orderRowsToAdd.push(createOrderRow(NEWorder[i], i));
           };
 
-          renderSegmentList(segmentRowsToAdd);
+          renderOrderList(orderRowsToAdd);
         };
       });
     })
   }
 
-  //Pulling subsegment data from database
-  async function getSubsegData() {
+  //Pulling orderdetail data from database
+  async function getOrderData() {
 
-    //If segment ID found, pull the data from the db for that segment
-    if (url.indexOf('?segment_id=') !== -1) {
-      segmentId = url.split('=')[1];
-      // console.log("segmentId: ", segmentId);    
-      segmentURL = '/?segment_id=' + segmentId;
-      // console.log("segmentURL: ", segmentURL);
-      const subsegData = await subsegAPICall(segmentURL);
+    //If order ID found, pull the data from the db for that order
+    if (url.indexOf('?order_id=') !== -1) {
+      OrderId = url.split('=')[1];
+      // console.log("OrderId: ", OrderId);    
+      orderURL = '/?order_id=' + OrderId;
+      // console.log("orderURL: ", orderURL);
+      const orderData = await orderAPICall(orderURL);
     }
   }
 
-  //Function to pull subsegment data
-  function subsegAPICall(segmentURL) {
-    return new Promise(nbSubseg => {
-      $.get('/api/subsegments' + segmentURL, function (data) {
-        NEWsubsegments = data;
-        console.log("NEWsubsegments: ", NEWsubsegments);
-        // console.log("NEWsubsegments.length: ", NEWsubsegments.length);
+  //Function to pull orderdetail data
+  function orderAPICall(orderURL) {
+    return new Promise(nbOrder => {
+      $.get('/api/orderdetails' + orderURL, function (data) {
+        NEWorderdetails = data;
+        console.log("NEWorderdetails: ", NEWorderdetails);
+        // console.log("NEWorderdetails.length: ", NEWorderdetails.length);
 
         //Defining ID for blank row
-        // nextSubsegmentId = segmentId + subsegmentIndex.substring(NEWsubsegments.length, NEWsubsegments.length + 1);
-        nextSubsegmentId = segmentId + (getRandomInt(0, 1000));
-        console.log("nextSubsegmentId: ", nextSubsegmentId);
+        // nextOrderdetailId = OrderId + orderdetailIndex.substring(NEWorderdetails.length, NEWorderdetails.length + 1);
+        nextOrderdetailId = OrderId + (getRandomInt(0, 1000));
+        console.log("nextOrderdetailId: ", nextOrderdetailId);
 
-        //Create subsegment rows for this segment
-        for (let i = 0; i < NEWsubsegments.length; i++) {
-          subsegmentRowsToAdd.push(createSubSegmentRow(NEWsubsegments[i]));
-          console.log("subsegmentRowsToAdd: ", subsegmentRowsToAdd);
+        //Create orderdetail rows for this order
+        for (let i = 0; i < NEWorderdetails.length; i++) {
+          orderdetailRowsToAdd.push(createOrderDetailRow(NEWorderdetails[i]));
+          console.log("orderdetailRowsToAdd: ", orderdetailRowsToAdd);
         };
 
-        //Add in blank row in subsegment table - to capture new entries
-        subsegmentRowsToAdd.push(createBlankRow(NEWsegment, nextSubsegmentId));
+        //Add in blank row in orderdetail table - to capture new entries
+        orderdetailRowsToAdd.push(createBlankRow(NEWorder, nextOrderdetailId));
 
-        //Render subsegments to the screen
-        renderSubsegmentList(subsegmentRowsToAdd);
+        //Render orderdetails to the screen
+        renderOrderdetailList(orderdetailRowsToAdd);
       })
     })
   }
@@ -157,108 +157,108 @@ $(document).ready(function () {
     return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
   }
 
-  // Function for retrieving segments and getting them ready to be rendered to the page
-  function getSegments() {
+  // Function for retrieving orders and getting them ready to be rendered to the page
+  function getOrders() {
 
-    getSegData();
+    getOrderData();
 
-    $.get('/api/segments', function (data) {
-      let segment = data;
-      console.log("segment: ", segment);
+    $.get('/api/orders', function (data) {
+      let order = data;
+      console.log("order: ", order);
 
-      segmentRevTotal = 0;
+      orderRevTotal = 0;
       nextyearSgmtRevTotal = 0;
 
-      for (let i = 0; i < segment.length; i++) {
-        const idMatch = ((segment[i].id / 1) - (segmentId / 1));
+      for (let i = 0; i < order.length; i++) {
+        const idMatch = ((order[i].id / 1) - (OrderId / 1));
         // console.log("idMatch: ", idMatch);
 
         if (idMatch == 0) {
-          console.log("*** Segment id matches: ", segmentId, " ***")
+          console.log("*** Order id matches: ", OrderId, " ***")
           console.log("data[i]: ", data[i])
-          console.log("segment[i]: ", segment[i])
+          console.log("order[i]: ", order[i])
 
-          segmentRowsToAdd.push(createSegmentRow(segment[i], i));
+          orderRowsToAdd.push(createOrderRow(order[i], i));
 
-          nextSubsegmentId = segmentId + subsegmentIndex.substring(0, 1);
-          console.log("nextSubsegmentId: ", nextSubsegmentId);
+          nextOrderdetailId = OrderId + orderdetailIndex.substring(0, 1);
+          console.log("nextOrderdetailId: ", nextOrderdetailId);
 
-          // console.log("subsegments exist?: ", subsegments.length);
-          console.log("subsegments exist?: ", NEWsubsegments.length);
-          if (NEWsubsegments.length > 0) {
-            segmentRowsToAdd.push(createBlankRow(segment[i], i));
+          // console.log("orderdetails exist?: ", orderdetails.length);
+          console.log("orderdetails exist?: ", NEWorderdetails.length);
+          if (NEWorderdetails.length > 0) {
+            orderRowsToAdd.push(createBlankRow(order[i], i));
           };
         };
       };
-      console.log("segmentRowsToAdd: ", segmentRowsToAdd);
-      renderSegmentList(segmentRowsToAdd);
+      console.log("orderRowsToAdd: ", orderRowsToAdd);
+      renderOrderList(orderRowsToAdd);
     });
   }
 
 
-  // This function grabs subsegments from the database and updates the view
-  // function getSubSegments(segment) {
+  // This function grabs orderdetails from the database and updates the view
+  // function getOrderDetails(order) {
 
-  //   segmentId = segment || '';
-  //   console.log("segmentId: ", segmentId);
+  //   OrderId = order || '';
+  //   console.log("OrderId: ", OrderId);
 
-  //   if (segmentId) {
-  //     segmentURL = '/?segment_id=' + segmentId;
+  //   if (OrderId) {
+  //     orderURL = '/?order_id=' + OrderId;
   //   }
 
-  //   //API Call to get data for specific subsegment
-  //   $.get('/api/subsegments' + segmentURL, function (data) {
-  //     subsegments = data;
-  //     console.log("subsegments: ", subsegments);
+  //   //API Call to get data for specific orderdetail
+  //   $.get('/api/orderdetails' + orderURL, function (data) {
+  //     orderdetails = data;
+  //     console.log("orderdetails: ", orderdetails);
   //   });
 
-  //   subsegmentRowsToAdd.push(createSubSegmentRow(subsegments));
-  //   console.log("subsegmentRowsToAdd: ", subsegmentRowsToAdd);
+  //   orderdetailRowsToAdd.push(createOrderDetailRow(orderdetails));
+  //   console.log("orderdetailRowsToAdd: ", orderdetailRowsToAdd);
 
   // }
 
 
 
-  // This function does an API call to delete subsegments
-  function deleteSubSegment(id) {
+  // This function does an API call to delete orderdetails
+  function deleteOrderDetail(id) {
     console.log("id: ", id);
 
     $.ajax({
       method: 'DELETE',
-      url: '/api/subsegments/' + id,
+      url: '/api/orderdetails/' + id,
     })
       .then(function () {
         location.reload();
-        // getSubSegments(subsegmentCategorySelect.val());
+        // getOrderDetails(orderdetailCategorySelect.val());
       });
   }
 
 
 
-  // InitializeRows handles appending all of our constructed subsegment HTML inside blogContainer
+  // InitializeRows handles appending all of our constructed orderdetail HTML inside blogContainer
   function initializeRows() {
     blogContainer.empty();
-    console.log("subsegments: ", subsegments);
-    console.log("subsegments.length: ", subsegments.length);
-    const subsegmentsToAdd = [];
-    for (let i = 0; i < subsegments.length; i++) {
-      subsegmentsToAdd.push(createNewRow(subsegments[i]));
+    console.log("orderdetails: ", orderdetails);
+    console.log("orderdetails.length: ", orderdetails.length);
+    const orderdetailsToAdd = [];
+    for (let i = 0; i < orderdetails.length; i++) {
+      orderdetailsToAdd.push(createNewRow(orderdetails[i]));
     }
-    blogContainer.append(subsegmentsToAdd);
+    blogContainer.append(orderdetailsToAdd);
   }
 
-  // This function constructs a subsegment's HTML
-  // function createNewRow(subsegment) {
-  //   let formattedDate = new Date(subsegment.createdAt);
+  // This function constructs a orderdetail's HTML
+  // function createNewRow(orderdetail) {
+  //   let formattedDate = new Date(orderdetail.createdAt);
   //   formattedDate = moment(formattedDate).format('MMMM Do YYYY, h:mm:ss a');
 
-  //   // console.log("subsegment: ", subsegment);
+  //   // console.log("orderdetail: ", orderdetail);
 
-  //   const newSubSegmentCard = $('<div>');
-  //   newSubSegmentCard.addClass('card');
+  //   const newOrderDetailCard = $('<div>');
+  //   newOrderDetailCard.addClass('card');
 
-  //   const newSubSegmentCardHeading = $('<div>');
-  //   newSubSegmentCardHeading.addClass('card-header');
+  //   const newOrderDetailCardHeading = $('<div>');
+  //   newOrderDetailCardHeading.addClass('card-header');
 
   //   const deleteBtn = $('<button>');
   //   deleteBtn.text('x');
@@ -268,47 +268,47 @@ $(document).ready(function () {
   //   editBtn.text('EDIT');
   //   editBtn.addClass('edit btn btn-info');
 
-  //   const newSubSegmentTitle = $('<h2>');
-  //   const newSubSegmentDate = $('<small>');
-  //   const newSubSegmentSegment = $('<h5>');
-  //   newSubSegmentSegment.text('Written by: ' + subsegment.Segment.name);
-  //   newSubSegmentSegment.css({
+  //   const newOrderDetailTitle = $('<h2>');
+  //   const newOrderDetailDate = $('<small>');
+  //   const newOrderDetailOrder = $('<h5>');
+  //   newOrderDetailOrder.text('Written by: ' + orderdetail.Order.name);
+  //   newOrderDetailOrder.css({
   //     'float': 'right',
   //     'color': 'blue',
   //     'margin-top':
   //       '-10px',
   //   });
 
-  //   const newSubSegmentCardBody = $('<div>');
-  //   newSubSegmentCardBody.addClass('card-body');
+  //   const newOrderDetailCardBody = $('<div>');
+  //   newOrderDetailCardBody.addClass('card-body');
 
-  //   const newSubSegmentBody = $('<p>');
-  //   newSubSegmentTitle.text(subsegment.title + ' ');
-  //   newSubSegmentBody.text(subsegment.body);
-  //   newSubSegmentDate.text(formattedDate);
-  //   newSubSegmentTitle.append(newSubSegmentDate);
-  //   newSubSegmentCardHeading.append(deleteBtn);
-  //   newSubSegmentCardHeading.append(editBtn);
-  //   newSubSegmentCardHeading.append(newSubSegmentTitle);
-  //   newSubSegmentCardHeading.append(newSubSegmentSegment);
-  //   newSubSegmentCardBody.append(newSubSegmentBody);
-  //   newSubSegmentCard.append(newSubSegmentCardHeading);
-  //   newSubSegmentCard.append(newSubSegmentCardBody);
-  //   newSubSegmentCard.data('subsegment', subsegment);
-  //   return newSubSegmentCard;
+  //   const newOrderDetailBody = $('<p>');
+  //   newOrderDetailTitle.text(orderdetail.title + ' ');
+  //   newOrderDetailBody.text(orderdetail.body);
+  //   newOrderDetailDate.text(formattedDate);
+  //   newOrderDetailTitle.append(newOrderDetailDate);
+  //   newOrderDetailCardHeading.append(deleteBtn);
+  //   newOrderDetailCardHeading.append(editBtn);
+  //   newOrderDetailCardHeading.append(newOrderDetailTitle);
+  //   newOrderDetailCardHeading.append(newOrderDetailOrder);
+  //   newOrderDetailCardBody.append(newOrderDetailBody);
+  //   newOrderDetailCard.append(newOrderDetailCardHeading);
+  //   newOrderDetailCard.append(newOrderDetailCardBody);
+  //   newOrderDetailCard.data('orderdetail', orderdetail);
+  //   return newOrderDetailCard;
   // }
 
-  // This function displays a message when there are no subsegments
+  // This function displays a message when there are no orderdetails
   // function displayEmpty(id) {
   //   const query = window.location.search;
   //   let partial = '';
   //   if (id) {
-  //     partial = ' for Segment #' + id;
+  //     partial = ' for Order #' + id;
   //   }
   //   blogContainer.empty();
   //   const messageH2 = $('<h2>');
   //   messageH2.css({ 'text-align': 'center', 'margin-top': '50px' });
-  //   messageH2.html('No subsegments yet' + partial + ', navigate <a href=\'/sms' + query +
+  //   messageH2.html('No orderdetails yet' + partial + ', navigate <a href=\'/sms' + query +
   //     '\'>here</a> in order to get started.');
   //   blogContainer.append(messageH2);
   // }
@@ -322,7 +322,7 @@ $(document).ready(function () {
     const tog_data = {
       id: menuvarId,
       value: menuvar,
-      segmentId: segmentId
+      OrderId: OrderId
     };
     console.log("tog_data: ", tog_data);
 
@@ -330,7 +330,7 @@ $(document).ready(function () {
     togChangeLog.push(tog_data);
     console.log("togChangeLog: ", togChangeLog);
 
-    renderSubsegmentList(subsegmentRowsToAdd);
+    renderOrderdetailList(orderdetailRowsToAdd);
   }
 
 
@@ -349,7 +349,7 @@ $(document).ready(function () {
     const progfam_data = {
       id: progfam_id,
       value: progfam_value,
-      segmentId: segmentId
+      OrderId: OrderId
     };
     console.log("progfam_data: ", progfam_data);
 
@@ -361,7 +361,7 @@ $(document).ready(function () {
   function handleCheckboxClick(e) {
 
     //Resetting flag
-    subsegmentRecordFound = false;
+    orderdetailRecordFound = false;
 
     //Identifies field clicked 
     // console.log("e.target.id: ", e.target.id);
@@ -382,87 +382,87 @@ $(document).ready(function () {
     const change_data = {
       id: change_id,
       value: change_value,
-      segmentId: segmentId
+      OrderId: OrderId
     };
     // console.log("change_data: ", change_data);
 
     //Building log of changes to upload to db
-    subsegmentChangeLog.push(change_data);
-    // console.log("subsegmentChangeLog: ", subsegmentChangeLog);
+    orderdetailChangeLog.push(change_data);
+    // console.log("orderdetailChangeLog: ", orderdetailChangeLog);
 
-    // console.log("NEWsubsegments: ", NEWsubsegments);
+    // console.log("NEWorderdetails: ", NEWorderdetails);
 
-    // if (!NEWsubsegments || !NEWsubsegments.length) {
-    //   console.log("NO SUBSEGMENTS FOUND")
+    // if (!NEWorderdetails || !NEWorderdetails.length) {
+    //   console.log("NO ORDER DETAILS FOUND")
     // } else {
-    //   console.log("SUBSEGMENT", NEWsubsegments[0].SegmentId.toString(), "FOUND");
+    //   console.log("OrderDetail", NEWorderdetails[0].OrderId.toString(), "FOUND");
     // };
 
 
     searchString = e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length);
     console.log("searchString: ", searchString);
 
-    //Looping through subsegmentsData, to update clicks
-    console.log("subsegmentsData: ", subsegmentsData);
-    for (var i = 0; i < subsegmentsData.length; i++) {
+    //Looping through orderdetailsData, to update clicks
+    console.log("orderdetailsData: ", orderdetailsData);
+    for (var i = 0; i < orderdetailsData.length; i++) {
 
-      if (subsegmentsData[i].RouteId.toString() == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
+      if (orderdetailsData[i].RouteId.toString() == e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length)) {
         console.log("MATCH!");
 
-        // Defining IDs to be referenced when updating the SubSegments table
-        subsegmentRecordFound = true;
-        console.log("subsegmentRecordFound: ", subsegmentRecordFound);
+        // Defining IDs to be referenced when updating the OrderDetails table
+        orderdetailRecordFound = true;
+        console.log("orderdetailRecordFound: ", orderdetailRecordFound);
 
-        const hurdle_id = ("hurdle_" + subsegmentsData[i].RouteId);
+        const hurdle_id = ("hurdle_" + orderdetailsData[i].RouteId);
         // console.log("hurdle_id: ", hurdle_id);
-        const markets_id = ("markets_" + subsegmentsData[i].RouteId);
+        const markets_id = ("markets_" + orderdetailsData[i].RouteId);
         // console.log("markets_id: ", markets_id);
-        const buyers_id = ("buyers_" + subsegmentsData[i].RouteId);
+        const buyers_id = ("buyers_" + orderdetailsData[i].RouteId);
         // console.log("buyers_id: ", buyers_id);
-        const offerings_id = ("offerings_" + subsegmentsData[i].RouteId);
+        const offerings_id = ("offerings_" + orderdetailsData[i].RouteId);
         // console.log("offerings_id: ", offerings_id);
-        const productivity_id = ("productivity_" + subsegmentsData[i].RouteId);
+        const productivity_id = ("productivity_" + orderdetailsData[i].RouteId);
         // console.log("productivity_id: ", productivity_id);
-        const acquisition_id = ("acquisition_" + subsegmentsData[i].RouteId);
+        const acquisition_id = ("acquisition_" + orderdetailsData[i].RouteId);
         // console.log("acquisition_id: ", acquisition_id);
 
         // const hurdle_desc = $('#' + hurdle_id);
         // console.log('hurdle_desc:', hurdle_desc.val().trim());
-        // subsegmentsData[i].hurdle = hurdle_desc.val().trim();
+        // orderdetailsData[i].hurdle = hurdle_desc.val().trim();
 
-        console.log("subsegmentChangeLog: ", subsegmentChangeLog);
+        console.log("orderdetailChangeLog: ", orderdetailChangeLog);
 
-        //Looping through subsegmentChangeLog, and updating subsegmentsData if match found
-        subsegmentChangeLog.forEach(change => {
+        //Looping through orderdetailChangeLog, and updating orderdetailsData if match found
+        orderdetailChangeLog.forEach(change => {
           if (change.id == change_id) {
-            subsegmentsData[i].markets = change_value;
+            orderdetailsData[i].markets = change_value;
           };
 
           if (buyers_id == change_id) {
-            subsegmentsData[i].buyers = change_value;
+            orderdetailsData[i].buyers = change_value;
           };
 
           if (offerings_id == change_id) {
-            subsegmentsData[i].offerings = change_value;
+            orderdetailsData[i].offerings = change_value;
           };
 
           if (productivity_id == change_id) {
-            subsegmentsData[i].productivity = change_value;
+            orderdetailsData[i].productivity = change_value;
           };
 
           if (acquisition_id == change_id) {
-            subsegmentsData[i].acquisition = change_value;
+            orderdetailsData[i].acquisition = change_value;
           };
         })
       }
     }
 
-    // console.log("subsegmentsData: ",subsegmentsData);
-    console.log("subsegmentRecordFound: ", subsegmentRecordFound);
+    // console.log("orderdetailsData: ",orderdetailsData);
+    console.log("orderdetailRecordFound: ", orderdetailRecordFound);
 
-    if (subsegmentRecordFound == false) {
+    if (orderdetailRecordFound == false) {
 
-      console.log("No subsegment record found");
+      console.log("No orderdetail record found");
 
       const hurdle_id = ("hurdle_" + searchString);
       const markets_id = ("markets_" + searchString);
@@ -474,98 +474,98 @@ $(document).ready(function () {
       console.log("change_id: ", change_id);
       console.log("change_value: ", change_value);
 
-      blankSubsegment.SegmentId = segmentId;
-      console.log("blankSubsegment.SegmentId: ", blankSubsegment.SegmentId);
-      blankSubsegment.RouteId = e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length);
-      console.log("blankSubsegment.RouteId: ", blankSubsegment.RouteId);
+      blankOrderdetail.OrderId = OrderId;
+      console.log("blankOrderdetail.OrderId: ", blankOrderdetail.OrderId);
+      blankOrderdetail.RouteId = e.target.id.substr((e.target.id.indexOf('_') + 1), e.target.id.length);
+      console.log("blankOrderdetail.RouteId: ", blankOrderdetail.RouteId);
 
-      subsegmentChangeLog.forEach(change => {
+      orderdetailChangeLog.forEach(change => {
         if (markets_id == change_id) {
-          blankSubsegment.markets = change_value;
+          blankOrderdetail.markets = change_value;
         };
 
         if (buyers_id == change_id) {
-          blankSubsegment.buyers = change_value;
+          blankOrderdetail.buyers = change_value;
         };
 
         if (offerings_id == change_id) {
-          blankSubsegment.offerings = change_value;
+          blankOrderdetail.offerings = change_value;
         };
 
         if (productivity_id == change_id) {
-          blankSubsegment.productivity = change_value;
+          blankOrderdetail.productivity = change_value;
         };
 
         if (acquisition_id == change_id) {
-          blankSubsegment.acquisition = change_value;
+          blankOrderdetail.acquisition = change_value;
         };
       })
-      blankSubsegment.hurdle = ($('#hurdle_' + searchString).val());
-      console.log("blankSubsegment.hurdle: ", blankSubsegment.hurdle);
+      blankOrderdetail.hurdle = ($('#hurdle_' + searchString).val());
+      console.log("blankOrderdetail.hurdle: ", blankOrderdetail.hurdle);
     };
 
-    console.log("blankSubsegment: ", blankSubsegment);
-    console.log("subsegmentsData: ", subsegmentsData);
+    console.log("blankOrderdetail: ", blankOrderdetail);
+    console.log("orderdetailsData: ", orderdetailsData);
 
   };
 
 
 
-  // This function figures out which subsegment we want to delete and then calls deleteSubSegment
-  function handleSubSegmentDelete() {
-    console.log("Deleting subsegment record!");
+  // This function figures out which orderdetail we want to delete and then calls deleteOrderDetail
+  function handleOrderDetailDelete() {
+    console.log("Deleting orderdetail record!");
 
-    const currentSubSegment = $(this)
+    const currentOrderDetail = $(this)
       .parent()
       .parent()
-      .data('subsegment');
+      .data('orderdetail');
 
-    console.log("currentSubSegment: ", currentSubSegment);
-    console.log("currentSubSegment.RouteId: ", currentSubSegment.id);
+    console.log("currentOrderDetail: ", currentOrderDetail);
+    console.log("currentOrderDetail.RouteId: ", currentOrderDetail.id);
 
-    deleteSubSegment(currentSubSegment.id);
+    deleteOrderDetail(currentOrderDetail.id);
   }
 
 
 
-  // This function figures out which subsegment we want to edit and takes it to the appropriate url
-  function handleSubSegmentEdit() {
-    const currentSubSegment = $(this)
+  // This function figures out which orderdetail we want to edit and takes it to the appropriate url
+  function handleOrderDetailEdit() {
+    const currentOrderDetail = $(this)
       .parent()
       .parent()
-      .data('subsegment');
-    window.location.href = '/sms?subsegment_id=' + currentSubSegment.id;
+      .data('orderdetail');
+    window.location.href = '/sms?orderdetail_id=' + currentOrderDetail.id;
   }
 
 
 
-  // A function to handle what happens when the form is submitted to create a new subsegment record
+  // A function to handle what happens when the form is submitted to create a new orderdetail record
   function handleRoutesFormSubmit(event) {
     event.preventDefault();
 
-    console.log("blankSubsegment: ", blankSubsegment);
-    console.log("subsegmentsData: ", subsegmentsData);
+    console.log("blankOrderdetail: ", blankOrderdetail);
+    console.log("orderdetailsData: ", orderdetailsData);
 
     let blankRowUpsert = [];
-    blankRowUpsert.push(blankSubsegment);
+    blankRowUpsert.push(blankOrderdetail);
     console.log("blankRowUpsert: ", blankRowUpsert);
     upsertRoutes(blankRowUpsert);
 
     //Need to pull down existing records from the database - to determine if it needs to be POST or a PUT
 
-    //If no subsegment records exist
-    // if (!subsegmentsData || !subsegmentsData.length) {
-    console.log("subsegmentRecordFound: ", subsegmentRecordFound);
-    if (subsegmentRecordFound == false) {
+    //If no orderdetail records exist
+    // if (!orderdetailsData || !orderdetailsData.length) {
+    console.log("orderdetailRecordFound: ", orderdetailRecordFound);
+    if (orderdetailRecordFound == false) {
 
-      console.log("subsegmentRecordFound false -- creating new row");
+      console.log("orderdetailRecordFound false -- creating new row");
 
       createNewRoute();
 
       // console.log("Upserting new route to database")
 
-      // let newSubsegment = {
-      //   SegmentId: '',
+      // let newOrderdetail = {
+      //   OrderId: '',
       //   RouteId: '',
       //   acquisition: '',
       //   buyers: '',
@@ -575,32 +575,32 @@ $(document).ready(function () {
       //   productivity: ''
       // };
 
-      // //Build subsegmentsData object for upserting
-      // subsegmentChangeLog.forEach(change => {
+      // //Build orderdetailsData object for upserting
+      // orderdetailChangeLog.forEach(change => {
       //   console.log("change.id: :", change.id);
       //   console.log("change.value: :", change.value);
-      //   console.log("change.segmentId: :", change.segmentId);
+      //   console.log("change.OrderId: :", change.OrderId);
 
-      //   newSubsegment.SegmentId = change.segmentId;
-      //   console.log(" newSubsegment.SegmentId: ", newSubsegment.SegmentId);
-      //   newSubsegment.RouteId = change.id.substr((change.id.indexOf('_') + 1), change.id.length);
-      //   console.log(" newSubsegment.RouteId: ", newSubsegment.RouteId);
+      //   newOrderdetail.OrderId = change.OrderId;
+      //   console.log(" newOrderdetail.OrderId: ", newOrderdetail.OrderId);
+      //   newOrderdetail.RouteId = change.id.substr((change.id.indexOf('_') + 1), change.id.length);
+      //   console.log(" newOrderdetail.RouteId: ", newOrderdetail.RouteId);
 
       //   switch (change.id.substr(0, (change.id.indexOf('_')))) {
       //     case "markets":
-      //       newSubsegment.markets = change.value;
+      //       newOrderdetail.markets = change.value;
       //       break;
       //     case "buyers":
-      //       newSubsegment.buyers = change.value;
+      //       newOrderdetail.buyers = change.value;
       //       break;
       //     case "offerings":
-      //       newSubsegment.offerings = change.value;
+      //       newOrderdetail.offerings = change.value;
       //       break;
       //     case "productivity":
-      //       newSubsegment.productivity = change.value;
+      //       newOrderdetail.productivity = change.value;
       //       break;
       //     case "acquisition":
-      //       newSubsegment.acquisition = change.value;
+      //       newOrderdetail.acquisition = change.value;
       //       break;
       //   }
 
@@ -610,82 +610,82 @@ $(document).ready(function () {
       //   let hurdle_value = hurdle_id.val();
       //   console.log("hurdle_value: ", hurdle_value);
 
-      //   newSubsegment.hurdle = hurdle_value;
-      //   console.log("newSubsegment: ", newSubsegment);
+      //   newOrderdetail.hurdle = hurdle_value;
+      //   console.log("newOrderdetail: ", newOrderdetail);
 
-      //   subsegmentsData.push(newSubsegment);
-      //   console.log("subsegmentsData: ", subsegmentsData);
+      //   orderdetailsData.push(newOrderdetail);
+      //   console.log("orderdetailsData: ", orderdetailsData);
       // })
-      // upsertRoutes(subsegmentsData);
+      // upsertRoutes(orderdetailsData);
 
     }
     else
-      //If subsegment records do exist
-      console.log("subsegmentRecordFound true -- updating existing row");
+      //If orderdetail records do exist
+      console.log("orderdetailRecordFound true -- updating existing row");
 
     {
-      console.log("subsegmentsData: ", subsegmentsData);
+      console.log("orderdetailsData: ", orderdetailsData);
 
-      for (let i = 0; i < subsegmentsData.length; i++) {
-        console.log("subsegmentsData object: ", subsegmentsData[i]);
+      for (let i = 0; i < orderdetailsData.length; i++) {
+        console.log("orderdetailsData object: ", orderdetailsData[i]);
 
-        //Checking each item in change log, to see if it matches the subsegment record
-        subsegmentChangeLog.forEach(update => {
+        //Checking each item in change log, to see if it matches the orderdetail record
+        orderdetailChangeLog.forEach(update => {
 
           let searchId = update.id.substr((update.id.indexOf('_') + 1), update.id.length);
           console.log("searchId: ", searchId);
 
-          if (searchId == subsegmentsData[i].RouteId) {
-            console.log("*** Subsegment match: ", searchId, subsegmentsData[i].RouteId, " ***");
+          if (searchId == orderdetailsData[i].RouteId) {
+            console.log("*** Orderdetail match: ", searchId, orderdetailsData[i].RouteId, " ***");
 
-            subsegmentRecordFound = true;
-            console.log("subsegmentRecordFound: ", subsegmentRecordFound);
+            orderdetailRecordFound = true;
+            console.log("orderdetailRecordFound: ", orderdetailRecordFound);
 
             switch (update.id) {
               case ("markets_" + searchId):
-                subsegmentsData[i].markets = update.value;
+                orderdetailsData[i].markets = update.value;
                 break;
               case ("buyers_" + searchId):
-                subsegmentsData[i].buyers = update.value;
+                orderdetailsData[i].buyers = update.value;
                 break;
               case ("offerings_" + searchId):
-                subsegmentsData[i].offerings = update.value;
+                orderdetailsData[i].offerings = update.value;
                 break;
               case ("productivity_" + searchId):
-                subsegmentsData[i].productivity = update.value;
+                orderdetailsData[i].productivity = update.value;
                 break;
               case ("acquisition_" + searchId):
-                subsegmentsData[i].acquisition = update.value;
+                orderdetailsData[i].acquisition = update.value;
                 break;
             }
 
             let hurdle_id = ('#hurdle_' + searchId);
             let hurdle_value = $(hurdle_id).val();
             console.log("hurdle_value: ", hurdle_value);
-            if (hurdle_value != subsegmentsData[i].hurdle && hurdle_value != '') {
+            if (hurdle_value != orderdetailsData[i].hurdle && hurdle_value != '') {
               console.log("Updating hurdle value!")
-              subsegmentsData[i].hurdle = hurdle_value;
+              orderdetailsData[i].hurdle = hurdle_value;
             }
 
-            console.log("subsegmentsData[i]: ", subsegmentsData[i]);
+            console.log("orderdetailsData[i]: ", orderdetailsData[i]);
 
             console.log("UPDATING!");
-            // updateRouteInfo(subsegments, subsegmentsData[i])
-            updateRouteInfo(subsegmentsData[i])
+            // updateRouteInfo(orderdetails, orderdetailsData[i])
+            updateRouteInfo(orderdetailsData[i])
 
           }
         });
-        console.log("subsegmentsData: ", subsegmentsData);
+        console.log("orderdetailsData: ", orderdetailsData);
 
 
-        // console.log("blankSubsegment: ", blankSubsegment);
-        // subsegmentsData = [];
+        // console.log("blankOrderdetail: ", blankOrderdetail);
+        // orderdetailsData = [];
         // blankRowUpsert = [];
       };
 
     };
-    // getSubsegData();
-    subsegmentChangeLog = [];
+    // getOrderData();
+    orderdetailChangeLog = [];
     location.reload();
   };
 
@@ -693,8 +693,8 @@ $(document).ready(function () {
   function createNewRoute() {
     console.log("*** Creating new route in database ***")
 
-    let newSubsegment = {
-      SegmentId: '',
+    let newOrderdetail = {
+      OrderId: '',
       RouteId: '',
       acquisition: '',
       buyers: '',
@@ -704,32 +704,32 @@ $(document).ready(function () {
       productivity: ''
     };
 
-    //Build subsegmentsData object for upserting
-    subsegmentChangeLog.forEach(change => {
+    //Build orderdetailsData object for upserting
+    orderdetailChangeLog.forEach(change => {
       console.log("change.id: :", change.id);
       console.log("change.value: :", change.value);
-      console.log("change.segmentId: :", change.segmentId);
+      console.log("change.OrderId: :", change.OrderId);
 
-      newSubsegment.SegmentId = change.segmentId;
-      console.log(" newSubsegment.SegmentId: ", newSubsegment.SegmentId);
-      newSubsegment.RouteId = change.id.substr((change.id.indexOf('_') + 1), change.id.length);
-      console.log(" newSubsegment.RouteId: ", newSubsegment.RouteId);
+      newOrderdetail.OrderId = change.OrderId;
+      console.log(" newOrderdetail.OrderId: ", newOrderdetail.OrderId);
+      newOrderdetail.RouteId = change.id.substr((change.id.indexOf('_') + 1), change.id.length);
+      console.log(" newOrderdetail.RouteId: ", newOrderdetail.RouteId);
 
       switch (change.id.substr(0, (change.id.indexOf('_')))) {
         case "markets":
-          newSubsegment.markets = change.value;
+          newOrderdetail.markets = change.value;
           break;
         case "buyers":
-          newSubsegment.buyers = change.value;
+          newOrderdetail.buyers = change.value;
           break;
         case "offerings":
-          newSubsegment.offerings = change.value;
+          newOrderdetail.offerings = change.value;
           break;
         case "productivity":
-          newSubsegment.productivity = change.value;
+          newOrderdetail.productivity = change.value;
           break;
         case "acquisition":
-          newSubsegment.acquisition = change.value;
+          newOrderdetail.acquisition = change.value;
           break;
       }
 
@@ -739,40 +739,40 @@ $(document).ready(function () {
       let hurdle_value = hurdle_id.val();
       console.log("hurdle_value: ", hurdle_value);
 
-      newSubsegment.hurdle = hurdle_value;
-      console.log("newSubsegment: ", newSubsegment);
+      newOrderdetail.hurdle = hurdle_value;
+      console.log("newOrderdetail: ", newOrderdetail);
 
-      subsegmentsData.push(newSubsegment);
-      console.log("subsegmentsData: ", subsegmentsData);
+      orderdetailsData.push(newOrderdetail);
+      console.log("orderdetailsData: ", orderdetailsData);
     })
-    console.log("subsegmentsData: ", subsegmentsData);
-    // upsertRoutes(subsegmentsData);
+    console.log("orderdetailsData: ", orderdetailsData);
+    // upsertRoutes(orderdetailsData);
   }
 
 
-  // A function for updating the SubSegment table record
+  // A function for updating the OrderDetail table record
   function updateRouteInfo(newDetails) {
     // function updateRouteInfo(oldRecord, newDetails) {
     // console.log("oldRecord: ", oldRecord[0]);
     console.log("newDetails: ", newDetails);
 
     // for (let i = 0; i < oldRecord.length; i++) {
-    //   subsegmentChangeLog.forEach(change => {
+    //   orderdetailChangeLog.forEach(change => {
 
     //     switch (change.id) {
-    //       case ("markets_" + oldRecord[i].SegmentId):
+    //       case ("markets_" + oldRecord[i].OrderId):
     //         oldRecord[i].markets = change.value;
     //         break;
-    //       case ("buyers_" + oldRecord[i].SegmentId):
+    //       case ("buyers_" + oldRecord[i].OrderId):
     //         oldRecord[i].buyers = change.value;
     //         break;
-    //       case ("offerings_" + oldRecord[i].SegmentId):
+    //       case ("offerings_" + oldRecord[i].OrderId):
     //         oldRecord[i].offerings = change.value;
     //         break;
-    //       case ("productivity_" + oldRecord[i].SegmentId):
+    //       case ("productivity_" + oldRecord[i].OrderId):
     //         oldRecord[i].productivity = change.value;
     //         break;
-    //       case ("acquisition_" + oldRecord[i].SegmentId):
+    //       case ("acquisition_" + oldRecord[i].OrderId):
     //         oldRecord[i].acquisition = change.value;
     //         break;
     //     }
@@ -783,7 +783,7 @@ $(document).ready(function () {
 
     $.ajax({
       method: 'PUT',
-      url: '/api/subsegments',
+      url: '/api/orderdetails',
       // data: oldRecord[0],
       data: newDetails,
     });
@@ -792,24 +792,24 @@ $(document).ready(function () {
 
 
 
-  // A function for creating a subsegment.
-  function upsertRoutes(subsegmentObj) {
-    console.log("subsegmentObj in upsert: ", subsegmentObj);
+  // A function for creating a orderdetail.
+  function upsertRoutes(orderdetailObj) {
+    console.log("orderdetailObj in upsert: ", orderdetailObj);
 
-    $.post('/api/subsegments', subsegmentObj[0])
-    // .then(getSegments);
+    $.post('/api/orderdetails', orderdetailObj[0])
+    // .then(getOrders);
   }
 
 
-  // Function for creating a new list row for segments
-  function createSegmentTotals(title, segmentTotals, nextyearSgmtTotals) {
+  // Function for creating a new list row for orders
+  function createOrderTotals(title, orderTotals, nextyearSgmtTotals) {
 
     const totalTr = $('<tr>');
-    // totalTr.data('totals', segmentTotals);
+    // totalTr.data('totals', orderTotals);
     totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
     totalTr.append('<td>' + '</td>');
     totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + segmentTotals + '</b></h4></td>');
+    totalTr.append('<td><h4><b>$' + orderTotals + '</b></h4></td>');
     totalTr.append('<td>' + '</td>');
     totalTr.append('<td>' + '</td>');
     totalTr.append('<td>' + '</td>');
@@ -820,57 +820,57 @@ $(document).ready(function () {
 
 
 
-  // Function for creating a new list row for segments
+  // Function for creating a new list row for orders
 
-  function createSegmentRow(segmentData) {
-    console.log("segmentData: ", segmentData);
+  function createOrderRow(orderData) {
+    console.log("orderData: ", orderData);
 
-    const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
-    const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
+    const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
+    const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
 
     const newTr = $('<tr>');
-    newTr.data('segment', segmentData);
+    newTr.data('order', orderData);
 
     console.log("rowCount: ", rowCount);
 
-    //For first iteration, include segment information - do not for subsequent rows
+    //For first iteration, include order information - do not for subsequent rows
     if (rowCount === 0) {
-      newTr.append('<td>' + segmentData.name + '</td>');
-      newTr.append('<td>$' + segmentData.deal_size + '</td>');
-      newTr.append('<td>' + segmentData.deal_count + '</td>');
-      newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+      newTr.append('<td>' + orderData.name + '</td>');
+      newTr.append('<td>$' + orderData.deal_size + '</td>');
+      newTr.append('<td>' + orderData.deal_count + '</td>');
+      newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
 
-      if (segmentData.deal_size_yoy) {
-        newTr.append('<td>' + segmentData.deal_size_yoy + '</td>');
+      if (orderData.deal_size_yoy) {
+        newTr.append('<td>' + orderData.deal_size_yoy + '</td>');
       } else {
         newTr.append('<td>' + ' - ' + '</td>');
       }
 
-      if (segmentData.deal_count_yoy) {
-        newTr.append('<td>' + segmentData.deal_count_yoy + '%' + '</td>');
+      if (orderData.deal_count_yoy) {
+        newTr.append('<td>' + orderData.deal_count_yoy + '%' + '</td>');
       } else {
         newTr.append('<td>' + '-' + '</td>');
       }
 
-      if (!segmentData.next_year_deal_size) {
-        newTr.append('<td>$' + segmentData.deal_size + '</td>');
+      if (!orderData.next_year_deal_size) {
+        newTr.append('<td>$' + orderData.deal_size + '</td>');
       }
       else {
-        newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
+        newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
       }
 
-      if (!segmentData.next_year_deal_count) {
-        newTr.append('<td>$' + segmentData.deal_count + '</td>');
+      if (!orderData.next_year_deal_count) {
+        newTr.append('<td>$' + orderData.deal_count + '</td>');
       }
       else {
-        newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+        newTr.append('<td>$' + orderData.next_year_deal_count + '</td>');
       }
 
-      if (!segmentData.next_year_sgmt_rev) {
-        newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+      if (!orderData.next_year_sgmt_rev) {
+        newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
       }
       else {
-        newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
+        newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
       };
     } else {
       newTr.append('<td></td>');
@@ -886,32 +886,32 @@ $(document).ready(function () {
 
     return newTr;
   }
-  // End of createSegmentRow 
+  // End of createOrderRow 
 
   // function createBlankRow for creating a blank row at the end
-  function createBlankRow(segmentData) {
-    // console.log("segmentData: ", segmentData);
-    console.log("nextSubsegmentId: ", nextSubsegmentId);
-    if (!nextSubsegmentId) {
-      nextSubsegmentId = segmentId + "0";
-      console.log("nextSubsegmentId: ", nextSubsegmentId);
+  function createBlankRow(orderData) {
+    // console.log("orderData: ", orderData);
+    console.log("nextOrderdetailId: ", nextOrderdetailId);
+    if (!nextOrderdetailId) {
+      nextOrderdetailId = OrderId + "0";
+      console.log("nextOrderdetailId: ", nextOrderdetailId);
     }
 
     const newTr = $('<tr>');
-    newTr.data('subsegment', segmentData);
-    newTr.append('<td>' + '<input id="hurdle_' + nextSubsegmentId + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + nextSubsegmentId + '" value="unchecked">' + '</td>');
+    newTr.data('orderdetail', orderData);
+    newTr.append('<td>' + '<input id="hurdle_' + nextOrderdetailId + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + nextOrderdetailId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + nextOrderdetailId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + nextOrderdetailId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + nextOrderdetailId + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + nextOrderdetailId + '" value="unchecked">' + '</td>');
 
     // 11/20 Program Family add-in
-    newTr.append('<td>' + '<input class="progfam-input" id="reputation_' + nextSubsegmentId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="progfam-input" id="demand_' + nextSubsegmentId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="progfam-input" id="engagement_' + nextSubsegmentId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="progfam-input" id="enablement_' + nextSubsegmentId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="progfam-input" id="intelligence_' + nextSubsegmentId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="reputation_' + nextOrderdetailId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="demand_' + nextOrderdetailId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="engagement_' + nextOrderdetailId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="enablement_' + nextOrderdetailId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="progfam-input" id="intelligence_' + nextOrderdetailId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
     // End 11/20 Program Family add-in
 
     newTr.append('<td>' + '<button type="submit" class="btn btn-primary">Submit > </button>' + '</td>');
@@ -921,65 +921,65 @@ $(document).ready(function () {
   // End of createBlankRow 
 
 
-  //This function builds the SubSegment details, to be appended to segmentRowsToAdd
-  // function createSubSegmentRow(segmentId) {
-  function createSubSegmentRow(NEWsubsegments) {
-    // console.log("NEWsubsegments: ", NEWsubsegments);
+  //This function builds the OrderDetail details, to be appended to orderRowsToAdd
+  // function createOrderDetailRow(OrderId) {
+  function createOrderDetailRow(NEWorderdetails) {
+    // console.log("NEWorderdetails: ", NEWorderdetails);
 
-    //Creating row string for subsegment
+    //Creating row string for orderdetail
     const newTr = $('<tr>');
-    newTr.data('subsegment', NEWsubsegments);
+    newTr.data('orderdetail', NEWorderdetails);
 
-    const subsegmentDetails = {
-      id: NEWsubsegments.id,
-      hurdle: NEWsubsegments.hurdle,
-      markets: NEWsubsegments.markets,
-      buyers: NEWsubsegments.buyers,
-      offerings: NEWsubsegments.offerings,
-      productivity: NEWsubsegments.productivity,
-      acquisition: NEWsubsegments.acquisition,
-      SegmentId: NEWsubsegments.SegmentId,
-      RouteId: NEWsubsegments.RouteId
+    const orderdetailDetails = {
+      id: NEWorderdetails.id,
+      hurdle: NEWorderdetails.hurdle,
+      markets: NEWorderdetails.markets,
+      buyers: NEWorderdetails.buyers,
+      offerings: NEWorderdetails.offerings,
+      productivity: NEWorderdetails.productivity,
+      acquisition: NEWorderdetails.acquisition,
+      OrderId: NEWorderdetails.OrderId,
+      RouteId: NEWorderdetails.RouteId
       // togId: menuvarId,
       // togValue: menuvar
     };
 
-    console.log("subsegmentDetails: ", subsegmentDetails);
-    console.log("Check if subsegmentsData already populated: ", subsegmentsData);
+    console.log("orderdetailDetails: ", orderdetailDetails);
+    console.log("Check if orderdetailsData already populated: ", orderdetailsData);
 
 
-    //Building up array of subsegment detail objects (for this segment)
-    subsegmentsData.push(subsegmentDetails);
-    // console.log("subsegmentsData: ", subsegmentsData);
+    //Building up array of orderdetail detail objects (for this order)
+    orderdetailsData.push(orderdetailDetails);
+    // console.log("orderdetailsData: ", orderdetailsData);
 
-    if ((subsegmentDetails.SegmentId.toString() === segmentId) && (subsegmentDetails.RouteId != RouteIdRef)) {
-      // console.log("segmentId found:", segmentId);
+    if ((orderdetailDetails.OrderId.toString() === OrderId) && (orderdetailDetails.RouteId != RouteIdRef)) {
+      // console.log("OrderId found:", OrderId);
 
       let hurdle_value;
-      if (subsegmentDetails.hurdle) {
-        hurdle_value = '"' + subsegmentDetails.hurdle + '"'
+      if (orderdetailDetails.hurdle) {
+        hurdle_value = '"' + orderdetailDetails.hurdle + '"'
       } else {
         hurdle_value = '"E.g. Retention"';
       }
 
-      const markets_value = subsegmentDetails.markets;
+      const markets_value = orderdetailDetails.markets;
       // console.log("markets_value: ", markets_value);
-      const buyers_value = subsegmentDetails.buyers;
+      const buyers_value = orderdetailDetails.buyers;
       // console.log("buyers_value: ", buyers_value);
-      const offerings_value = subsegmentDetails.offerings;
+      const offerings_value = orderdetailDetails.offerings;
       // console.log("offerings_value: ", offerings_value);
-      const productivity_value = subsegmentDetails.productivity;
+      const productivity_value = orderdetailDetails.productivity;
       // console.log("productivity_value: ", productivity_value);
-      const acquisition_value = subsegmentDetails.acquisition;
+      const acquisition_value = orderdetailDetails.acquisition;
       // console.log("acquisition_value: ", acquisition_value);
 
-      const hurdleScript = '<td>' + '<input id="hurdle_' + subsegmentDetails.RouteId + '" placeholder=' + hurdle_value + ' type="text" />' + '</td>'
+      const hurdleScript = '<td>' + '<input id="hurdle_' + orderdetailDetails.RouteId + '" placeholder=' + hurdle_value + ' type="text" />' + '</td>'
       newTr.append(hurdleScript);
 
-      // Setting checkboxes to checked or unchecked, depending on results from GET from Subsegments table
+      // Setting checkboxes to checked or unchecked, depending on results from GET from Orderdetails table
       let marketsScript = "";
-      let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
-      let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
+      let marketsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + orderdetailDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
+      let marketsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="markets_' + orderdetailDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
       if (markets_value == "checked") {
         marketsScript = marketsChecked;
@@ -989,8 +989,8 @@ $(document).ready(function () {
       newTr.append(marketsScript);
 
       let buyersScript = "";
-      let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
-      let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
+      let buyersUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + orderdetailDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
+      let buyersChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="buyers_' + orderdetailDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
       if (buyers_value == "checked") {
         buyersScript = buyersChecked;
@@ -1000,8 +1000,8 @@ $(document).ready(function () {
       newTr.append(buyersScript);
 
       let offeringsScript = "";
-      let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
-      let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
+      let offeringsUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + orderdetailDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
+      let offeringsChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="offerings_' + orderdetailDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
       if (offerings_value == "checked") {
         offeringsScript = offeringsChecked;
@@ -1011,8 +1011,8 @@ $(document).ready(function () {
       newTr.append(offeringsScript);
 
       let productivityScript = "";
-      let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
-      let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
+      let productivityUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + orderdetailDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
+      let productivityChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="productivity_' + orderdetailDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
       if (productivity_value == "checked") {
         productivityScript = productivityChecked;
@@ -1022,8 +1022,8 @@ $(document).ready(function () {
       newTr.append(productivityScript);
 
       let acquisitionScript = "";
-      let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + subsegmentDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
-      let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + subsegmentDetails.RouteId + '" value="checked"' + '>' + '</td>';
+      let acquisitionUnchecked = '<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + orderdetailDetails.RouteId + '" value="unchecked"' + '>' + '</td>';
+      let acquisitionChecked = '<td>' + '<input class="form-check-input" type="checkbox" checked="checked" id="acquisition_' + orderdetailDetails.RouteId + '" value="checked"' + '>' + '</td>';
 
       if (acquisition_value == "checked") {
         acquisitionScript = acquisitionChecked;
@@ -1032,12 +1032,12 @@ $(document).ready(function () {
       }
       newTr.append(acquisitionScript);
 
-      console.log("subsegmentDetails: ", subsegmentDetails);
-      const repTogId = 'repTog_'+subsegmentDetails.RouteId;
-      const demTogId = 'demTog_'+subsegmentDetails.RouteId;
-      const engTogId = 'engTog_'+subsegmentDetails.RouteId;
-      const enabTogId = 'enabTog_'+subsegmentDetails.RouteId;
-      const intTogId = 'intTog_'+subsegmentDetails.RouteId;
+      console.log("orderdetailDetails: ", orderdetailDetails);
+      const repTogId = 'repTog_'+orderdetailDetails.RouteId;
+      const demTogId = 'demTog_'+orderdetailDetails.RouteId;
+      const engTogId = 'engTog_'+orderdetailDetails.RouteId;
+      const enabTogId = 'enabTog_'+orderdetailDetails.RouteId;
+      const intTogId = 'intTog_'+orderdetailDetails.RouteId;
 
       //12/10 Commenting out dropdowm button
       /* <div class="dropdown"> */
@@ -1047,63 +1047,63 @@ $(document).ready(function () {
       // </div>
       //12/10 End of commenting out
 
-      newTr.append('<td>' + '<input class="progfam-input" id="reputation_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
-      newTr.append('<td>' + '<input class="progfam-input" id="demand_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
-      newTr.append('<td>' + '<input class="progfam-input" id="engagement_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
-      newTr.append('<td>' + '<input class="progfam-input" id="enablement_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
-      newTr.append('<td>' + '<input class="progfam-input" id="intelligence_' + subsegmentDetails.RouteId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
+      newTr.append('<td>' + '<input class="progfam-input" id="reputation_' + orderdetailDetails.RouteId + '" placeholder=' + 'Insert reputation action' + ' type="text" />' + '</td>');
+      newTr.append('<td>' + '<input class="progfam-input" id="demand_' + orderdetailDetails.RouteId + '" placeholder=' + 'Insert demand action' + ' type="text" />' + '</td>');
+      newTr.append('<td>' + '<input class="progfam-input" id="engagement_' + orderdetailDetails.RouteId + '" placeholder=' + 'Insert engagement action' + ' type="text" />' + '</td>');
+      newTr.append('<td>' + '<input class="progfam-input" id="enablement_' + orderdetailDetails.RouteId + '" placeholder=' + 'Insert enablement action' + ' type="text" />' + '</td>');
+      newTr.append('<td>' + '<input class="progfam-input" id="intelligence_' + orderdetailDetails.RouteId + '" placeholder=' + 'Insert intelligence action' + ' type="text" />' + '</td>');
 
       newTr.append('<td>' + '<button class="btn btn-success update"> Save </button>' + '</td>');
-      newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-subsegment\'>X</a></td>');
+      newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-orderdetail\'>X</a></td>');
 
       newTr.append('</tr>');
     }
 
-    RouteIdRef = subsegmentDetails.RouteId;
+    RouteIdRef = orderdetailDetails.RouteId;
     console.log("RouteIdRef: ", RouteIdRef);
 
-    //UNHIDE IF CHARTS REQUIRED ON SUBSEGMENTS PAGE
-    // buildChartObject(segmentData);
+    //UNHIDE IF CHARTS REQUIRED ON ORDER DETAILS PAGE
+    // buildChartObject(orderData);
 
     return newTr;
   };
-  // End of createSubSegmentRow
+  // End of createOrderDetailRow
 
 
 
-  // This function grabs NEWsubsegments from the database and updates the view
-  //10.02 Calling this function from 76 not 49 (so only pulling records with specific segmentId)
-  // function getSubSegmentDetails() {
-  // function getSubSegmentDetails(subsegmentsData) {
-  //   console.log("subsegmentsData: ", subsegmentsData);
+  // This function grabs NEWorderdetails from the database and updates the view
+  //10.02 Calling this function from 76 not 49 (so only pulling records with specific OrderId)
+  // function getOrderDetailDetails() {
+  // function getOrderDetailDetails(orderdetailsData) {
+  //   console.log("orderdetailsData: ", orderdetailsData);
 
-  //   for (let i = 0; i < subsegmentsData.length; i++) {
+  //   for (let i = 0; i < orderdetailsData.length; i++) {
 
-  //     segmentId = subsegmentsData[i].id || '';
-  //     console.log("subsegmentsData[i].id: ", subsegmentsData[i].id);
-  //     console.log("segmentId: ", segmentId);
+  //     OrderId = orderdetailsData[i].id || '';
+  //     console.log("orderdetailsData[i].id: ", orderdetailsData[i].id);
+  //     console.log("OrderId: ", OrderId);
 
-  //     if (segmentId) {
-  //       segmentId = '/?segment_id=' + segmentId;
+  //     if (OrderId) {
+  //       OrderId = '/?order_id=' + OrderId;
   //     }
-  //     $.get('/api/subsegments' + segmentId, function (data) {
-  //       console.log('SubSegment data', data);
-  //       subsegments = data;
+  //     $.get('/api/orderdetails' + OrderId, function (data) {
+  //       console.log('OrderDetail data', data);
+  //       orderdetails = data;
   //     });
   //   }
-  //   console.log("subsegments: ", subsegments);
+  //   console.log("orderdetails: ", orderdetails);
   // };
 
 
 
 
-  // A function for rendering the list of segments to the page
-  function renderSegmentList(rows) {
-    segmentList.children().not(':last').remove();
-    segmentContainer.children('.alert').remove();
+  // A function for rendering the list of orders to the page
+  function renderOrderList(rows) {
+    orderList.children().not(':last').remove();
+    orderContainer.children('.alert').remove();
     if (rows.length) {
-      // segmentList.prepend(rows);
-      $("#segment-table")
+      // orderList.prepend(rows);
+      $("#order-table")
         // .find('tbody')
         .find('thead')
         .append(rows);
@@ -1112,13 +1112,13 @@ $(document).ready(function () {
     }
   }
 
-  // A function for rendering the list of segments to the page
-  function renderSubsegmentList(rows) {
-    subsegmentList.children().not(':last').remove();
-    subsegmentContainer.children('.alert').remove();
+  // A function for rendering the list of orders to the page
+  function renderOrderdetailList(rows) {
+    orderdetailList.children().not(':last').remove();
+    orderdetailContainer.children('.alert').remove();
     if (rows.length) {
-      // subsegmentList.prepend(rows);
-      $("#subsegments-table")
+      // orderdetailList.prepend(rows);
+      $("#orderdetails-table")
         .find('tbody')
         .prepend(rows);
     } else {
@@ -1130,18 +1130,18 @@ $(document).ready(function () {
 
 
   // This populates the object for the Revenue Bubble Chart(s)
-  function buildChartObject(segmentData) {
+  function buildChartObject(orderData) {
 
     chart1Data.push({
-      x: segmentData.deal_size,
-      y: segmentData.deal_count,
-      r: (segmentData.sgmt_rev / 100)
+      x: orderData.deal_size,
+      y: orderData.deal_count,
+      r: (orderData.sgmt_rev / 100)
     });
 
     chart2Data.push({
-      x: segmentData.next_year_deal_size,
-      y: segmentData.next_year_deal_count,
-      r: (segmentData.next_year_sgmt_rev / 100)
+      x: orderData.next_year_deal_size,
+      y: orderData.next_year_deal_count,
+      r: (orderData.next_year_sgmt_rev / 100)
     });
 
     renderChart1(chart1Data);
@@ -1157,7 +1157,7 @@ $(document).ready(function () {
   //     type: 'bubble',
   //     data: {
   //       "datasets": [{
-  //         label: "Segment Revenue - This Year",
+  //         label: "Order Revenue - This Year",
   //         data: chart1Data,
   //         backgroundColor:
   //           'red'
@@ -1198,7 +1198,7 @@ $(document).ready(function () {
   //     type: 'bubble',
   //     data: {
   //       "datasets": [{
-  //         label: "Next Year Segment Revenue Plan",
+  //         label: "Next Year Order Revenue Plan",
   //         data: chart2Data,
   //         backgroundColor:
   //           'green'
@@ -1232,12 +1232,12 @@ $(document).ready(function () {
   // }
 
 
-  // Function for handling what to render when there are no segments
+  // Function for handling what to render when there are no orders
   function renderEmpty() {
     const alertDiv = $('<div>');
     alertDiv.addClass('alert alert-danger');
-    alertDiv.text('You must create a Segment before you can create a SubSegment.');
-    segmentContainer.append(alertDiv);
+    alertDiv.text('You must create a Order before you can create a OrderDetail.');
+    orderContainer.append(alertDiv);
   }
 
 });

@@ -75,19 +75,19 @@ button.edit {
   margin-top: 30px;
 }
 
-.segment-container {
+.order-container {
   margin-top: 50px;
 }
 
-.segment-list {
+.order-list {
   margin-top: 25px;
 }
 
-.subsegment-container {
+.orderdetail-container {
   margin-top: 30px;
 }
 
-.subsegment {
+.orderdetail {
   margin-top: 30px;
 }
 
@@ -95,28 +95,28 @@ button.edit {
   display: none;
 }
 
-#segment-name {
+#order-name {
   width: 30%;
   height: 35px;
   margin: 5px;
   padding: 10px;
 }
 
-#segment-deal_size {
+#order-deal_size {
   width: 30%;
   height: 35px;
   margin: 5px;
   padding: 10px;
 }
 
-#segment-deal_count {
+#order-deal_count {
   width: 30%;
   height: 35px;
   margin: 5px;
   padding: 10px;
 }
 
-#segment-revenue {
+#order-revenue {
   width: 30%;
   height: 35px;
   margin: 5px;
@@ -137,7 +137,7 @@ button.edit {
   padding: 10px;
 }
 
-.add_segment {
+.add_order {
   margin-top: 50px;
   margin-bottom: 100px;
   vertical-align: middle;

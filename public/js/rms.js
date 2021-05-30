@@ -1,78 +1,78 @@
 $(document).ready(function () {
-  // Getting jQuery references to the subsegment body, title, form, and segment select
+  // Getting jQuery references to the orderdetail body, title, form, and order select
   // const bodyInput = $('#body');
-  const subsegmentInput = $('#subsegment');
+  const orderdetailInput = $('#orderdetail');
   const smsForm = $('#sms');
-  const segmentSelect = $('#segment');
-  const subsegmentSelect = $('#subsegment');
+  const orderSelect = $('#order');
+  const orderdetailSelect = $('#orderdetail');
   // Adding an event listener for when the form is submitted
   $(smsForm).on('submit', handleFormSubmit);
-  // Gets the part of the url that comes after the "?" (which we have if we're updating a subsegment)
+  // Gets the part of the url that comes after the "?" (which we have if we're updating a orderdetail)
   const url = window.location.search;
-  let subsegmentId;
-  let segmentId;
-  // Sets a flag for whether or not we're updating a subsegment to be false initially
+  let orderdetailId;
+  let OrderId;
+  // Sets a flag for whether or not we're updating a orderdetail to be false initially
   let updating = false;
 
-  // If we have this section in our url, we pull out the subsegment id from the url
-  // In '?subsegment_id=1', subsegmentId is 1
-  if (url.indexOf('?subsegment_id=') !== -1) {
-    subsegmentId = url.split('=')[1];
-    getRouteData(subsegmentId, 'subsegment');
+  // If we have this section in our url, we pull out the orderdetail id from the url
+  // In '?orderdetail_id=1', orderdetailId is 1
+  if (url.indexOf('?orderdetail_id=') !== -1) {
+    orderdetailId = url.split('=')[1];
+    getRouteData(orderdetailId, 'orderdetail');
   }
-  // Otherwise if we have an segment_id in our url, preset the segment select box to be our Segment
-  else if (url.indexOf('?segment_id=') !== -1) {
-    segmentId = url.split('=')[1];
-    console.log("segmentId: ", segmentId);
+  // Otherwise if we have an order_id in our url, preset the order select box to be our Order
+  else if (url.indexOf('?order_id=') !== -1) {
+    OrderId = url.split('=')[1];
+    console.log("OrderId: ", OrderId);
   }
 
-  // Getting the segments, and their subsegments
-  getSegments();
+  // Getting the orders, and their orderdetails
+  getOrders();
 
   getRoutes();
 
-  // A function for handling what happens when the form to create a new subsegment is submitted
+  // A function for handling what happens when the form to create a new orderdetail is submitted
   function handleFormSubmit(event) {
     event.preventDefault();
-    // Wont submit the subsegment if we are missing a body, title, or segment
-    // if (!titleInput.val().trim() || !bodyInput.val().trim() || !segmentSelect.val()) {
-    if (!subsegmentInput.val().trim() || !segmentSelect.val()) {
+    // Wont submit the orderdetail if we are missing a body, title, or order
+    // if (!titleInput.val().trim() || !bodyInput.val().trim() || !orderSelect.val()) {
+    if (!orderdetailInput.val().trim() || !orderSelect.val()) {
       return;
     }
-    // Constructing a newSubSegment object to hand to the database
+    // Constructing a newOrderDetail object to hand to the database
     const newRoute = {
-      subsegment: subsegmentInput
+      orderdetail: orderdetailInput
         .val()
         .trim(),
-      SegmentId: segmentSelect.val(),
+      OrderId: orderSelect.val(),
     };
 
-    // If we're updating a subsegment run updateSubSegment to update a subsegment
-    // Otherwise run submitRoute to create a whole new subsegment
+    // If we're updating a orderdetail run updateOrderDetail to update a orderdetail
+    // Otherwise run submitRoute to create a whole new orderdetail
     if (updating) {
-      newRoute.id = subsegmentId;
+      newRoute.id = orderdetailId;
       updateRoute(newRoute);
     } else {
       submitRoute(newRoute);
     }
   }
 
-  // Submits a new subsegment and brings user to subsegment page upon completion
-  function submitRoute(subsegment) {
-    $.post('/api/subsegments', subsegment, function () {
-      window.location.href = '/subsegment';
+  // Submits a new orderdetail and brings user to orderdetail page upon completion
+  function submitRoute(orderdetail) {
+    $.post('/api/orderdetails', orderdetail, function () {
+      window.location.href = '/orderdetail';
     });
   }
 
-  // Gets subsegment data for the current subsegment if we're editing, or if we're adding to an segment's existing subsegments
+  // Gets orderdetail data for the current orderdetail if we're editing, or if we're adding to an order's existing orderdetails
   function getRouteData(id, type) {
     let queryUrl;
     switch (type) {
-      case 'subsegment':
-        queryUrl = '/api/subsegments/' + id;
+      case 'orderdetail':
+        queryUrl = '/api/orderdetails/' + id;
         break;
-      case 'segment':
-        queryUrl = '/api/segments/' + id;
+      case 'order':
+        queryUrl = '/api/orders/' + id;
         break;
       default:
         return;
@@ -82,50 +82,50 @@ $(document).ready(function () {
 
     $.get(queryUrl, function (data) {
       if (data) {
-        console.log(data.SegmentId || data.id);
-        // If this subsegment exists, prefill our sms forms with its data
+        console.log(data.OrderId || data.id);
+        // If this orderdetail exists, prefill our sms forms with its data
         titleInput.val(data.title);
         bodyInput.val(data.body);
-        segmentId = data.SegmentId || data.id;
-        // If we have a subsegment with this id, set a flag for us to know to update the subsegment
+        OrderId = data.OrderId || data.id;
+        // If we have a orderdetail with this id, set a flag for us to know to update the orderdetail
         // when we hit submit
         updating = true;
       }
     });
   }
 
-  // A function to get Segments and then render our list of Segments
-  function getSegments() {
-    $.get('/api/segments', renderSegmentList);
+  // A function to get Orders and then render our list of Orders
+  function getOrders() {
+    $.get('/api/orders', renderOrderList);
   }
 
   // A function to get Routes and then render our list of Routes
   function getRoutes() {
-    $.get('/api/subsegments', renderRouteList);
+    $.get('/api/orderdetails', renderRouteList);
   }
 
-  // Function to either render a list of segments, or if there are none, direct the user to the page
-  // to create an segment first
-  function renderSegmentList(data) {
+  // Function to either render a list of orders, or if there are none, direct the user to the page
+  // to create an order first
+  function renderOrderList(data) {
 
     if (!data.length) {
-      window.location.href = '/segments';
+      window.location.href = '/orders';
     }
     $('.hidden').removeClass('hidden');
     const rowsToAdd = [];
     for (let i = 0; i < data.length; i++) {
-      rowsToAdd.push(createSegmentRow(data[i]));
+      rowsToAdd.push(createOrderRow(data[i]));
     }
-    segmentSelect.empty();
+    orderSelect.empty();
     console.log(rowsToAdd);
-    console.log(segmentSelect);
-    segmentSelect.append(rowsToAdd);
-    segmentSelect.val(segmentId);
+    console.log(orderSelect);
+    orderSelect.append(rowsToAdd);
+    orderSelect.val(OrderId);
   }
 
   function renderRouteList(data) {
     // if (!data.length) {
-    //   window.location.href = '/segments';
+    //   window.location.href = '/orders';
     // }
 
     console.log("Routes data: ", data);
@@ -139,59 +139,59 @@ $(document).ready(function () {
       rowsToAdd.push(createRouteRow(data[i]));
     }
 
-    subsegmentSelect.empty();
+    orderdetailSelect.empty();
     console.log(rowsToAdd);
-    console.log(subsegmentSelect);
-    subsegmentSelect.append(rowsToAdd);
-    subsegmentSelect.val(segmentId);
+    console.log(orderdetailSelect);
+    orderdetailSelect.append(rowsToAdd);
+    orderdetailSelect.val(OrderId);
   }
 
-  // Creates the segment options in the dropdown
-  function createSegmentRow(segment) {
+  // Creates the order options in the dropdown
+  function createOrderRow(order) {
 
-    console.log("segment: ", segment);
+    console.log("order: ", order);
 
     const listOption = $('<option>');
-    listOption.attr('value', segment.id);
-    listOption.text(segment.name);
+    listOption.attr('value', order.id);
+    listOption.text(order.name);
     return listOption;
   }
 
-  // Creates the subsegment options in the dropdown
-  function createRouteRow(subsegmentData) {
+  // Creates the orderdetail options in the dropdown
+  function createRouteRow(orderdetailData) {
 
-    console.log("subsegmentData: ", subsegmentData);
+    console.log("orderdetailData: ", orderdetailData);
 
     const listOption = $('<option>');
-    listOption.attr('value', subsegmentData.id);
-    listOption.text(subsegmentData.body);
+    listOption.attr('value', orderdetailData.id);
+    listOption.text(orderdetailData.body);
     return listOption;
 
-    // let subsegment_id;
+    // let orderdetail_id;
 
-    // console.log("subsegmentData.SegmentId: ", subsegmentData.SegmentId);
-    // console.log("subsegmentData.id: ", subsegmentData.id);
-    // console.log("subsegmentData.title: ", subsegmentData.title);
-    // console.log("subsegmentData.body: ", subsegmentData.body);
+    // console.log("orderdetailData.OrderId: ", orderdetailData.OrderId);
+    // console.log("orderdetailData.id: ", orderdetailData.id);
+    // console.log("orderdetailData.title: ", orderdetailData.title);
+    // console.log("orderdetailData.body: ", orderdetailData.body);
 
     // const newTr = $('<tr>');
-    // newTr.data('segment', subsegmentData);
-    // // newTr.append('<td>' + '<input placeholder=' + subsegmentData.body + ' id=' + subsegment_id + ' type="text" />' + '</td>');
-    // newTr.append('<td>' + '<input placeholder=' + subsegmentData.body + ' id=' + subsegmentData.id + ' type="text" />' + '</td>');
-    // // newTr.append('<td>' + '<input placeholder=' + subsegmentData.body + ' id=' + subsegmentData.SegmentId + ' type="text" />' + '</td>');
+    // newTr.data('order', orderdetailData);
+    // // newTr.append('<td>' + '<input placeholder=' + orderdetailData.body + ' id=' + orderdetail_id + ' type="text" />' + '</td>');
+    // newTr.append('<td>' + '<input placeholder=' + orderdetailData.body + ' id=' + orderdetailData.id + ' type="text" />' + '</td>');
+    // // newTr.append('<td>' + '<input placeholder=' + orderdetailData.body + ' id=' + orderdetailData.OrderId + ' type="text" />' + '</td>');
     // return newTr;
   }
 
 
-  // Update a given subsegment, bring user to the subsegment page when done
-  function updateRoute(subsegment) {
+  // Update a given orderdetail, bring user to the orderdetail page when done
+  function updateRoute(orderdetail) {
     $.ajax({
       method: 'PUT',
-      url: '/api/subsegments',
-      data: subsegment,
+      url: '/api/orderdetails',
+      data: orderdetail,
     })
       .then(function () {
-        window.location.href = '/subsegment';
+        window.location.href = '/orderdetail';
       });
   }
 });

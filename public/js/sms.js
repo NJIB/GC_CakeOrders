@@ -1,76 +1,76 @@
 $(document).ready(function() {
-  // Getting jQuery references to the subsegment body, title, form, and segment select
+  // Getting jQuery references to the orderdetail body, title, form, and order select
   const bodyInput = $('#body');
   const titleInput = $('#title');
   const smsForm = $('#sms');
-  const segmentSelect = $('#segment');
+  const orderSelect = $('#order');
   // Adding an event listener for when the form is submitted
   $(smsForm).on('submit', handleFormSubmit);
-  // Gets the part of the url that comes after the "?" (which we have if we're updating a subsegment)
+  // Gets the part of the url that comes after the "?" (which we have if we're updating a orderdetail)
   const url = window.location.search;
-  let subsegmentId;
-  let segmentId;
-  // Sets a flag for whether or not we're updating a subsegment to be false initially
+  let orderdetailId;
+  let OrderId;
+  // Sets a flag for whether or not we're updating a orderdetail to be false initially
   let updating = false;
 
-  // If we have this section in our url, we pull out the subsegment id from the url
-  // In '?subsegment_id=1', subsegmentId is 1
-  if (url.indexOf('?subsegment_id=') !== -1) {
-    subsegmentId = url.split('=')[1];
-    getSubSegmentData(subsegmentId, 'subsegment');
+  // If we have this section in our url, we pull out the orderdetail id from the url
+  // In '?orderdetail_id=1', orderdetailId is 1
+  if (url.indexOf('?orderdetail_id=') !== -1) {
+    orderdetailId = url.split('=')[1];
+    getOrderDetailData(orderdetailId, 'orderdetail');
   }
-  // Otherwise if we have an segment_id in our url, preset the segment select box to be our Segment
-  else if (url.indexOf('?segment_id=') !== -1) {
-    segmentId = url.split('=')[1];
+  // Otherwise if we have an order_id in our url, preset the order select box to be our Order
+  else if (url.indexOf('?order_id=') !== -1) {
+    OrderId = url.split('=')[1];
   }
 
-  // Getting the segments, and their subsegments
-  getSegments();
+  // Getting the orders, and their orderdetails
+  getOrders();
 
-  // A function for handling what happens when the form to create a new subsegment is submitted
+  // A function for handling what happens when the form to create a new orderdetail is submitted
   function handleFormSubmit(event) {
     event.preventDefault();
-    // Wont submit the subsegment if we are missing a body, title, or segment
-    if (!titleInput.val().trim() || !bodyInput.val().trim() || !segmentSelect.val()) {
+    // Wont submit the orderdetail if we are missing a body, title, or order
+    if (!titleInput.val().trim() || !bodyInput.val().trim() || !orderSelect.val()) {
       return;
     }
-    // Constructing a newSubSegment object to hand to the database
-    const newSubSegment = {
+    // Constructing a newOrderDetail object to hand to the database
+    const newOrderDetail = {
       title: titleInput
           .val()
           .trim(),
       body: bodyInput
           .val()
           .trim(),
-      SegmentId: segmentSelect.val(),
+      OrderId: orderSelect.val(),
     };
 
-    // If we're updating a subsegment run updateSubSegment to update a subsegment
-    // Otherwise run submitSubSegment to create a whole new subsegment
+    // If we're updating a orderdetail run updateOrderDetail to update a orderdetail
+    // Otherwise run submitOrderDetail to create a whole new orderdetail
     if (updating) {
-      newSubSegment.id = subsegmentId;
-      updateSubSegment(newSubSegment);
+      newOrderDetail.id = orderdetailId;
+      updateOrderDetail(newOrderDetail);
     } else {
-      submitSubSegment(newSubSegment);
+      submitOrderDetail(newOrderDetail);
     }
   }
 
-  // Submits a new subsegment and brings user to subsegment page upon completion
-  function submitSubSegment(subsegment) {
-    $.post('/api/subsegments', subsegment, function() {
-      window.location.href = '/subsegment';
+  // Submits a new orderdetail and brings user to orderdetail page upon completion
+  function submitOrderDetail(orderdetail) {
+    $.post('/api/orderdetails', orderdetail, function() {
+      window.location.href = '/orderdetail';
     });
   }
 
-  // Gets subsegment data for the current subsegment if we're editing, or if we're adding to an segment's existing subsegments
-  function getSubSegmentData(id, type) {
+  // Gets orderdetail data for the current orderdetail if we're editing, or if we're adding to an order's existing orderdetails
+  function getOrderDetailData(id, type) {
     let queryUrl;
     switch (type) {
-      case 'subsegment':
-        queryUrl = '/api/subsegments/' + id;
+      case 'orderdetail':
+        queryUrl = '/api/orderdetails/' + id;
         break;
-      case 'segment':
-        queryUrl = '/api/segments/' + id;
+      case 'order':
+        queryUrl = '/api/orders/' + id;
         break;
       default:
         return;
@@ -80,57 +80,57 @@ $(document).ready(function() {
 
     $.get(queryUrl, function(data) {
       if (data) {
-        console.log(data.SegmentId || data.id);
-        // If this subsegment exists, prefill our sms forms with its data
+        console.log(data.OrderId || data.id);
+        // If this orderdetail exists, prefill our sms forms with its data
         titleInput.val(data.title);
         bodyInput.val(data.body);
-        segmentId = data.SegmentId || data.id;
-        // If we have a subsegment with this id, set a flag for us to know to update the subsegment
+        OrderId = data.OrderId || data.id;
+        // If we have a orderdetail with this id, set a flag for us to know to update the orderdetail
         // when we hit submit
         updating = true;
       }
     });
   }
 
-  // A function to get Segments and then render our list of Segments
-  function getSegments() {
-    $.get('/api/segments', renderSegmentList);
+  // A function to get Orders and then render our list of Orders
+  function getOrders() {
+    $.get('/api/orders', renderOrderList);
   }
-  // Function to either render a list of segments, or if there are none, direct the user to the page
-  // to create an segment first
-  function renderSegmentList(data) {
+  // Function to either render a list of orders, or if there are none, direct the user to the page
+  // to create an order first
+  function renderOrderList(data) {
     if (!data.length) {
-      window.location.href = '/segments';
+      window.location.href = '/orders';
     }
     $('.hidden').removeClass('hidden');
     const rowsToAdd = [];
     for (let i = 0; i < data.length; i++) {
-      rowsToAdd.push(createSegmentRow(data[i]));
+      rowsToAdd.push(createOrderRow(data[i]));
     }
-    segmentSelect.empty();
+    orderSelect.empty();
     console.log(rowsToAdd);
-    console.log(segmentSelect);
-    segmentSelect.append(rowsToAdd);
-    segmentSelect.val(segmentId);
+    console.log(orderSelect);
+    orderSelect.append(rowsToAdd);
+    orderSelect.val(OrderId);
   }
 
-  // Creates the segment options in the dropdown
-  function createSegmentRow(segment) {
+  // Creates the order options in the dropdown
+  function createOrderRow(order) {
     const listOption = $('<option>');
-    listOption.attr('value', segment.id);
-    listOption.text(segment.name);
+    listOption.attr('value', order.id);
+    listOption.text(order.name);
     return listOption;
   }
 
-  // Update a given subsegment, bring user to the subsegment page when done
-  function updateSubSegment(subsegment) {
+  // Update a given orderdetail, bring user to the orderdetail page when done
+  function updateOrderDetail(orderdetail) {
     $.ajax({
       method: 'PUT',
-      url: '/api/subsegments',
-      data: subsegment,
+      url: '/api/orderdetails',
+      data: orderdetail,
     })
         .then(function() {
-          window.location.href = '/subsegment';
+          window.location.href = '/orderdetail';
         });
   }
 });

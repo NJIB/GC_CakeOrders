@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  const Segment = sequelize.define('Segment', {
+  const Order = sequelize.define('Order', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -66,14 +66,14 @@ module.exports = function(sequelize, DataTypes) {
 
   });
 
-  Segment.associate = function(models) {
-    // Associating Segment with SubSegments
-    // When an Segment is deleted, also delete any associated SubSegments
-    Segment.hasMany(models.SubSegment, {
+  Order.associate = function(models) {
+    // Associating Order with OrderDetails
+    // When an Order is deleted, also delete any associated OrderDetails
+    Order.hasMany(models.OrderDetail, {
       onDelete: 'cascade',
     });
   };
 
 
-  return Segment;
+  return Order;
 };

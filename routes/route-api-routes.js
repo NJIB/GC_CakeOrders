@@ -15,18 +15,18 @@ module.exports = function(app) {
   app.get('/api/routes', async (req, res) => {
     // Add sequelize code to find all comments, and return them to the user with res.json
     const query = {};
-    if (req.query.segment_id) {
-      query.SegmentId = req.query.segment_id;
+    if (req.query.order_id) {
+      query.OrderId = req.query.order_id;
     }
     // In our findAll argument, we add a 'where' property, that could be empty
-    // depending on whether or not the request has an 'segment_id' key/value pait in the query string.
+    // depending on whether or not the request has an 'order_id' key/value pait in the query string.
     // We also add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Segment
+    // In this case, just db.Order
     try {
       const data = await db.Route.findAll({
         where: query,
-        include: [db.Segment],
+        include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -39,22 +39,22 @@ module.exports = function(app) {
     // Add sequelize code to find all comments where the category is equal to req.params.category,
     // return the result to the user with res.json
     // We build up the query object with a category property.
-    // If the request has an 'segment_id' key/value pair in the query string, we
-    // we add an SegmentId property to the query object.
+    // If the request has an 'order_id' key/value pair in the query string, we
+    // we add an OrderId property to the query object.
     // Then entire query object will be passed as the object for 'where' in the findAll argument.
     const query = {
       category: req.params.category,
     };
-    if (req.query.segment_id) {
-      query.SegmentId = req.query.segment_id;
+    if (req.query.order_id) {
+      query.OrderId = req.query.order_id;
     }
     // We also add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Segment
+    // In this case, just db.Order
     try {
       const data = await db.Route.findAll({
         where: query,
-        include: [db.Segment],
+        include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -68,11 +68,11 @@ module.exports = function(app) {
     // return the result to the user with res.json
     // We add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Segment
+    // In this case, just db.Order
     try {
       const data = await db.Route.findOne({
         where: {id: req.params.id},
-        include: [db.Segment],
+        include: [db.Order],
       });
       res.json(data);
     } catch (error) {

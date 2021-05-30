@@ -9,8 +9,8 @@ $(document).ready(function () {
   let routesData = [];
 
   // Click events for the edit and delete buttons
-  $(document).on('click', 'button.delete', handleSubSegmentDelete);
-  $(document).on('click', 'button.edit', handleSubSegmentEdit);
+  $(document).on('click', 'button.delete', handleOrderDetailDelete);
+  $(document).on('click', 'button.edit', handleOrderDetailEdit);
   $(document).on('click', '.form-check-input', handleCheckboxClick);
   $(document).on('submit', '#routes-form', handleRoutesFormSubmit);
 
@@ -55,30 +55,30 @@ $(document).ready(function () {
   // Variable to hold our routes
   let routes;
 
-  // The code below handles the case where we want to get route routes for a specific segment
-  // Looks for a query param in the url for segment_id
+  // The code below handles the case where we want to get route routes for a specific order
+  // Looks for a query param in the url for order_id
   const url = window.location.search;
-  let segmentId;
-  if (url.indexOf('?segment_id=') !== -1) {
-    segmentId = url.split('=')[1];
-    getSubSegments(segmentId);
+  let OrderId;
+  if (url.indexOf('?order_id=') !== -1) {
+    OrderId = url.split('=')[1];
+    getOrderDetails(OrderId);
   }
-  // If there's no segmentId we just get all routes as usual
+  // If there's no OrderId we just get all routes as usual
   else {
-    getSubSegments();
+    getOrderDetails();
   }
 
   // This function grabs routes from the database and updates the view
-  function getSubSegments(segment) {
-    segmentId = segment || '';
-    if (segmentId) {
-      segmentId = '/?segment_id=' + segmentId;
+  function getOrderDetails(order) {
+    OrderId = order || '';
+    if (OrderId) {
+      OrderId = '/?order_id=' + OrderId;
     }
-    $.get('/api/route' + segmentId, function (data) {
-      console.log('SubSegments', data);
+    $.get('/api/route' + OrderId, function (data) {
+      console.log('OrderDetails', data);
       routes = data;
       if (!routes || !routes.length) {
-        displayEmpty(segment);
+        displayEmpty(order);
       } else {
         initializeRows();
       }
@@ -86,13 +86,13 @@ $(document).ready(function () {
   }
 
   // This function does an API call to delete routes
-  function deleteSubSegment(id) {
+  function deleteOrderDetail(id) {
     $.ajax({
       method: 'DELETE',
       url: '/api/route/' + id,
     })
       .then(function () {
-        getSubSegments(routeCategorySelect.val());
+        getOrderDetails(routeCategorySelect.val());
       });
   }
 
@@ -111,11 +111,11 @@ $(document).ready(function () {
     let formattedDate = new Date(route.createdAt);
     formattedDate = moment(formattedDate).format('MMMM Do YYYY, h:mm:ss a');
 
-    const newSubSegmentCard = $('<div>');
-    newSubSegmentCard.addClass('card');
+    const newOrderDetailCard = $('<div>');
+    newOrderDetailCard.addClass('card');
 
-    const newSubSegmentCardHeading = $('<div>');
-    newSubSegmentCardHeading.addClass('card-header');
+    const newOrderDetailCardHeading = $('<div>');
+    newOrderDetailCardHeading.addClass('card-header');
 
     const deleteBtn = $('<button>');
     deleteBtn.text('x');
@@ -125,52 +125,52 @@ $(document).ready(function () {
     editBtn.text('EDIT');
     editBtn.addClass('edit btn btn-info');
 
-    const newSubSegmentTitle = $('<h2>');
-    const newSubSegmentDate = $('<small>');
-    const newSubSegmentSegment = $('<h5>');
-    newSubSegmentSegment.text('Written by: ' + route.Segment.name);
-    newSubSegmentSegment.css({
+    const newOrderDetailTitle = $('<h2>');
+    const newOrderDetailDate = $('<small>');
+    const newOrderDetailOrder = $('<h5>');
+    newOrderDetailOrder.text('Written by: ' + route.Order.name);
+    newOrderDetailOrder.css({
       'float': 'right',
       'color': 'blue',
       'margin-top':
         '-10px',
     });
 
-    const newSubSegmentCardBody = $('<div>');
-    newSubSegmentCardBody.addClass('card-body');
+    const newOrderDetailCardBody = $('<div>');
+    newOrderDetailCardBody.addClass('card-body');
 
-    const newSubSegmentBody = $('<p>');
-    newSubSegmentTitle.text(route.title + ' ');
-    newSubSegmentBody.text(route.body);
-    newSubSegmentDate.text(formattedDate);
-    newSubSegmentTitle.append(newSubSegmentDate);
-    newSubSegmentCardHeading.append(deleteBtn);
-    newSubSegmentCardHeading.append(editBtn);
-    newSubSegmentCardHeading.append(newSubSegmentTitle);
-    newSubSegmentCardHeading.append(newSubSegmentSegment);
-    newSubSegmentCardBody.append(newSubSegmentBody);
-    newSubSegmentCard.append(newSubSegmentCardHeading);
-    newSubSegmentCard.append(newSubSegmentCardBody);
-    newSubSegmentCard.data('route', route);
-    return newSubSegmentCard;
+    const newOrderDetailBody = $('<p>');
+    newOrderDetailTitle.text(route.title + ' ');
+    newOrderDetailBody.text(route.body);
+    newOrderDetailDate.text(formattedDate);
+    newOrderDetailTitle.append(newOrderDetailDate);
+    newOrderDetailCardHeading.append(deleteBtn);
+    newOrderDetailCardHeading.append(editBtn);
+    newOrderDetailCardHeading.append(newOrderDetailTitle);
+    newOrderDetailCardHeading.append(newOrderDetailOrder);
+    newOrderDetailCardBody.append(newOrderDetailBody);
+    newOrderDetailCard.append(newOrderDetailCardHeading);
+    newOrderDetailCard.append(newOrderDetailCardBody);
+    newOrderDetailCard.data('route', route);
+    return newOrderDetailCard;
   }
 
-  // This function figures out which route we want to delete and then calls deleteSubSegment
-  function handleSubSegmentDelete() {
-    const currentSubSegment = $(this)
+  // This function figures out which route we want to delete and then calls deleteOrderDetail
+  function handleOrderDetailDelete() {
+    const currentOrderDetail = $(this)
       .parent()
       .parent()
       .data('route');
-    deleteSubSegment(currentSubSegment.id);
+    deleteOrderDetail(currentOrderDetail.id);
   }
 
   // This function figures out which route we want to edit and takes it to the appropriate url
-  function handleSubSegmentEdit() {
-    const currentSubSegment = $(this)
+  function handleOrderDetailEdit() {
+    const currentOrderDetail = $(this)
       .parent()
       .parent()
       .data('route');
-    window.location.href = '/sms?route_id=' + currentSubSegment.id;
+    window.location.href = '/sms?route_id=' + currentOrderDetail.id;
   }
 
   // This function displays a message when there are no routes
@@ -178,7 +178,7 @@ $(document).ready(function () {
     const query = window.location.search;
     let partial = '';
     if (id) {
-      partial = ' for Segment #' + id;
+      partial = ' for Order #' + id;
     }
     blogContainer.empty();
     const messageH2 = $('<h2>');
@@ -190,22 +190,22 @@ $(document).ready(function () {
 
   //INSERTING ROUTES TO REVENUE CODE
 
-  const segmentList = $('tbody');
-  const segmentTotals = $('tfooter');
-  const segmentContainer = $('.segment-container');
-  let segmentRevTotal = 0;
+  const orderList = $('tbody');
+  const orderTotals = $('tfooter');
+  const orderContainer = $('.order-container');
+  let orderRevTotal = 0;
 
   let chart1Data = [{}];
   let chart2Data = [{}];
 
   // Adding event listeners to the form to create a new object, and the button to delete
-  // an Segment
+  // an Order
   // $(document).on('submit', '#routes-form', handleRoutesFormSubmit);
 
-  // Getting the initial list of Segments
-  getSegments();
+  // Getting the initial list of Orders
+  getOrders();
 
-  // A function to handle what happens when the form is submitted to create a new Segment
+  // A function to handle what happens when the form is submitted to create a new Order
   function handleRoutesFormSubmit(event) {
     event.preventDefault();
     console.log("Submit button clicked!!")
@@ -215,84 +215,84 @@ $(document).ready(function () {
 
   }
 
-  // A function for creating an segment. Calls getSegments upon completion
+  // A function for creating an order. Calls getOrders upon completion
   function upsertRoutes(routesData) {
 
     console.log("routesData in upsert function: ", routesData);
     $.post('/api/route', routesData)
-    .then(getSegments);
+    .then(getOrders);
   }
 
-  // Function for creating a new list row for segments
-  function createSegmentRow(segmentData) {
+  // Function for creating a new list row for orders
+  function createOrderRow(orderData) {
 
-    // console.log('segmentData: ', segmentData);
-    const deal_size_yoy_id = "deal_size_yoy" + segmentData.id;
-    const deal_count_yoy_id = "deal_count_yoy" + segmentData.id;
+    // console.log('orderData: ', orderData);
+    const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
+    const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
 
     const newTr = $('<tr>');
-    newTr.data('segment', segmentData);
-    newTr.append('<td>' + segmentData.name + '</td>');
-    newTr.append('<td>$' + segmentData.deal_size + '</td>');
-    newTr.append('<td>' + segmentData.deal_count + '</td>');
-    newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+    newTr.data('order', orderData);
+    newTr.append('<td>' + orderData.name + '</td>');
+    newTr.append('<td>$' + orderData.deal_size + '</td>');
+    newTr.append('<td>' + orderData.deal_count + '</td>');
+    newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
 
-    if (segmentData.deal_size_yoy) {
-      newTr.append('<td>' + segmentData.deal_size_yoy + '</td>');
+    if (orderData.deal_size_yoy) {
+      newTr.append('<td>' + orderData.deal_size_yoy + '</td>');
     } else {
       newTr.append('<td>' + ' - ' + '</td>');
     }
 
-    if (segmentData.deal_count_yoy) {
-      newTr.append('<td>' + segmentData.deal_count_yoy + '%' + '</td>');
+    if (orderData.deal_count_yoy) {
+      newTr.append('<td>' + orderData.deal_count_yoy + '%' + '</td>');
     } else {
       newTr.append('<td>' + '-' + '</td>');
     }
 
-    if (!segmentData.next_year_deal_size) {
-      newTr.append('<td>$' + segmentData.deal_size + '</td>');
+    if (!orderData.next_year_deal_size) {
+      newTr.append('<td>$' + orderData.deal_size + '</td>');
     }
     else {
-      newTr.append('<td>$' + segmentData.next_year_deal_size + '</td>');
+      newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
     }
 
-    if (!segmentData.next_year_deal_count) {
-      newTr.append('<td>$' + segmentData.deal_count + '</td>');
+    if (!orderData.next_year_deal_count) {
+      newTr.append('<td>$' + orderData.deal_count + '</td>');
     }
     else {
-      newTr.append('<td>$' + segmentData.next_year_deal_count + '</td>');
+      newTr.append('<td>$' + orderData.next_year_deal_count + '</td>');
     }
 
-    if (!segmentData.next_year_sgmt_rev) {
-      newTr.append('<td>$' + segmentData.sgmt_rev + '</td>');
+    if (!orderData.next_year_sgmt_rev) {
+      newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
     }
     else {
-      newTr.append('<td>$' + segmentData.next_year_sgmt_rev + '</td>');
+      newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
     };
 
-    newTr.append('<td>' + '<input id="hurdle_' + segmentData.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + segmentData.id + '" value="unchecked">' + '</td>');
-    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + segmentData.id + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input id="hurdle_' + orderData.id + '" placeholder=' + 'E.g. Retention' + ' type="text" />' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="markets_' + orderData.id + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="buyers_' + orderData.id + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="offerings_' + orderData.id + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="productivity_' + orderData.id + '" value="unchecked">' + '</td>');
+    newTr.append('<td>' + '<input class="form-check-input" type="checkbox" id="acquisition_' + orderData.id + '" value="unchecked">' + '</td>');
 
-    buildChartObject(segmentData);
+    buildChartObject(orderData);
 
     return newTr;
   }
-  // End of createSegmentRow
+  // End of createOrderRow
 
 
-  // Function for creating a new list row for segments
-  function createSegmentTotals(title, segmentTotals, nextyearSgmtTotals) {
+  // Function for creating a new list row for orders
+  function createOrderTotals(title, orderTotals, nextyearSgmtTotals) {
 
     const totalTr = $('<tr>');
-    // totalTr.data('totals', segmentTotals);
+    // totalTr.data('totals', orderTotals);
     totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
     totalTr.append('<td>' + '</td>');
     totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + segmentTotals + '</b></h4></td>');
+    totalTr.append('<td><h4><b>$' + orderTotals + '</b></h4></td>');
     totalTr.append('<td>' + '</td>');
     totalTr.append('<td>' + '</td>');
     totalTr.append('<td>' + '</td>');
@@ -302,22 +302,22 @@ $(document).ready(function () {
   }
 
 
-  // Function for retrieving segments and getting them ready to be rendered to the page
-  function getSegments() {
+  // Function for retrieving orders and getting them ready to be rendered to the page
+  function getOrders() {
 
     chart1Data = [{}];
     chart2Data = [{}];
 
-    $.get('/api/segments', function (data) {
+    $.get('/api/orders', function (data) {
 
       // console.log('data: ', data);
 
-      segmentRevTotal = 0;
+      orderRevTotal = 0;
       nextyearSgmtRevTotal = 0;
       const rowsToAdd = [];
 
       for (let i = 0; i < data.length; i++) {
-        rowsToAdd.push(createSegmentRow(data[i], i));
+        rowsToAdd.push(createOrderRow(data[i], i));
 
         // Populate object for [ulitmate] upload to Routes table
         const routesDetails = {
@@ -331,8 +331,8 @@ $(document).ready(function () {
         routesData.push(routesDetails);
         console.log("routesData: ", routesData);
 
-        // Calculating total segment revenue
-        segmentRevTotal += data[i].sgmt_rev;
+        // Calculating total order revenue
+        orderRevTotal += data[i].sgmt_rev;
         if (!data[i].next_year_sgmt_rev) {
           nextyearSgmtRevTotal += data[i].sgmt_rev;
         }
@@ -343,14 +343,14 @@ $(document).ready(function () {
         console.log("i: ", i);
         console.log("data.length: ", data.length);
         if ((i + 1) == data.length) {
-          rowsToAdd.push(createSegmentTotals("TOTAL", segmentRevTotal, nextyearSgmtRevTotal));
+          rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
         }
       }
 
-      console.log("segmentRevTotal: ", segmentRevTotal);
+      console.log("orderRevTotal: ", orderRevTotal);
       // console.log("rowsToAdd: ", rowsToAdd);
 
-      renderSegmentList(rowsToAdd);
+      renderOrderList(rowsToAdd);
       nameInput.val('');
       dealsizeInput.val('');
       dealcountInput.val('');
@@ -358,31 +358,31 @@ $(document).ready(function () {
 
   }
 
-  // A function for rendering the list of segments to the page
-  function renderSegmentList(rows) {
-    segmentList.children().not(':last').remove();
-    segmentContainer.children('.alert').remove();
+  // A function for rendering the list of orders to the page
+  function renderOrderList(rows) {
+    orderList.children().not(':last').remove();
+    orderContainer.children('.alert').remove();
     if (rows.length) {
       // console.log("rows: ", rows);
-      segmentList.prepend(rows);
+      orderList.prepend(rows);
     } else {
       renderEmpty();
     }
   }
 
   // This populates the object for the Revenue Bubble Chart(s)
-  function buildChartObject(segmentData) {
+  function buildChartObject(orderData) {
 
     chart1Data.push({
-      x: segmentData.deal_size,
-      y: segmentData.deal_count,
-      r: (segmentData.sgmt_rev / 100)
+      x: orderData.deal_size,
+      y: orderData.deal_count,
+      r: (orderData.sgmt_rev / 100)
     });
 
     chart2Data.push({
-      x: segmentData.next_year_deal_size,
-      y: segmentData.next_year_deal_count,
-      r: (segmentData.next_year_sgmt_rev / 100)
+      x: orderData.next_year_deal_size,
+      y: orderData.next_year_deal_count,
+      r: (orderData.next_year_sgmt_rev / 100)
     });
 
     renderChart1(chart1Data);
@@ -398,7 +398,7 @@ $(document).ready(function () {
       type: 'bubble',
       data: {
         "datasets": [{
-          label: "Segment Revenue - This Year",
+          label: "Order Revenue - This Year",
           data: chart1Data,
           backgroundColor:
             'red'
@@ -439,7 +439,7 @@ $(document).ready(function () {
       type: 'bubble',
       data: {
         "datasets": [{
-          label: "Next Year Segment Revenue Plan",
+          label: "Next Year Order Revenue Plan",
           data: chart2Data,
           backgroundColor:
             'green'
@@ -473,12 +473,12 @@ $(document).ready(function () {
   }
 
 
-  // Function for handling what to render when there are no segments
+  // Function for handling what to render when there are no orders
   function renderEmpty() {
     const alertDiv = $('<div>');
     alertDiv.addClass('alert alert-danger');
-    alertDiv.text('You must create a Segment before you can create a SubSegment.');
-    segmentContainer.append(alertDiv);
+    alertDiv.text('You must create a Order before you can create a OrderDetail.');
+    orderContainer.append(alertDiv);
   }
 
 });

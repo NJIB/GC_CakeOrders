@@ -12,22 +12,22 @@ const db = require('../models');
 // =============================================================
 module.exports = function(app) {
   // GET route for getting all of the comments
-  app.get('/api/subsegments', async (req, res) => {
+  app.get('/api/orderdetails', async (req, res) => {
     // Add sequelize code to find all comments, and return them to the user with res.json
     const query = {};
-    console.log("req.query.segment_id: ", req.query.segment_id);
-    if (req.query.segment_id) {
-      query.SegmentId = req.query.segment_id;
+    console.log("req.query.order_id: ", req.query.order_id);
+    if (req.query.order_id) {
+      query.OrderId = req.query.order_id;
     }
     // In our findAll argument, we add a 'where' property, that could be empty
-    // depending on whether or not the request has an 'segment_id' key/value pait in the query string.
+    // depending on whether or not the request has an 'order_id' key/value pait in the query string.
     // We also add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Segment
+    // In this case, just db.Order
     try {
-      const data = await db.SubSegment.findAll({
+      const data = await db.OrderDetail.findAll({
         where: query,
-        include: [db.Segment],
+        include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -36,26 +36,26 @@ module.exports = function(app) {
   });
 
   // Get route for returning comments of a specific category
-  app.get('/api/subsegments/category/:category', async (req, res) => {
+  app.get('/api/orderdetails/category/:category', async (req, res) => {
     // Add sequelize code to find all comments where the category is equal to req.params.category,
     // return the result to the user with res.json
     // We build up the query object with a category property.
-    // If the request has an 'segment_id' key/value pair in the query string, we
-    // we add an SegmentId property to the query object.
+    // If the request has an 'order_id' key/value pair in the query string, we
+    // we add an OrderId property to the query object.
     // Then entire query object will be passed as the object for 'where' in the findAll argument.
     const query = {
       category: req.params.category,
     };
-    if (req.query.segment_id) {
-      query.SegmentId = req.query.segment_id;
+    if (req.query.order_id) {
+      query.OrderId = req.query.order_id;
     }
     // We also add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Segment
+    // In this case, just db.Order
     try {
-      const data = await db.SubSegment.findAll({
+      const data = await db.OrderDetail.findAll({
         where: query,
-        include: [db.Segment],
+        include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -64,16 +64,16 @@ module.exports = function(app) {
   });
 
   // Get route for retrieving a single comment
-  app.get('/api/subsegments/:id', async (req, res) => {
+  app.get('/api/orderdetails/:id', async (req, res) => {
     // Add sequelize code to find a single comment where the id is equal to req.params.id,
     // return the result to the user with res.json
     // We add an "include" property to our options in our findAll query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Segment
+    // In this case, just db.Order
     try {
-      const data = await db.SubSegment.findOne({
+      const data = await db.OrderDetail.findOne({
         where: {id: req.params.id},
-        include: [db.Segment],
+        include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -82,14 +82,14 @@ module.exports = function(app) {
   });
 
   // POST route for saving a new comment
-  app.post('/api/subsegments', async (req, res) => {
+  app.post('/api/orderdetails', async (req, res) => {
     // Add sequelize code for creating a comment using req.body,
     // then return the result using res.json
     console.log("req.body: ", req.body);
     
     try {
       console.log("req.body: ", req.body);
-      const result = await db.SubSegment.create(req.body);
+      const result = await db.OrderDetail.create(req.body);
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
@@ -97,7 +97,7 @@ module.exports = function(app) {
   });
 
   // // POST route for saving a new comment
-  // app.post('/api/subsegments', async (req, res) => {
+  // app.post('/api/orderdetails', async (req, res) => {
   //   // Add sequelize code for creating a comment using req.body,
   //   // then return the result using res.json
   //   try {
@@ -109,11 +109,11 @@ module.exports = function(app) {
   // });
 
   // DELETE route for deleting comments
-  app.delete('/api/subsegments/:id', async (req, res) => {
+  app.delete('/api/orderdetails/:id', async (req, res) => {
     // Add sequelize code to delete a comment where the id is equal to req.params.id,
     // then return the result to the user using res.json
     try {
-      const result = await db.SubSegment.destroy(
+      const result = await db.OrderDetail.destroy(
           {
             // where: {id: req.params.id},
             where: {id: req.params.id},
@@ -128,20 +128,20 @@ module.exports = function(app) {
   });
 
   // PUT route for updating comments
-  app.put('/api/subsegments', async (req, res) => {
+  app.put('/api/orderdetails', async (req, res) => {
     // Add code here to update a comment using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     // const {id, hurdle, markets, buyers, offerings, productivity, acquisition} = req.body;
-    const {id, hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, SegmentId
+    const {id, hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, OrderId
     // , reputation, demand, engagement, enablement, intelligence
     } = req.body;
     console.log("req.body: ",req.body);
 
     try {
-      // const result = await db.SubSegment.update(
-        const result = await db.SubSegment.update(
+      // const result = await db.OrderDetail.update(
+        const result = await db.OrderDetail.update(
           // {hurdle, markets, buyers, offerings, productivity, acquisition},
-          {hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, SegmentId},
+          {hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, OrderId},
           {where: {id}},
       );
       const affectedRowCount = result[0];

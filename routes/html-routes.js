@@ -20,7 +20,7 @@ module.exports = function (app) {
   // THIS IS THE START-UP ROUTING
   // index route loads view.html
   app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/segment-manager.html'));
+    res.sendFile(path.join(__dirname, '../public/order-manager.html'));
   });
 
   // Route to the cms page
@@ -43,9 +43,9 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, '../public/comment.html'));
   });
 
-  // subsegment route loads subsegment.html
-  app.get('/subsegment', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/subsegment.html'));
+  // orderdetail route loads orderdetail.html
+  app.get('/orderdetail', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public/orderdetail.html'));
   });
 
   // sgmt_rev_goals route loads sgmt_rev_goals.html
@@ -58,12 +58,12 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, '../public/person-manager.html'));
   });
 
-  // segments route loads segment-manager.html
-  app.get('/segments', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/segment-manager.html'));
+  // orders route loads order-manager.html
+  app.get('/orders', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public/order-manager.html'));
   });
 
-  // // routes_to_revenue route loads routes-to-revenue.html
+  // // routes_to_revenue route loads order-details.html
   // app.get('/route', function (req, res) {
   //   res.sendFile(path.join(__dirname, '../public/route.html'));
   // });

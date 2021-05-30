@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const SubSegment = sequelize.define('SubSegment', {
+  const OrderDetail = sequelize.define('OrderDetail', {
     hurdle: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -42,7 +42,7 @@ module.exports = function (sequelize, DataTypes) {
       //   len: [1],
       // },
     },
-    SegmentId: {
+    OrderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       //   validate: {
@@ -105,15 +105,15 @@ module.exports = function (sequelize, DataTypes) {
       // },
     });
 
-  SubSegment.associate = function (models) {
-    // We're saying that a SubSegment should belong to an Segment
-    // A SubSegment can't be created without an Segment due to the foreign key constraint
-    SubSegment.belongsTo(models.Segment, {
+  OrderDetail.associate = function (models) {
+    // We're saying that a OrderDetail should belong to an Order
+    // A OrderDetail can't be created without an Order due to the foreign key constraint
+    OrderDetail.belongsTo(models.Order, {
       foreignKey: {
         allowNull: false,
       },
     });
   };
 
-  return SubSegment;
+  return OrderDetail;
 };
