@@ -1,8 +1,8 @@
 $(document).ready(function () {
   // Getting references to the name input and order container, as well as the table body
-  const nameInput = $('#order-name');
-  const dealsizeInput = $('#order-deal_size');
-  const dealcountInput = $('#order-deal_count');
+  const nameInput = $('#order-firstname');
+  const dealsizeInput = $('#order-lastname');
+  const dealcountInput = $('#order-order_date');
 
   const orderList = $('tbody');
   const orderTotals = $('tfooter');

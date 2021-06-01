@@ -95,21 +95,21 @@ button.edit {
   display: none;
 }
 
-#order-name {
+#order-firstname {
   width: 30%;
   height: 35px;
   margin: 5px;
   padding: 10px;
 }
 
-#order-deal_size {
+#order-lastname {
   width: 30%;
   height: 35px;
   margin: 5px;
   padding: 10px;
 }
 
-#order-deal_count {
+#order-order_date {
   width: 30%;
   height: 35px;
   margin: 5px;

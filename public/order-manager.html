@@ -52,15 +52,47 @@
 				<div class="order-container">
 					<h1>Orders</h1>
 
-						<form id="order-form">
-							<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
-								<input placeholder="New order name" id="order-name" type="text" />
-								<input placeholder="Deal size" id="order-deal_size" type="text" />
-								<input placeholder="Deal count" id="order-deal_count" type="text" />
-							<!-- </td> -->
-							<td><button type="submit" class="btn btn-success">Create Order > </button>
-							</td>
-						</form>
+					<form id="order-form">
+						<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
+							<input placeholder="Order date" id="order-order_date" type="text" />
+							<input placeholder="Delivery / pickup date" id="order-delivery_date" type="text" />
+							<div>
+							<input placeholder="First name" id="order-firstname" type="text" />
+							<input placeholder="Last name" id="order-lastname" type="text" />
+							<input placeholder="Address" id="order-customer_address" type="text" />
+						</div>
+						<div>
+							<input placeholder="Cake theme" id="order-cake_theme" type="text" />
+							<input placeholder="Name on cake" id="order-cake_name" type="text" />
+							<input placeholder="Age on cake" id="order-cake_age" type="text" />
+							<input placeholder="Girl / boy" id="order-boygirl" type="text" />
+							<input placeholder="Cake description" id="order-cake_description" type="text" />
+							<input placeholder="Occasion" id="order-occasion" type="text" />
+						</div>
+						<div>
+							<input placeholder="Cake size" id="order-cake_size" type="text" />
+							<input placeholder="Cake servings" id="order-cake_servings" type="text" />
+						</div>
+						<div>
+							<input placeholder="Cake layers" id="order-cake_layers" type="text" />
+							<input placeholder="Flavor - layer 1" id="order-cake_flavor1" type="text" />
+							<input placeholder="Filling - layer 1" id="order-cake_filling1" type="text" />
+							<input placeholder="Flavor - layer 2" id="order-cake_flavor2" type="text" />
+							<input placeholder="Filling - layer 1" id="order-cake_filling1" type="text" />
+							<input placeholder="Flavor - layer 3" id="order-cake_flavor3" type="text" />
+							<input placeholder="Filling - layer 3" id="order-cake_filling3" type="text" />
+						</div>
+						<div>
+							<input placeholder="Price" id="order-cake_price" type="text" />
+							<input placeholder="Delivery or pickup" id="order-delivery_pickup" type="text" />
+							<input placeholder="Delivery or pickup time" id="order-delivery_pickup_time" type="text" />
+						</div>
+
+
+						<!-- </td> -->
+						<td><button type="submit" class="btn btn-success">Create Order > </button>
+						</td>
+					</form>
 
 					<table class="table table-striped">
 						<thead>
@@ -85,9 +117,9 @@
 							<!-- <tr id="form-row">
 								<form id="order-form">
 									<td colspan="8" class="add_order" style="background-color: yellow;">
-										<input placeholder="New order name" id="order-name" type="text" />
-										<input placeholder="Deal size" id="order-deal_size" type="text" />
-										<input placeholder="Deal count" id="order-deal_count" type="text" />
+										<input placeholder="New order name" id="order-firstname" type="text" />
+										<input placeholder="Deal size" id="order-lastname" type="text" />
+										<input placeholder="Deal count" id="order-order_date" type="text" />
 									</td>
 									<td><button type="submit" class="btn btn-success">Create Order > </button>
 									</td>
@@ -105,9 +137,9 @@
 							<h4>Add a new order:</h4>
 						</div>
 						<div class="col-md-9 col-sm-12">
-							<input placeholder="Order" id="order-name" type="text" style="width: 200px" />
-							<input placeholder="Deal size" id="order-deal_size" type="text" style="width: 200px" />
-							<input placeholder="Deal count" id="order-deal_count" type="text" style="width: 200px" />
+							<input placeholder="Order" id="order-firstname" type="text" style="width: 200px" />
+							<input placeholder="Deal size" id="order-lastname" type="text" style="width: 200px" />
+							<input placeholder="Deal count" id="order-order_date" type="text" style="width: 200px" />
 							<button type="submit" class="btn btn-success">Create Order</button>
 						</div>
 					</div> -->
