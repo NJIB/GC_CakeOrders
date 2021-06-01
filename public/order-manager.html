@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Order Revenue</title>
+	<title>GC Order Tracker</title>
 	<!-- Latest compiled and minified CSS & JS -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/flatly/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/styles.css" media="screen" title="no title">
@@ -12,12 +12,18 @@
 
 	<script src="https://code.jquery.com/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+
 </head>
 
 <header>
 	<div class="row">
 		<div class="name_plate col-lg-4 col-md-4 col-sm-12">
-			MKTG_PLANNER
+			The Greenwich Cakery
 		</div>
 
 		<nav class="col-lg-8 col-md-8 col-sm-12">
@@ -45,6 +51,17 @@
 			<div class="col-md-12">
 				<div class="order-container">
 					<h1>Orders</h1>
+
+						<form id="order-form">
+							<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
+								<input placeholder="New order name" id="order-name" type="text" />
+								<input placeholder="Deal size" id="order-deal_size" type="text" />
+								<input placeholder="Deal count" id="order-deal_count" type="text" />
+							<!-- </td> -->
+							<td><button type="submit" class="btn btn-success">Create Order > </button>
+							</td>
+						</form>
+
 					<table class="table table-striped">
 						<thead>
 							<tr>
@@ -65,7 +82,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr id="form-row">
+							<!-- <tr id="form-row">
 								<form id="order-form">
 									<td colspan="8" class="add_order" style="background-color: yellow;">
 										<input placeholder="New order name" id="order-name" type="text" />
@@ -75,7 +92,7 @@
 									<td><button type="submit" class="btn btn-success">Create Order > </button>
 									</td>
 								</form>
-							</tr>
+							</tr> -->
 						</tbody>
 						<!-- <tfooter>
 							<tr id="form-row">
