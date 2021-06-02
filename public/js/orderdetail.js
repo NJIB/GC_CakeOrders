@@ -837,7 +837,7 @@ $(document).ready(function () {
     if (rowCount === 0) {
       newTr.append('<td>' + orderData.name + '</td>');
       newTr.append('<td>$' + orderData.deal_size + '</td>');
-      newTr.append('<td>' + orderData.deal_count + '</td>');
+      newTr.append('<td>' + orderData.order_date + '</td>');
       newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
 
       if (orderData.deal_size_yoy) {
@@ -860,7 +860,7 @@ $(document).ready(function () {
       }
 
       if (!orderData.next_year_deal_count) {
-        newTr.append('<td>$' + orderData.deal_count + '</td>');
+        newTr.append('<td>$' + orderData.order_date + '</td>');
       }
       else {
         newTr.append('<td>$' + orderData.next_year_deal_count + '</td>');
@@ -1134,7 +1134,7 @@ $(document).ready(function () {
 
     chart1Data.push({
       x: orderData.deal_size,
-      y: orderData.deal_count,
+      y: orderData.order_date,
       r: (orderData.sgmt_rev / 100)
     });
 

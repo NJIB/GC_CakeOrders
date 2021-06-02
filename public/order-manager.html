@@ -54,16 +54,21 @@
 			<!-- <div class="col-md-8 offset-md-2"> -->
 			<div class="col-md-12">
 				<div class="order-container">
-					<h1>Orders</h1>
+					<!-- <h1>Orders</h1> -->
 
 					<form id="order-form">
+						<div class="order-header">
+							<h3>Customer Details</h3>
+						</div>
 						<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
-							<input placeholder="Order date" id="order-order_date" type="text" />
-							<input placeholder="Delivery / pickup date" id="order-delivery_date" type="text" />
-							<div>
+						<div>
 							<input placeholder="First name" id="order-firstname" type="text" />
 							<input placeholder="Last name" id="order-lastname" type="text" />
 							<input placeholder="Address" id="order-customer_address" type="text" />
+						</div>
+
+						<div class="order-header">
+							<h3>Cake Details</h3>
 						</div>
 						<div>
 							<input placeholder="Cake theme" id="order-cake_theme" type="text" />
@@ -86,34 +91,38 @@
 							<input placeholder="Flavor - layer 3" id="order-cake_flavor3" type="text" />
 							<input placeholder="Filling - layer 3" id="order-cake_filling3" type="text" />
 						</div>
+
+						<div class="order-header">
+							<h3>Order Details</h3>
+						</div>
 						<div>
+							<input placeholder="Order Date" id="order-order_date" type="date"/>
 							<input placeholder="Price" id="order-cake_price" type="text" />
 							<input placeholder="Delivery or pickup" id="order-delivery_pickup" type="text" />
 							<input placeholder="Delivery or pickup time" id="order-delivery_pickup_time" type="text" />
+							<input placeholder="Delivery / pickup date" id="order-delivery_date" type="text" />
 						</div>
 
-
-						<!-- </td> -->
-						<td><button type="submit" class="btn btn-success">Create Order > </button>
-						</td>
+						<div class="order-header">
+							<button type="submit" class="btn btn-success">Create Order > </button>
+						</div>
 					</form>
 
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>Name</th>
-								<th>Deal Size</th>
-								<th>Deal Count</th>
-								<th>Order Revenue</th>
-								<th>Deal Size % YOY Change</th>
+								<th>Delivery Date</th>
+								<th>Cake Theme</th>
+								<th>Customer Name</th>
+								<!-- <th>Deal Size % YOY Change</th>
 								<th>Deal Count % YOY Change</th>
 								<th>Update</th>
 								<th>Next Year Deal Size</th>
 								<th>Next Year Deal Count</th>
 								<th>Next Year Order Revenue</th>
 								<th>Define Revenue Routes</th>
-								<th># of Revenue Routes</th>
-								<th>Manage Revenue Routes</th>
+								<th># of Revenue Routes</th> -->
+								<th>Order Details</th>
 								<th>Delete</th>
 							</tr>
 						</thead>

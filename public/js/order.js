@@ -1,8 +1,11 @@
 $(document).ready(function () {
   // Getting references to the name input and order container, as well as the table body
-  const nameInput = $('#order-firstname');
-  const dealsizeInput = $('#order-lastname');
-  const dealcountInput = $('#order-order_date');
+  const firstnameInput = $('#order-firstname');
+  const lastnameInput = $('#order-lastname');
+  const fullnameInput = $('#order-firstname') + $('#order-lastname');
+  // const dealsizeInput = $('#order-lastname');
+  const orderdateInput = $('#order-order_date');
+  const cakethemeInput = $('#order-cake_theme');
 
   const orderList = $('tbody');
   const orderTotals = $('tfooter');
@@ -12,8 +15,8 @@ $(document).ready(function () {
   // const chart1Area = $('#myBubbleChart1');
   // const chart2Area = $('#myBubbleChart2');
   // var ctx = $('#myBubbleChart');
-  let chart1Data = [{}];
-  let chart2Data = [{}];
+  // let chart1Data = [{}];
+  // let chart2Data = [{}];
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Order
@@ -29,22 +32,25 @@ $(document).ready(function () {
     event.preventDefault();
 
     // Don't do anything if the name fields hasn't been filled out
-    if (!nameInput.val().trim().trim()) {
+    if (!firstnameInput.val().trim().trim()) {
       return;
     }
 
-    console.log("nameInput: ", nameInput.val().trim());
-    console.log("dealsizeInput: ", dealsizeInput.val().trim());
-    console.log("dealcountInput: ", dealcountInput.val().trim());
+    console.log("firstnameInput: ", firstnameInput.val().trim());
+    console.log("lastnameInput: ", lastnameInput.val().trim());
+    console.log("orderdateInput: ", orderdateInput.val().trim());
 
     const orderData = {
-      name: nameInput
+      first_name: firstnameInput
         .val()
         .trim(),
-      deal_size: dealsizeInput
+      last_name: lastnameInput
         .val()
         .trim(),
-      deal_count: dealcountInput
+      order_date: orderdateInput
+        .val()
+        .trim(),
+      cake_theme: cakethemeInput
         .val()
         .trim()
     }
@@ -74,10 +80,10 @@ $(document).ready(function () {
     newTr.data('order', orderData);
     newTr.append('<td>' + orderData.name + '</td>');
     newTr.append('<td>$' + orderData.deal_size + '</td>');
-    newTr.append('<td>' + orderData.deal_count + '</td>');
+    newTr.append('<td>' + orderData.order_date + '</td>');
     newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
 
-    console.log("orderData.deal_size_yoy: ",orderData.deal_size_yoy);
+    console.log("orderData.deal_size_yoy: ", orderData.deal_size_yoy);
     if (orderData.deal_size_yoy) {
       newTr.append('<td>' + '<input placeholder=' + orderData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
     } else {
@@ -97,14 +103,14 @@ $(document).ready(function () {
       newTr.append('<td>$' + orderData.deal_size + '</td>');
     }
     else {
-    newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
+      newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
     }
 
     if (!orderData.next_year_deal_count) {
-      newTr.append('<td>$' + orderData.deal_count + '</td>');
+      newTr.append('<td>$' + orderData.order_date + '</td>');
     }
     else {
-    newTr.append('<td>' + orderData.next_year_deal_count + '</td>');
+      newTr.append('<td>' + orderData.next_year_deal_count + '</td>');
     }
 
     if (!orderData.next_year_sgmt_rev) {
@@ -164,8 +170,8 @@ $(document).ready(function () {
 
       console.log('data: ', data);
 
-      orderRevTotal = 0;
-      nextyearSgmtRevTotal = 0;
+      // orderRevTotal = 0;
+      // nextyearSgmtRevTotal = 0;
       const rowsToAdd = [];
 
       for (let i = 0; i < data.length; i++) {
@@ -191,9 +197,12 @@ $(document).ready(function () {
       // console.log("rowsToAdd: ", rowsToAdd);
 
       renderOrderList(rowsToAdd);
-      nameInput.val('');
-      dealsizeInput.val('');
-      dealcountInput.val('');
+      firstnameInput.val('');
+      lastnameInput.val('');
+      fullnameInput.val('');
+      // dealsizeInput.val('');
+      orderdateInput.val('');
+      cakethemeInput.val('');
     });
 
   }
@@ -215,7 +224,7 @@ $(document).ready(function () {
 
     chart1Data.push({
       x: orderData.deal_size,
-      y: orderData.deal_count,
+      y: orderData.order_date,
       r: (orderData.sgmt_rev / 100)
     });
 
@@ -360,10 +369,10 @@ $(document).ready(function () {
 
     // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
     if (dealcountyoychangeInput === '') {
-      nextyearDealcount = listItemData.deal_count;
+      nextyearDealcount = listItemData.order_date;
       // console.log("nextyearDealcount: ", nextyearDealcount);
     } else {
-      nextyearDealcount = (listItemData.deal_count * (1 + (dealcountyoychangeInput.val() / 100)));
+      nextyearDealcount = (listItemData.order_date * (1 + (dealcountyoychangeInput.val() / 100)));
       // console.log("nextyearDealcount: ", nextyearDealcount);
     }
 
@@ -375,7 +384,7 @@ $(document).ready(function () {
       id: listItemData.id,
       name: listItemData.name,
       deal_size: listItemData.deal_size,
-      deal_count: listItemData.deal_count,
+      order_date: listItemData.order_date,
       deal_size_yoy: dealsizeyoychangeInput.val() * 1,
       deal_count_yoy: dealcountyoychangeInput.val() * 1,
       next_year_deal_size: nextyearDealsize,

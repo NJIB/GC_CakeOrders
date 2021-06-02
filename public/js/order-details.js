@@ -1,8 +1,8 @@
 $(document).ready(function () {
   // Getting references to the name input and order container, as well as the table body
-  const nameInput = $('#order-firstname');
+  const firstnameInput = $('#order-firstname');
   const dealsizeInput = $('#order-lastname');
-  const dealcountInput = $('#order-order_date');
+  const orderdateInput = $('#order-order_date');
 
   const orderList = $('tbody');
   const orderTotals = $('tfooter');
@@ -29,22 +29,22 @@ $(document).ready(function () {
     event.preventDefault();
 
     // Don't do anything if the name fields hasn't been filled out
-    if (!nameInput.val().trim().trim()) {
+    if (!firstnameInput.val().trim().trim()) {
       return;
     }
 
-    console.log("nameInput: ", nameInput.val().trim());
+    console.log("firstnameInput: ", firstnameInput.val().trim());
     console.log("dealsizeInput: ", dealsizeInput.val().trim());
-    console.log("dealcountInput: ", dealcountInput.val().trim());
+    console.log("orderdateInput: ", orderdateInput.val().trim());
 
     const orderData = {
-      name: nameInput
+      name: firstnameInput
         .val()
         .trim(),
       deal_size: dealsizeInput
         .val()
         .trim(),
-      deal_count: dealcountInput
+      order_date: orderdateInput
         .val()
         .trim()
     }
@@ -74,7 +74,7 @@ $(document).ready(function () {
     newTr.data('order', orderData);
     newTr.append('<td>' + orderData.name + '</td>');
     newTr.append('<td>$' + orderData.deal_size + '</td>');
-    newTr.append('<td>' + orderData.deal_count + '</td>');
+    newTr.append('<td>' + orderData.order_date + '</td>');
     newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
 
     if (orderData.deal_size_yoy) {
@@ -100,7 +100,7 @@ $(document).ready(function () {
     }
 
     if (!orderData.next_year_deal_count) {
-      newTr.append('<td>$' + orderData.deal_count + '</td>');
+      newTr.append('<td>$' + orderData.order_date + '</td>');
     }
     else {
     newTr.append('<td>$' + orderData.next_year_deal_count + '</td>');
@@ -186,9 +186,9 @@ $(document).ready(function () {
       // console.log("rowsToAdd: ", rowsToAdd);
 
       renderOrderList(rowsToAdd);
-      nameInput.val('');
+      firstnameInput.val('');
       dealsizeInput.val('');
-      dealcountInput.val('');
+      orderdateInput.val('');
     });
 
   }
@@ -210,7 +210,7 @@ $(document).ready(function () {
 
     chart1Data.push({
       x: orderData.deal_size,
-      y: orderData.deal_count,
+      y: orderData.order_date,
       r: (orderData.sgmt_rev / 100)
     });
 
@@ -353,10 +353,10 @@ $(document).ready(function () {
 
     // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
     if (dealcountyoychangeInput === '') {
-      nextyearDealcount = listItemData.deal_count;
+      nextyearDealcount = listItemData.order_date;
       // console.log("nextyearDealcount: ", nextyearDealcount);
     } else {
-      nextyearDealcount = (listItemData.deal_count * (1 + (dealcountyoychangeInput.val() / 100)));
+      nextyearDealcount = (listItemData.order_date * (1 + (dealcountyoychangeInput.val() / 100)));
       // console.log("nextyearDealcount: ", nextyearDealcount);
     }
 
@@ -368,7 +368,7 @@ $(document).ready(function () {
       id: listItemData.id,
       name: listItemData.name,
       deal_size: listItemData.deal_size,
-      deal_count: listItemData.deal_count,
+      order_date: listItemData.order_date,
       deal_size_yoy: dealsizeyoychangeInput.val() * 1,
       deal_count_yoy: dealcountyoychangeInput.val() * 1,
       next_year_deal_size: nextyearDealsize,

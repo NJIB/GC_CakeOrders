@@ -39,6 +39,10 @@ form#sms {
   resize: none;
 }
 
+.order-header {
+  margin-top: 20px;
+}
+
 .card-header button.delete,
 button.edit {
   float: right;

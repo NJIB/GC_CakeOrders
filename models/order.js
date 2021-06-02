@@ -1,68 +1,79 @@
 module.exports = function(sequelize, DataTypes) {
   const Order = sequelize.define('Order', {
-    name: {
+    first_name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         len: [1, 160],
       },
     },
-    deal_size: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
       validate: {
-        len: [1],
+        len: [1, 160],
       },
     },
-    deal_count: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
+    cake_theme: {
+      type: DataTypes.STRING,
+      allowNull: false,
       validate: {
-        len: [1],
+        len: [1, 160],
       },
     },
-    sgmt_rev: {
-      type: DataTypes.INTEGER,
+    // deal_size: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
+    order_date: {
+      type: DataTypes.DATE,
       allowNull: true,
-      validate: {
-        len: [1],
-      },
     },
-    deal_size_yoy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        len: [1],
-      },
-    },
-    deal_count_yoy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        len: [1],
-      },
-    },
-    next_year_deal_size: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        len: [1],
-      },
-    },
-    next_year_deal_count: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        len: [1],
-      },
-    },
-    next_year_sgmt_rev: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        len: [1],
-      },
-    },
+    // sgmt_rev: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
+    // deal_size_yoy: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
+    // deal_count_yoy: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
+    // next_year_deal_size: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
+    // next_year_deal_count: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
+    // next_year_sgmt_rev: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   validate: {
+    //     len: [1],
+    //   },
+    // },
 
   });
 
@@ -73,7 +84,6 @@ module.exports = function(sequelize, DataTypes) {
       onDelete: 'cascade',
     });
   };
-
 
   return Order;
 };
