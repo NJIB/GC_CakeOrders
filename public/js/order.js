@@ -2,8 +2,6 @@ $(document).ready(function () {
   // Getting references to the name input and order container, as well as the table body
   const firstnameInput = $('#order-firstname');
   const lastnameInput = $('#order-lastname');
-  const fullnameInput = $('#order-firstname') + $('#order-lastname');
-  // const dealsizeInput = $('#order-lastname');
   const orderdateInput = $('#order-order_date');
   const cakethemeInput = $('#order-cake_theme');
 
@@ -71,72 +69,67 @@ $(document).ready(function () {
   function createOrderRow(orderData) {
 
     // console.log('orderData: ', orderData);
-    // const deal_size_yoy_id = "deal_size_yoy" + (i + 1);
     const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
-    // const deal_count_yoy_id = "deal_count_yoy" + (i + 1);
     const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
 
     const newTr = $('<tr>');
     newTr.data('order', orderData);
-    newTr.append('<td>' + orderData.name + '</td>');
-    newTr.append('<td>$' + orderData.deal_size + '</td>');
     newTr.append('<td>' + orderData.order_date + '</td>');
-    newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
+    newTr.append('<td>' + orderData.cake_theme + '</td>');
+    newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
+    // newTr.append('<td>' + orderData.first_name + '</td>');
+    // newTr.append('<td>' + orderData.last_name + '</td>');
 
-    console.log("orderData.deal_size_yoy: ", orderData.deal_size_yoy);
-    if (orderData.deal_size_yoy) {
-      newTr.append('<td>' + '<input placeholder=' + orderData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    } else {
-      newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    }
+    // console.log("orderData.deal_size_yoy: ", orderData.deal_size_yoy);
+    // if (orderData.deal_size_yoy) {
+    //   newTr.append('<td>' + '<input placeholder=' + orderData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
+    // } else {
+    //   newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
+    // }
 
-    if (orderData.deal_count_yoy) {
-      newTr.append('<td>' + '<input placeholder=' + orderData.deal_count_yoy + ' id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    } else {
-      newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    }
+    // if (orderData.deal_count_yoy) {
+    //   newTr.append('<td>' + '<input placeholder=' + orderData.deal_count_yoy + ' id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
+    // } else {
+    //   newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
+    // }
 
     // Potentially only show button, if change field is populated?
-    newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
+    // newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
 
-    if (!orderData.next_year_deal_size) {
-      newTr.append('<td>$' + orderData.deal_size + '</td>');
-    }
-    else {
-      newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
-    }
+    // if (!orderData.next_year_deal_size) {
+    //   newTr.append('<td>$' + orderData.deal_size + '</td>');
+    // }
+    // else {
+    //   newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
+    // }
 
-    if (!orderData.next_year_deal_count) {
-      newTr.append('<td>$' + orderData.order_date + '</td>');
-    }
-    else {
-      newTr.append('<td>' + orderData.next_year_deal_count + '</td>');
-    }
+    // if (!orderData.next_year_deal_count) {
+    //   newTr.append('<td>$' + orderData.order_date + '</td>');
+    // }
+    // else {
+    //   newTr.append('<td>' + orderData.next_year_deal_count + '</td>');
+    // }
 
-    if (!orderData.next_year_sgmt_rev) {
-      newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
-    }
-    else {
-      newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
-    };
+    // if (!orderData.next_year_sgmt_rev) {
+    //   newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
+    // }
+    // else {
+    //   newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
+    // };
     //10.05 Testing change to button class
-    // newTr.append('<td> <button class="btn btn-success update"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
     newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
-    //10.05 End test
 
-    if (orderData.OrderDetails) {
-      newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
-    } else {
-      newTr.append('<td>0</td>');
-    }
-    // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?order_id=' + orderData.id + '\'>...</a></td>');
+    // if (orderData.OrderDetails) {
+    //   newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
+    // } else {
+    //   newTr.append('<td>0</td>');
+    // }
     // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
-    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
 
     console.log("orderData: ", orderData);
 
-    buildChartObject(orderData);
+    // buildChartObject(orderData);
 
     return newTr;
   }
@@ -178,18 +171,18 @@ $(document).ready(function () {
         rowsToAdd.push(createOrderRow(data[i], i));
 
         // Calculating total order revenue
-        orderRevTotal += data[i].sgmt_rev;
-        if (!data[i].next_year_sgmt_rev) {
-          nextyearSgmtRevTotal += data[i].sgmt_rev;
-        }
-        else {
-          nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
-        };
+        // orderRevTotal += data[i].sgmt_rev;
+        // if (!data[i].next_year_sgmt_rev) {
+        //   nextyearSgmtRevTotal += data[i].sgmt_rev;
+        // }
+        // else {
+        //   nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
+        // };
 
         console.log("i: ", i);
         console.log("data.length: ", data.length);
         if ((i + 1) == data.length) {
-          rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
+          // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
         }
       }
 
@@ -199,8 +192,6 @@ $(document).ready(function () {
       renderOrderList(rowsToAdd);
       firstnameInput.val('');
       lastnameInput.val('');
-      fullnameInput.val('');
-      // dealsizeInput.val('');
       orderdateInput.val('');
       cakethemeInput.val('');
     });
