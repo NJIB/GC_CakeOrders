@@ -39,6 +39,11 @@ form#sms {
   resize: none;
 }
 
+.gc_order_entry {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .order-header {
   margin-top: 20px;
 }

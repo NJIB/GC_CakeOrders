@@ -38,6 +38,21 @@ $(document).ready(function () {
     console.log("lastnameInput: ", lastnameInput.val().trim());
     console.log("orderdateInput: ", orderdateInput.val().trim());
 
+    const customerData = {
+      first_name: firstnameInput
+        .val()
+        .trim(),
+      last_name: lastnameInput
+        .val()
+        .trim(),
+      order_date: orderdateInput
+        .val()
+        .trim(),
+      cake_theme: cakethemeInput
+        .val()
+        .trim()
+    }
+
     const orderData = {
       first_name: firstnameInput
         .val()
@@ -55,6 +70,7 @@ $(document).ready(function () {
 
     console.log("orderData object: ", orderData)
 
+    upsertCustomer(customerData);
     upsertOrder(orderData);
 
   }
@@ -62,6 +78,11 @@ $(document).ready(function () {
   // A function for creating an order. Calls getOrders upon completion
   function upsertOrder(orderData) {
     $.post('/api/orders', orderData)
+      .then(getOrders);
+  }
+
+  function upsertCustomer(customerData) {
+    $.post('/api/customers', customerData)
       .then(getOrders);
   }
 
@@ -186,7 +207,7 @@ $(document).ready(function () {
         }
       }
 
-      console.log("orderRevTotal: ", orderRevTotal);
+      // console.log("orderRevTotal: ", orderRevTotal);
       // console.log("rowsToAdd: ", rowsToAdd);
 
       renderOrderList(rowsToAdd);
