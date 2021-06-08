@@ -8,7 +8,7 @@ module.exports = function(app) {
   app.get('/api/customers', async (req, res) => {
     try {
       const data = await db.Customer.findAll({
-        include: [db.OrderDetail],
+        include: [db.CakeOrder],
       });
       res.json(data);
     } catch (error) {
@@ -25,7 +25,7 @@ module.exports = function(app) {
       const data = await db.Customer.findOne( // findOne returns a single object.  findAll returns an array of objects
           {
             where: {id: req.params.id},
-            include: [db.OrderDetail],
+            include: [db.CakeOrder],
           },
       );
       res.json(data);
@@ -37,7 +37,6 @@ module.exports = function(app) {
   app.post('/api/customers', async (req, res) => {
     // Create an Order with the data available to us in req.body
     console.log("req.body: ", req.body);
-    // const {name, deal_size, order_date} = req.body;
     const {first_name, last_name, order_date} = req.body;
 
     // const sgmt_rev = (deal_size * order_date);
@@ -75,12 +74,13 @@ module.exports = function(app) {
     // Add code here to update a order using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     // const {id, name} = req.body;
-    const {id, name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev} = req.body;
+    const {id, first_name, last_name, order_date} = req.body;
+    // const {id, name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev} = req.body;
     console.log("name: ", name);
 
     try {
       const result = await db.Customer.update(
-          {name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev},
+          {first_name, last_name, order_date},
           {where: {id}},
       );
       const affectedRowCount = result[0];

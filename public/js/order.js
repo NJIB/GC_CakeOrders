@@ -1,9 +1,38 @@
 $(document).ready(function () {
-  // Getting references to the name input and order container, as well as the table body
+  // Getting references to the name inputs and order date
   const firstnameInput = $('#order-firstname');
   const lastnameInput = $('#order-lastname');
   const orderdateInput = $('#order-order_date');
+
+  // Getting references to the cake detail inputs
   const cakethemeInput = $('#order-cake_theme');
+  const cakedescriptionInput = $('#order-cake_description');
+  const cakespecialInput = $('#order-cake_special');
+  const cakenameInput = $('#order-cake_name');
+  const cakeageInput = $('#order-cake_age');
+  const cakeboygirlInput = $('#order-cake_boygirl');
+  const cakeoccasionInput = $('#order-cake_occasion');
+  const cakeservingsInput = $('#order-cake_servings');
+  const cakelayersInput = $('#order-cake_layers');
+  const cakesize1Input = $('#order-cake_size1');
+  const cakeshape1Input = $('#order-cake_shape1');
+  const cakeflavor1Input = $('#order-cake_flavor1');
+  const cakefilling1Input = $('#order-cake_filling1');
+  const cakenotes1Input = $('#order-cake_notes1');
+  const cakesize2Input = $('#order-cake_size2');
+  const cakeshape2Input = $('#order-cake_shape2');
+  const cakeflavor2Input = $('#order-cake_flavor2');
+  const cakefilling2Input = $('#order-cake_filling2');
+  const cakenotes2Input = $('#order-cake_notes2');
+  const cakesize3Input = $('#order-cake_size3');
+  const cakeshape3Input = $('#order-cake_shape3');
+  const cakeflavor3Input = $('#order-cake_flavor3');
+  const cakefilling3Input = $('#order-cake_filling3');
+  const cakenotes3Input = $('#order-cake_notes3');
+  const cakepriceInput = $('#order-cake_price');
+
+
+
 
   const orderList = $('tbody');
   const orderTotals = $('tfooter');
@@ -48,22 +77,85 @@ $(document).ready(function () {
       order_date: orderdateInput
         .val()
         .trim(),
-      cake_theme: cakethemeInput
-        .val()
-        .trim()
+      // cake_theme: cakethemeInput
+      //   .val()
+      //   .trim()
     }
 
     const orderData = {
-      first_name: firstnameInput
-        .val()
-        .trim(),
-      last_name: lastnameInput
-        .val()
-        .trim(),
       order_date: orderdateInput
         .val()
         .trim(),
       cake_theme: cakethemeInput
+        .val()
+        .trim(),
+      cake_description: cakedescriptionInput
+        .val()
+        .trim(),
+      cake_special: cakespecialInput
+        .val()
+        .trim(),
+      cake_name: cakenameInput
+        .val()
+        .trim(),
+      cake_age: cakeageInput
+        .val()
+        .trim(),
+      cake_boygirl: cakeboygirlInput
+        .val()
+        .trim(),
+      cake_servings: cakeservingsInput
+        .val()
+        .trim(),
+      cake_layers: cakelayersInput
+        .val()
+        .trim(),
+      cake_size1: cakesize1Input
+        .val()
+        .trim(),
+      cake_shape1: cakeshape1Input
+        .val()
+        .trim(),
+      cake_flavor1: cakeflavor1Input
+        .val()
+        .trim(),
+      cake_filling1: cakefilling1Input
+        .val()
+        .trim(),
+      cake_notes1: cakenotes1Input
+        .val()
+        .trim(),
+      cake_size2: cakesize2Input
+        .val()
+        .trim(),
+      cake_shape2: cakeshape2Input
+        .val()
+        .trim(),
+      cake_flavor2: cakeflavor2Input
+        .val()
+        .trim(),
+      cake_filling2: cakefilling2Input
+        .val()
+        .trim(),
+      cake_notes2: cakenotes2Input
+        .val()
+        .trim(),
+      cake_size3: cakesize3Input
+        .val()
+        .trim(),
+      cake_shape3: cakeshape3Input
+        .val()
+        .trim(),
+      cake_flavor3: cakeflavor3Input
+        .val()
+        .trim(),
+      cake_filling3: cakefilling3Input
+        .val()
+        .trim(),
+      cake_notes3: cakenotes3Input
+        .val()
+        .trim(),
+      cake_price: cakepriceInput
         .val()
         .trim()
     }
@@ -82,8 +174,9 @@ $(document).ready(function () {
   }
 
   function upsertCustomer(customerData) {
+    console.log("customerData: ", customerData)
     $.post('/api/customers', customerData)
-      .then(getOrders);
+      .then(getCustomers);
   }
 
   // Function for creating a new list row for orders
@@ -207,17 +300,42 @@ $(document).ready(function () {
         }
       }
 
-      // console.log("orderRevTotal: ", orderRevTotal);
-      // console.log("rowsToAdd: ", rowsToAdd);
-
       renderOrderList(rowsToAdd);
       firstnameInput.val('');
       lastnameInput.val('');
       orderdateInput.val('');
       cakethemeInput.val('');
     });
-
   }
+
+  function getCustomers() {
+
+    $.get('/api/customers', function (data) {
+
+      console.log('data: ', data);
+
+      const rowsToAdd = [];
+
+      for (let i = 0; i < data.length; i++) {
+        rowsToAdd.push(createOrderRow(data[i], i));
+
+        console.log("i: ", i);
+        console.log("data.length: ", data.length);
+        if ((i + 1) == data.length) {
+          // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
+        }
+      }
+
+      renderOrderList(rowsToAdd);
+      firstnameInput.val('');
+      lastnameInput.val('');
+      orderdateInput.val('');
+      cakethemeInput.val('');
+
+    })
+  }
+
+  // }
 
   // A function for rendering the list of orders to the page
   function renderOrderList(rows) {

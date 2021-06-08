@@ -28,6 +28,7 @@ app.use(express.static('public'));
 require('./routes/html-routes')(app);
 require('./routes/order-api-routes')(app);
 require('./routes/orderdetails-api-routes')(app);
+require('./routes/customer-api-routes')(app);
 
 // Syncing our sequelize models Starting our Express app
 // =============================================================
