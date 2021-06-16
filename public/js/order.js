@@ -31,9 +31,6 @@ $(document).ready(function () {
   const cakenotes3Input = $('#order-cake_notes3');
   const cakepriceInput = $('#order-cake_price');
 
-
-
-
   const orderList = $('tbody');
   const orderTotals = $('tfooter');
   const orderContainer = $('.order-container');
@@ -47,7 +44,7 @@ $(document).ready(function () {
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Order
-  $(document).on('submit', '#order-form', handleOrderFormSubmit);
+  $(document).on('submit', '.order-form', handleOrderFormSubmit);
   $(document).on('click', '.delete-order', handleDeleteButtonPress);
   $(document).on('click', '.update', handleUpdateButtonPress);
 
@@ -58,14 +55,21 @@ $(document).ready(function () {
   function handleOrderFormSubmit(event) {
     event.preventDefault();
 
+    console.log("CREATE ORDER BUTTON PRESSED!")
+
     // Don't do anything if the name fields hasn't been filled out
-    if (!firstnameInput.val().trim().trim()) {
+    console.log("firstnameInput: ", firstnameInput.val().trim());
+    
+    if (!firstnameInput.val().trim()) {
       return;
     }
 
     console.log("firstnameInput: ", firstnameInput.val().trim());
     console.log("lastnameInput: ", lastnameInput.val().trim());
     console.log("orderdateInput: ", orderdateInput.val().trim());
+
+    let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0,1);
+    console.log("customerId: ", customerId);
 
     const customerData = {
       first_name: firstnameInput
@@ -76,13 +80,13 @@ $(document).ready(function () {
         .trim(),
       order_date: orderdateInput
         .val()
-        .trim(),
-      // cake_theme: cakethemeInput
-      //   .val()
-      //   .trim()
+        .trim()
     }
 
+    console.log("customerData: ", customerData);
+
     const orderData = {
+      customer_id: customerId,
       order_date: orderdateInput
         .val()
         .trim(),

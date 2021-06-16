@@ -46,6 +46,132 @@ module.exports = function (sequelize, DataTypes) {
       //   len: [1],
       // },
     },
+    cake_occasion: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_servings: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      //   validate: {
+      //     len: [1, 160],
+      //   },
+    },
+    cake_size1: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      //   validate: {
+      //     len: [1, 160],
+      //   },
+    },
+    cake_shape1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_flavor1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_filling1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_notes1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_size2: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      //   validate: {
+      //     len: [1, 160],
+      //   },
+    },
+    cake_shape2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_flavor2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_filling2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_notes2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_size3: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      //   validate: {
+      //     len: [1, 160],
+      //   },
+    },
+    cake_shape3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_flavor3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_filling3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_notes3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
+    cake_price: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // validate: {
+      //   len: [1],
+      // },
+    },
     CustomerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -53,60 +179,6 @@ module.exports = function (sequelize, DataTypes) {
       //     len: [1, 160],
       //   },
     },
-    // RouteId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-      // //   validate: {
-      // //     len: [1, 160],
-      // //   },
-    },
-    // body: {
-    //   type: DataTypes.TEXT,
-    //   allowNull: false,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    // category: {
-    //   type: DataTypes.STRING,
-    //   defaultValue: 'Personal',
-    //   allowNull: false,
-    // },
-    // reputation: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // //   validate: {
-    // //     len: [1, 160],
-    // //   },
-    // },
-    // demand: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // //   validate: {
-    // //     len: [1, 160],
-    // //   },
-    // },
-    // engagement: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // //   validate: {
-    // //     len: [1, 160],
-    // //   },
-    // },
-    // enablement: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // //   validate: {
-    // //     len: [1, 160],
-    // //   },
-    // },
-    // intelligence: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    // //   validate: {
-    // //     len: [1, 160],
-    // //   },
-    // },
   });
 
   CakeOrder.associate = function (models) {

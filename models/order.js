@@ -1,18 +1,18 @@
 module.exports = function(sequelize, DataTypes) {
   const Order = sequelize.define('Order', {
-    first_name: {
+    customer_id: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         len: [1, 160],
       },
     },
-    last_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1, 160],
-      },
+    order_date: {
+      type: DataTypes.DATE,
+      // allowNull: false,
+      // validate: {
+      //   len: [1, 160],
+      // },
     },
     cake_theme: {
       type: DataTypes.STRING,
@@ -21,60 +21,98 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 160],
       },
     },
-    // deal_size: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    order_date: {
-      type: DataTypes.DATE,
+    cake_description: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
-    // sgmt_rev: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    // deal_size_yoy: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    // deal_count_yoy: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    // next_year_deal_size: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    // next_year_deal_count: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-    // next_year_sgmt_rev: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   validate: {
-    //     len: [1],
-    //   },
-    // },
-
+    cake_special: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_age: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_boygirl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_servings: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    cake_layers: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    cake_size1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_shape1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_flavor1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_filling1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_notes1: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_size2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_shape2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_flavor2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_filling2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_notes2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_size3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_shape3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_flavor3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_filling3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_notes3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cake_price: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    }
   });
 
   Order.associate = function(models) {
