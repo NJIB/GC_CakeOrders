@@ -186,7 +186,8 @@ $(document).ready(function () {
   // Function for creating a new list row for orders
   function createOrderRow(orderData) {
 
-    // console.log('orderData: ', orderData);
+    console.log('orderData: ', orderData);
+
     const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
     const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
 
@@ -194,7 +195,11 @@ $(document).ready(function () {
     newTr.data('order', orderData);
     newTr.append('<td>' + orderData.order_date + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
+    
+    // 9-27-21 Commented out
     newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
+    // 9-27-21 End of commenting out 
+
     // newTr.append('<td>' + orderData.first_name + '</td>');
     // newTr.append('<td>' + orderData.last_name + '</td>');
 
@@ -243,7 +248,10 @@ $(document).ready(function () {
     //   newTr.append('<td>0</td>');
     // }
     // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
-    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
+    
+    // 9-27-21 Commented out
+    // newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
+    // 9-27-21 End of commenting out
 
     console.log("orderData: ", orderData);
 
@@ -251,6 +259,28 @@ $(document).ready(function () {
 
     return newTr;
   }
+
+  function createOrderRow2(customerData) {
+
+    console.log('customerData: ', customerData);
+    
+    const deal_size_yoy_id = "deal_size_yoy" + customerData.id;
+    const deal_count_yoy_id = "deal_count_yoy" + customerData.id;
+
+    const newTr = $('<tr>');
+    newTr.data('order', customerData);
+    newTr.append('<td>' + customerData.first_name + ' ' + customerData.last_name + '</td>');
+    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
+
+    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
+
+    console.log("customerData: ", customerData);
+
+    // buildChartObject(orderData);
+
+    return newTr;
+  }
+
 
   // Function for creating a new list row for orders
   function createOrderTotals(title, orderTotals, nextyearSgmtTotals) {
