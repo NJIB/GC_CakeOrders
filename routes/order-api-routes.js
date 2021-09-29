@@ -8,7 +8,19 @@ module.exports = function (app) {
   app.get('/api/orders', async (req, res) => {
     try {
       const data = await db.Order.findAll({
-        include: [db.OrderDetail],
+        include: [db.Customer],
+      });
+      res.json(data);
+    } catch (error) {
+      res.status(400).json({ error: { name: error.name, msg: error.message } });
+    }
+  });
+
+  
+  app.get('/api/orders', async (req, res) => {
+    try {
+      const data = await db.Order.findAll({
+        include: [db.Customer],
       });
       res.json(data);
     } catch (error) {
@@ -25,7 +37,7 @@ module.exports = function (app) {
       const data = await db.Order.findOne( // findOne returns a single object.  findAll returns an array of objects
         {
           where: { id: req.params.id },
-          include: [db.OrderDetail],
+          include: [db.Customer],
         },
       );
       res.json(data);

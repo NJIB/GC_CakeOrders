@@ -8,7 +8,7 @@ module.exports = function(app) {
   app.get('/api/customers', async (req, res) => {
     try {
       const data = await db.Customer.findAll({
-        include: [db.CakeOrder],
+        // include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -25,7 +25,7 @@ module.exports = function(app) {
       const data = await db.Customer.findOne( // findOne returns a single object.  findAll returns an array of objects
           {
             where: {id: req.params.id},
-            include: [db.CakeOrder],
+            include: [db.Order],
           },
       );
       res.json(data);

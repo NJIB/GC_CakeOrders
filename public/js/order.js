@@ -36,6 +36,10 @@ $(document).ready(function () {
   const orderContainer = $('.order-container');
   let orderRevTotal = 0;
 
+  // 9-28-21 Making TR global
+  let newTr;
+
+
   // const chart1Area = $('#myBubbleChart1');
   // const chart2Area = $('#myBubbleChart2');
   // var ctx = $('#myBubbleChart');
@@ -51,6 +55,10 @@ $(document).ready(function () {
   // Getting the initial list of Orders
   getOrders();
 
+    // Getting the initial list of Orders
+  getCustomers();
+
+
   // A function to handle what happens when the form is submitted to create a new Order
   function handleOrderFormSubmit(event) {
     event.preventDefault();
@@ -59,7 +67,7 @@ $(document).ready(function () {
 
     // Don't do anything if the name fields hasn't been filled out
     console.log("firstnameInput: ", firstnameInput.val().trim());
-    
+
     if (!firstnameInput.val().trim()) {
       return;
     }
@@ -68,7 +76,7 @@ $(document).ready(function () {
     console.log("lastnameInput: ", lastnameInput.val().trim());
     console.log("orderdateInput: ", orderdateInput.val().trim());
 
-    let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0,1);
+    let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0, 1);
     console.log("customerId: ", customerId);
 
     const customerData = {
@@ -188,16 +196,20 @@ $(document).ready(function () {
 
     console.log('orderData: ', orderData);
 
-    const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
-    const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
+    // const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
+    // const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
 
+    // 9-28-21 Commented out to make a global var
+    // const newTr = $('<tr>');
     const newTr = $('<tr>');
+    // 9-28-21 End of commenting out
+
     newTr.data('order', orderData);
     newTr.append('<td>' + orderData.order_date + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
-    
+
     // 9-27-21 Commented out
-    newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
+    // newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
     // 9-27-21 End of commenting out 
 
     // newTr.append('<td>' + orderData.first_name + '</td>');
@@ -240,7 +252,10 @@ $(document).ready(function () {
     //   newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
     // };
     //10.05 Testing change to button class
-    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
+
+    // 9-27-21 Commented out
+    // newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
+    // 9-27-21 End of commenting out
 
     // if (orderData.OrderDetails) {
     //   newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
@@ -248,7 +263,7 @@ $(document).ready(function () {
     //   newTr.append('<td>0</td>');
     // }
     // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
-    
+
     // 9-27-21 Commented out
     // newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
     // 9-27-21 End of commenting out
@@ -263,20 +278,15 @@ $(document).ready(function () {
   function createOrderRow2(customerData) {
 
     console.log('customerData: ', customerData);
-    
-    const deal_size_yoy_id = "deal_size_yoy" + customerData.id;
-    const deal_count_yoy_id = "deal_count_yoy" + customerData.id;
 
-    const newTr = $('<tr>');
-    newTr.data('order', customerData);
+    // const newTr = $('<tr>');
+    // newTr.data('order', customerData);
     newTr.append('<td>' + customerData.first_name + ' ' + customerData.last_name + '</td>');
     newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
 
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
 
     console.log("customerData: ", customerData);
-
-    // buildChartObject(orderData);
 
     return newTr;
   }
@@ -348,23 +358,23 @@ $(document).ready(function () {
 
       console.log('data: ', data);
 
-      const rowsToAdd = [];
+      // const rowsToAdd = [];
 
-      for (let i = 0; i < data.length; i++) {
-        rowsToAdd.push(createOrderRow(data[i], i));
+      // for (let i = 0; i < data.length; i++) {
+      //   rowsToAdd.push(createOrderRow(data[i], i));
 
-        console.log("i: ", i);
-        console.log("data.length: ", data.length);
-        if ((i + 1) == data.length) {
-          // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
-        }
-      }
+      //   console.log("i: ", i);
+      //   console.log("data.length: ", data.length);
+      //   if ((i + 1) == data.length) {
+      //     // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
+      //   }
+      // }
 
-      renderOrderList(rowsToAdd);
-      firstnameInput.val('');
-      lastnameInput.val('');
-      orderdateInput.val('');
-      cakethemeInput.val('');
+      // renderOrderList(rowsToAdd);
+      // firstnameInput.val('');
+      // lastnameInput.val('');
+      // orderdateInput.val('');
+      // cakethemeInput.val('');
 
     })
   }
