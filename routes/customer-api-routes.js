@@ -37,13 +37,13 @@ module.exports = function(app) {
   app.post('/api/customers', async (req, res) => {
     // Create an Order with the data available to us in req.body
     console.log("req.body: ", req.body);
-    const {first_name, last_name, order_date} = req.body;
+    const {customer_id, first_name, last_name, order_date} = req.body;
 
     // const sgmt_rev = (deal_size * order_date);
     // console.log("sgmt_rev: ", sgmt_rev);
 
     try {
-      const result = await db.Customer.create({first_name, last_name, order_date});
+      const result = await db.Customer.create({customer_id, first_name, last_name, order_date});
       // const result = await db.Order.create({name, deal_size, order_date, sgmt_rev});
       res.json({created: result.dataValues});
     } catch (error) {
@@ -74,13 +74,13 @@ module.exports = function(app) {
     // Add code here to update a order using the values in req.body, where the id is equal to
     // req.body.id and return the result to the user using res.json
     // const {id, name} = req.body;
-    const {id, first_name, last_name, order_date} = req.body;
+    const {id, customer_id, first_name, last_name, order_date} = req.body;
     // const {id, name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev} = req.body;
     console.log("name: ", name);
 
     try {
       const result = await db.Customer.update(
-          {first_name, last_name, order_date},
+          {customer_id, first_name, last_name, order_date},
           {where: {id}},
       );
       const affectedRowCount = result[0];

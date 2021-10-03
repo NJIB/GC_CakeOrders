@@ -40,6 +40,7 @@ $(document).ready(function () {
   let newTr;
   let OrderGetData = [];
   let CustomerGetData = [];
+  let rowsToAdd = [];
 
   // const chart1Area = $('#myBubbleChart1');
   // const chart2Area = $('#myBubbleChart2');
@@ -56,9 +57,8 @@ $(document).ready(function () {
   // Getting the initial list of Orders
   getOrders();
 
-    // Getting the initial list of Orders
+  // Getting the initial list of Orders
   getCustomers();
-
 
   // A function to handle what happens when the form is submitted to create a new Order
   function handleOrderFormSubmit(event) {
@@ -81,6 +81,7 @@ $(document).ready(function () {
     console.log("customerId: ", customerId);
 
     const customerData = {
+      customer_id: customerId,
       first_name: firstnameInput
         .val()
         .trim(),
@@ -177,7 +178,6 @@ $(document).ready(function () {
 
     upsertCustomer(customerData);
     upsertOrder(orderData);
-
   }
 
   // A function for creating an order. Calls getOrders upon completion
@@ -269,8 +269,6 @@ $(document).ready(function () {
     // newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
     // 9-27-21 End of commenting out
 
-    console.log("orderData: ", orderData);
-
     // buildChartObject(orderData);
 
     return newTr;
@@ -325,16 +323,16 @@ $(document).ready(function () {
       //Copy orderdata to OrderGetData array (to build TR)
       for (let i = 0; i < orderdata.length; i++) {
         OrderGetData.push(orderdata[i]);
-        console.log("OrderGetData: ", OrderGetData);
+        // console.log("OrderGetData: ", OrderGetData);
       };
 
-      
+
       // orderRevTotal = 0;
       // nextyearSgmtRevTotal = 0;
       const rowsToAdd = [];
 
       for (let i = 0; i < orderdata.length; i++) {
-        rowsToAdd.push(createOrderRow(orderdata[i], i));
+        // rowsToAdd.push(createOrderRow(orderdata[i], i));
 
         // Calculating total order revenue
         // orderRevTotal += data[i].sgmt_rev;
@@ -346,14 +344,12 @@ $(document).ready(function () {
         // };
 
         //When all orders logged, insert Totals row
-        console.log("i: ", i);
-        console.log("orderdata.length: ", orderdata.length);
-        if ((i + 1) == orderdata.length) {
-          // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
-        }
+        // if ((i + 1) == orderdata.length) {
+        // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
+        // }
       }
 
-      renderOrderList(rowsToAdd);
+      // renderOrderList(rowsToAdd);
       firstnameInput.val('');
       lastnameInput.val('');
       orderdateInput.val('');
@@ -365,22 +361,18 @@ $(document).ready(function () {
 
     $.get('/api/customers', function (customerdata) {
 
-      console.log('customerdata: ', customerdata);
+      // console.log('customerdata: ', customerdata);
 
-            //Copy customerdata to CustomerGetData array (to build TR)
-            for (let i = 0; i < customerdata.length; i++) {
-              CustomerGetData.push(customerdata[i]);
-              console.log("CustomerGetData: ", CustomerGetData);
+      //Copy customerdata to CustomerGetData array (to build TR)
+      for (let i = 0; i < customerdata.length; i++) {
+        CustomerGetData.push(customerdata[i]);
+        // After copying customerdata to CustomerGetData, create table rows row for rendering
+        if ((i + 1) == customerdata.length) {
+          createOrderSummary();
+        }
 
-              // After copying customerdata to CustomerGetData, create table rows row for rendering
-              console.log("i: ", i);
-              console.log("customerdata.length: ", customerdata.length);
-              if ((i + 1) == customerdata.length) {
-                createOrderSummary();                
-              }
-      
-            };
-      
+      };
+
 
       // const rowsToAdd = [];
 
@@ -405,9 +397,13 @@ $(document).ready(function () {
   // }
 
   function createOrderSummary() {
+    console.log("OrderGetData: ", OrderGetData);
+    // Display Current Order Summary Table
+    const rowsToAdd = [];
     for (let i = 0; i < OrderGetData.length; i++) {
-      console.log("OrderGetData line ", i+1);
-      console.log(OrderGetData[i]);
+      rowsToAdd.push(createOrderRow(OrderGetData[i], i));
+      console.log("rowsToAdd: ", rowsToAdd);
+      renderOrderList(rowsToAdd);
     };
   };
 
@@ -416,7 +412,7 @@ $(document).ready(function () {
     orderList.children().not(':last').remove();
     orderContainer.children('.alert').remove();
     if (rows.length) {
-      // console.log("rows: ", rows);
+      console.log("rows: ", rows);
       orderList.prepend(rows);
     } else {
       renderEmpty();
