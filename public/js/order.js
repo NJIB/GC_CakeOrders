@@ -195,8 +195,6 @@ $(document).ready(function () {
   // Function for creating a new list row for orders
   function createOrderRow(orderData) {
 
-    console.log('orderData: ', orderData);
-
     // const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
     // const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
 
@@ -208,6 +206,17 @@ $(document).ready(function () {
     newTr.data('order', orderData);
     newTr.append('<td>' + orderData.order_date + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
+
+    //Paste in CustomerGetData for each order - keyed on customer_id
+    for (let i = 0; i < CustomerGetData.length; i++) {
+
+      console.log('orderData.customer_id: ', orderData.customer_id);
+
+      if (orderData.customer_id == CustomerGetData[i].customer_id) {
+        console.log("MATCHED customer_id!")
+        newTr.append('<td>' + CustomerGetData[i].first_name + " " + CustomerGetData[i].last_name + '</td>');
+      };
+    };
 
     // 9-27-21 Commented out
     // newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
@@ -254,9 +263,7 @@ $(document).ready(function () {
     // };
     //10.05 Testing change to button class
 
-    // 9-27-21 Commented out
-    // newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
-    // 9-27-21 End of commenting out
+    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
 
     // if (orderData.OrderDetails) {
     //   newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
@@ -265,9 +272,7 @@ $(document).ready(function () {
     // }
     // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
 
-    // 9-27-21 Commented out
-    // newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
-    // 9-27-21 End of commenting out
+    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
 
     // buildChartObject(orderData);
 
@@ -326,7 +331,6 @@ $(document).ready(function () {
         // console.log("OrderGetData: ", OrderGetData);
       };
 
-
       // orderRevTotal = 0;
       // nextyearSgmtRevTotal = 0;
       const rowsToAdd = [];
@@ -370,9 +374,9 @@ $(document).ready(function () {
         if ((i + 1) == customerdata.length) {
           createOrderSummary();
         }
-
       };
 
+      console.log("CustomerGetData: ", CustomerGetData);
 
       // const rowsToAdd = [];
 
