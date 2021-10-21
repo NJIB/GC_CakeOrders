@@ -41,6 +41,7 @@ $(document).ready(function () {
   let OrderGetData = [];
   let CustomerGetData = [];
   let rowsToAdd = [];
+  let rowsAdded;
 
   // const chart1Area = $('#myBubbleChart1');
   // const chart2Area = $('#myBubbleChart2');
@@ -64,11 +65,7 @@ $(document).ready(function () {
   function handleOrderFormSubmit(event) {
     event.preventDefault();
 
-    console.log("CREATE ORDER BUTTON PRESSED!")
-
     // Don't do anything if the name fields hasn't been filled out
-    console.log("firstnameInput: ", firstnameInput.val().trim());
-
     if (!firstnameInput.val().trim()) {
       return;
     }
@@ -92,8 +89,6 @@ $(document).ready(function () {
         .val()
         .trim()
     }
-
-    console.log("customerData: ", customerData);
 
     const orderData = {
       customer_id: customerId,
@@ -178,6 +173,7 @@ $(document).ready(function () {
 
     upsertCustomer(customerData);
     upsertOrder(orderData);
+    rowsToAdd.length = 0;
   }
 
   // A function for creating an order. Calls getOrders upon completion
@@ -193,28 +189,21 @@ $(document).ready(function () {
   }
 
   // Function for creating a new list row for orders
-  function createOrderRow(orderData) {
+  function createOrderRow(orderData, i, rowsAdded) {
+    let dupCounter = 0;
 
-    // const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
-    // const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
-
-    // 9-28-21 Commented out to make a global var
-    // const newTr = $('<tr>');
     const newTr = $('<tr>');
-    // 9-28-21 End of commenting out
-
     newTr.data('order', orderData);
     newTr.append('<td>' + orderData.order_date + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
 
     //Paste in CustomerGetData for each order - keyed on customer_id
-    for (let i = 0; i < CustomerGetData.length; i++) {
-
-      console.log('orderData.customer_id: ', orderData.customer_id);
-
-      if (orderData.customer_id == CustomerGetData[i].customer_id) {
-        console.log("MATCHED customer_id!")
-        newTr.append('<td>' + CustomerGetData[i].first_name + " " + CustomerGetData[i].last_name + '</td>');
+    for (let j = 0; j < CustomerGetData.length; j++) {
+      if (orderData.customer_id == CustomerGetData[j].customer_id) {
+        dupCounter++;
+        if (dupCounter == 1) {
+          newTr.append('<td>' + CustomerGetData[j].first_name + " " + CustomerGetData[j].last_name + '</td>');
+        };
       };
     };
 
@@ -279,23 +268,6 @@ $(document).ready(function () {
     return newTr;
   }
 
-  function createOrderRow2(customerData) {
-
-    console.log('customerData: ', customerData);
-
-    // const newTr = $('<tr>');
-    // newTr.data('order', customerData);
-    newTr.append('<td>' + customerData.first_name + ' ' + customerData.last_name + '</td>');
-    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
-
-    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
-
-    console.log("customerData: ", customerData);
-
-    return newTr;
-  }
-
-
   // Function for creating a new list row for orders
   function createOrderTotals(title, orderTotals, nextyearSgmtTotals) {
 
@@ -323,35 +295,30 @@ $(document).ready(function () {
 
     $.get('/api/orders', function (orderdata) {
 
-      console.log('orderdata: ', orderdata);
-
       //Copy orderdata to OrderGetData array (to build TR)
       for (let i = 0; i < orderdata.length; i++) {
         OrderGetData.push(orderdata[i]);
-        // console.log("OrderGetData: ", OrderGetData);
       };
 
-      // orderRevTotal = 0;
-      // nextyearSgmtRevTotal = 0;
-      const rowsToAdd = [];
+      // const rowsToAdd = [];
 
-      for (let i = 0; i < orderdata.length; i++) {
-        // rowsToAdd.push(createOrderRow(orderdata[i], i));
+      // for (let i = 0; i < orderdata.length; i++) {
+      // rowsToAdd.push(createOrderRow(orderdata[i], i));
 
-        // Calculating total order revenue
-        // orderRevTotal += data[i].sgmt_rev;
-        // if (!data[i].next_year_sgmt_rev) {
-        //   nextyearSgmtRevTotal += data[i].sgmt_rev;
-        // }
-        // else {
-        //   nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
-        // };
+      // Calculating total order revenue
+      // orderRevTotal += data[i].sgmt_rev;
+      // if (!data[i].next_year_sgmt_rev) {
+      //   nextyearSgmtRevTotal += data[i].sgmt_rev;
+      // }
+      // else {
+      //   nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
+      // };
 
-        //When all orders logged, insert Totals row
-        // if ((i + 1) == orderdata.length) {
-        // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
-        // }
-      }
+      //When all orders logged, insert Totals row
+      // if ((i + 1) == orderdata.length) {
+      // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
+      // }
+      // }
 
       // renderOrderList(rowsToAdd);
       firstnameInput.val('');
@@ -365,9 +332,7 @@ $(document).ready(function () {
 
     $.get('/api/customers', function (customerdata) {
 
-      // console.log('customerdata: ', customerdata);
-
-      //Copy customerdata to CustomerGetData array (to build TR)
+      //Copy customerdata to CustomerGetData array (to build TR)     
       for (let i = 0; i < customerdata.length; i++) {
         CustomerGetData.push(customerdata[i]);
         // After copying customerdata to CustomerGetData, create table rows row for rendering
@@ -375,10 +340,6 @@ $(document).ready(function () {
           createOrderSummary();
         }
       };
-
-      console.log("CustomerGetData: ", CustomerGetData);
-
-      // const rowsToAdd = [];
 
       // for (let i = 0; i < data.length; i++) {
       //   rowsToAdd.push(createOrderRow(data[i], i));
@@ -401,14 +362,15 @@ $(document).ready(function () {
   // }
 
   function createOrderSummary() {
-    console.log("OrderGetData: ", OrderGetData);
     // Display Current Order Summary Table
     const rowsToAdd = [];
     for (let i = 0; i < OrderGetData.length; i++) {
-      rowsToAdd.push(createOrderRow(OrderGetData[i], i));
-      console.log("rowsToAdd: ", rowsToAdd);
+
+      rowsAdded = i;
+      rowsToAdd.push(createOrderRow(OrderGetData[i], i, rowsAdded));
       renderOrderList(rowsToAdd);
     };
+    rowsToAdd.length = 0;
   };
 
   // A function for rendering the list of orders to the page
@@ -416,7 +378,6 @@ $(document).ready(function () {
     orderList.children().not(':last').remove();
     orderContainer.children('.alert').remove();
     if (rows.length) {
-      console.log("rows: ", rows);
       orderList.prepend(rows);
     } else {
       renderEmpty();
