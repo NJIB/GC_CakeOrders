@@ -24,11 +24,11 @@
 			<img src="/images/apple-touch-icon.png">
 		</div>
 
-		<div class="name_plate col-lg-4 col-md-4 col-sm-8">
+		<div class="name_plate col-lg-6 col-md-6 col-sm-6">
 			The Greenwich Cakery
 		</div>
 
-		<nav class="col-lg-6 col-md-6 col-sm-12">
+		<nav class="col-lg-4 col-md-4 col-sm-12">
 			<a class="btn btn-dark" href="/orders"> 1. ... </a>
 			<a class="btn btn-dark" href="/revroutes"> 2. ... </a>
 			<a class="btn btn-dark" href="/order"> 3. ... </a>
@@ -54,88 +54,108 @@
 				<div class="order-container">
 					<!-- <h1>Orders</h1> -->
 
-					<!-- <form class="order-form"> -->
-					<form class="customer-form">
-						<div class="order-header">
-							<h3>Customer Details</h3>
-						</div>
-						<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
-						<div class="gc_order_entry">
-							<input placeholder="First name" id="order-firstname" type="text" />
-							<input placeholder="Last name" id="order-lastname" type="text" />
-						</div>
-						<div class="gc_order_entry">
-							<input placeholder="Address" id="order-customer_address" type="text" />
-							<input placeholder="City" id="order-customer_city" type="text" />
-							<input placeholder="Zip code" id="order-customer_zip" type="text" />
-							<input placeholder="Phone" id="order-customer_phone" type="phone" />
-						</div>
-					</form>
+					<div class="card card-body">
+						<form class="customer-form">
+							<div class="card-header">
+								<!-- <div class="order-header"> -->
+								<h3>Customer Details</h3>
+								<!-- </div> -->
+							</div>
+							<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
+							<div>
+								<input placeholder="Customer Name" id="order-namesearch" type="text" />
+								<button class="btn btn-info" type="button" href="#find-customer">Search</button>
 
-					<form class="order-form">
-						<div class="order-header">
-							<h3>Order Details</h3>
-						</div>
-						<div class="gc_order_entry">
-							<div id="order-order_ref" type="text">Order #: </div>
-							<input placeholder="Order Date" id="order-order_date" type="date" />
-							<input placeholder="Delivery or pickup" id="order-delivery_pickup" type="text" />
-							<input placeholder="Delivery or pickup time" id="order-delivery_pickup_time" type="text" />
-							<input placeholder="Delivery / pickup date" id="order-delivery_date" type="text" />
-						</div>
+							</div>
+							<div>
+								<input placeholder="First name" class="gc_order_entry" id="order-firstname"
+									type="text" />
+								<input placeholder="Last name" class="gc_order_entry" id="order-lastname" type="text" />
+							</div>
+							<div>
+								<input placeholder="Address" class="gc_order_entry" id="order-customer_address"
+									type="text" />
+								<input placeholder="City" class="gc_order_entry" id="order-customer_city" type="text" />
+								<input placeholder="Zip code" class="gc_order_entry" id="order-customer_zip"
+									type="text" />
+								<input placeholder="Phone" class="gc_order_entry" id="order-customer_phone"
+									type="phone" />
+								<button class="btn btn-success" type="button" href="#add-customer">&#x271A &nbsp New
+									customer</button>
+							</div>
+						</form>
+					</div>
 
-						<div class="order-header">
-							<h3>Cake Details</h3>
-						</div>
-						<div class="gc_order_entry">
-							<input placeholder="Cake theme" id="order-cake_theme" type="text" />
-							<input placeholder="Cake description" id="order-cake_description" type="text" />
-							<input placeholder="Special requests / dietary restrictions" id="order-cake_special"
-								type="text" />
-						</div>
-						<div class="gc_order_entry">
-							<input placeholder="Name on cake" id="order-cake_name" type="text" />
-							<input placeholder="Age on cake" id="order-cake_age" type="text" />
-							<input placeholder="Girl / boy" id="order-cake_boygirl" type="text" />
-							<input placeholder="Occasion" id="order-cake_occasion" type="text" />
-						</div>
-						<div class="gc_order_entry">
-							<input placeholder="Cake servings" id="order-cake_servings" type="text" />
-							<input placeholder="Cake layers" id="order-cake_layers" type="text" />
-						</div>
-						<div class="gc_order_entry">
-							Layer 1:
-							<input placeholder="Cake size - layer 1" id="order-cake_size1" type="text" />
-							<input placeholder="Cake shape - layer 1" id="order-cake_shape1" type="text" />
-							<input placeholder="Flavor - layer 1" id="order-cake_flavor1" type="text" />
-							<input placeholder="Filling - layer 1" id="order-cake_filling1" type="text" />
-							<input placeholder="Layer 1 notes" id="order-cake_notes1" type="text" />
-						</div>
-						<div class="gc_order_entry">
-							Layer 2:
-							<input placeholder="Cake size - layer 2" id="order-cake_size2" type="text" />
-							<input placeholder="Cake shape - layer 2" id="order-cake_shape2" type="text" />
-							<input placeholder="Flavor - layer 2" id="order-cake_flavor2" type="text" />
-							<input placeholder="Filling - layer 2" id="order-cake_filling2" type="text" />
-							<input placeholder="Layer 2 notes" id="order-cake_notes2" type="text" />
-						</div>
-						<div class="gc_order_entry">
-							Layer 3:
-							<input placeholder="Cake size - layer 3" id="order-cake_size3" type="text" />
-							<input placeholder="Cake shape - layer 3" id="order-cake_shape3" type="text" />
-							<input placeholder="Flavor - layer 3" id="order-cake_flavor3" type="text" />
-							<input placeholder="Filling - layer 3" id="order-cake_filling3" type="text" />
-							<input placeholder="Layer 3 notes" id="order-cake_notes3" type="text" />
-						</div>
+					<div>&nbsp</div>
 
-						<div class="gc_order_entry">
-							<input placeholder="Price" id="order-cake_price" type="text" />
-						</div>
+					<div class="card card-body">
+						<form class="order-form">
+							<div class="card-header">
+							<!-- <div class="order-header"> -->
+								<h3>Order Details</h3>
+							</div>
+							<div class="gc_order_entry">
+								<div id="order-order_ref" type="text">Order #: </div>
+								<input placeholder="Order Date" id="order-order_date" type="date" />
+								<input placeholder="Delivery or pickup" id="order-delivery_pickup" type="text" />
+								<input placeholder="Delivery or pickup time" id="order-delivery_pickup_time"
+									type="text" />
+								<input placeholder="Delivery / pickup date" id="order-delivery_date" type="text" />
+							</div>
 
-						<div class="order-header">
-							<button type="submit" class="btn btn-success">Create Order > </button>
-						</div>
-					</form>
+							<div class="order-header">
+								<h3>Cake Details</h3>
+							</div>
+							<div class="gc_order_entry">
+								<input placeholder="Cake theme" id="order-cake_theme" type="text" />
+								<input placeholder="Cake description" id="order-cake_description" type="text" />
+								<input placeholder="Special requests / dietary restrictions" id="order-cake_special"
+									type="text" />
+							</div>
+							<div class="gc_order_entry">
+								<input placeholder="Name on cake" id="order-cake_name" type="text" />
+								<input placeholder="Age on cake" id="order-cake_age" type="text" />
+								<input placeholder="Girl / boy" id="order-cake_boygirl" type="text" />
+								<input placeholder="Occasion" id="order-cake_occasion" type="text" />
+							</div>
+							<div class="gc_order_entry">
+								<input placeholder="Cake servings" id="order-cake_servings" type="text" />
+								<input placeholder="Cake layers" id="order-cake_layers" type="text" />
+							</div>
+							<div class="gc_order_entry">
+								Layer 1:
+								<input placeholder="Cake size - layer 1" id="order-cake_size1" type="text" />
+								<input placeholder="Cake shape - layer 1" id="order-cake_shape1" type="text" />
+								<input placeholder="Flavor - layer 1" id="order-cake_flavor1" type="text" />
+								<input placeholder="Filling - layer 1" id="order-cake_filling1" type="text" />
+								<input placeholder="Layer 1 notes" id="order-cake_notes1" type="text" />
+							</div>
+							<div class="gc_order_entry">
+								Layer 2:
+								<input placeholder="Cake size - layer 2" id="order-cake_size2" type="text" />
+								<input placeholder="Cake shape - layer 2" id="order-cake_shape2" type="text" />
+								<input placeholder="Flavor - layer 2" id="order-cake_flavor2" type="text" />
+								<input placeholder="Filling - layer 2" id="order-cake_filling2" type="text" />
+								<input placeholder="Layer 2 notes" id="order-cake_notes2" type="text" />
+							</div>
+							<div class="gc_order_entry">
+								Layer 3:
+								<input placeholder="Cake size - layer 3" id="order-cake_size3" type="text" />
+								<input placeholder="Cake shape - layer 3" id="order-cake_shape3" type="text" />
+								<input placeholder="Flavor - layer 3" id="order-cake_flavor3" type="text" />
+								<input placeholder="Filling - layer 3" id="order-cake_filling3" type="text" />
+								<input placeholder="Layer 3 notes" id="order-cake_notes3" type="text" />
+							</div>
+
+							<div class="gc_order_entry">
+								<input placeholder="Price" id="order-cake_price" type="text" />
+							</div>
+
+							<div class="order-header">
+								<button type="submit" class="btn btn-success">Create Order > </button>
+							</div>
+						</form>
+					</div>
 
 					<table class="table table-striped">
 						<thead>
