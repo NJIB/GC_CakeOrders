@@ -37,14 +37,14 @@ module.exports = function(app) {
   app.post('/api/customers', async (req, res) => {
     // Create an Order with the data available to us in req.body
     console.log("req.body: ", req.body);
-    const {customer_id, first_name, last_name, order_date} = req.body;
+    const {customer_id, first_name, last_name, address, city, zip, phone} = req.body;
 
     // const sgmt_rev = (deal_size * order_date);
     // console.log("sgmt_rev: ", sgmt_rev);
 
     try {
-      const result = await db.Customer.create({customer_id, first_name, last_name, order_date});
-      // const result = await db.Order.create({name, deal_size, order_date, sgmt_rev});
+      // const result = await db.Customer.create({customer_id, first_name, last_name, order_date, address, city, zip, phone});
+      const result = await db.Customer.create({customer_id, first_name, last_name, address, city, zip, phone});
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});

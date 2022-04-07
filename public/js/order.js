@@ -3,6 +3,20 @@ $(document).ready(function () {
   const firstnameInput = $('#order-firstname');
   const lastnameInput = $('#order-lastname');
   const orderdateInput = $('#order-order_date');
+  const address = $('#order-customer_address');
+  const city = $('#order-customer_city');
+  const zip = $('#order-customer_zip');
+  const phone = $('#order-customer_phone');
+
+  let customersPull = [];
+  let rowsToBeAdded = [];
+  let customersToAdd = [];
+  let customerOptionsToAdd = [];
+  let newCustomerselect = $('<select>');
+  const customersList = $('ul');
+  const customersContainer = $('customerDropdown');
+  const customerSelect = $('#CustomerSelect');
+  const customerSelectContainer = $('CustomerSelect')
 
   // Getting references to the cake detail inputs
   const cakethemeInput = $('#order-cake_theme');
@@ -51,6 +65,7 @@ $(document).ready(function () {
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Order
+  $(document).on('click', '#add-customer', handleCustomerCreateSubmit);
   $(document).on('submit', '.order-form', handleOrderFormSubmit);
   $(document).on('click', '.delete-order', handleDeleteButtonPress);
   $(document).on('click', '.update', handleUpdateButtonPress);
@@ -60,6 +75,52 @@ $(document).ready(function () {
 
   // Getting the initial list of Orders
   getCustomers();
+
+  // A function to handle what happens when the form is submitted to create a new Order
+  function handleCustomerCreateSubmit(event) {
+    event.preventDefault();
+
+    console.log("Create Customer button clicked");
+
+    // Don't do anything if the name fields hasn't been filled out
+    if (!firstnameInput.val().trim()) {
+      return;
+    }
+
+    console.log("firstnameInput: ", firstnameInput.val().trim());
+    console.log("lastnameInput: ", lastnameInput.val().trim());
+
+    let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0, 1);
+    console.log("customerId: ", customerId);
+
+    const customerData = {
+      customer_id: customerId,
+      first_name: firstnameInput
+        .val()
+        .trim(),
+      last_name: lastnameInput
+        .val()
+        .trim(),
+      // order_date: orderdateInput
+      //   .val()
+      //   .trim(),
+      address: address
+        .val()
+        .trim(),
+      city: city
+        .val()
+        .trim(),
+      zip: zip
+        .val()
+        .trim(),
+      phone: phone
+        .val()
+        .trim(),
+    }
+
+    upsertCustomer(customerData);
+  }
+
 
   // A function to handle what happens when the form is submitted to create a new Order
   function handleOrderFormSubmit(event) {
@@ -290,8 +351,8 @@ $(document).ready(function () {
   // Function for retrieving orders and getting them ready to be rendered to the page
   function getOrders() {
 
-    chart1Data = [{}];
-    chart2Data = [{}];
+    // chart1Data = [{}];
+    // chart2Data = [{}];
 
     $.get('/api/orders', function (orderdata) {
 
@@ -328,37 +389,141 @@ $(document).ready(function () {
     });
   }
 
-  function getCustomers() {
+  async function getCustomers() {
+    console.log("***GETTING CUSTOMERS***")
+    customersPull.length = 0;
 
-    $.get('/api/customers', function (customerdata) {
+    const data = await $.get('/api/customers', function () { });
+    console.log('data: ', data);
 
-      //Copy customerdata to CustomerGetData array (to build TR)     
-      for (let i = 0; i < customerdata.length; i++) {
-        CustomerGetData.push(customerdata[i]);
-        // After copying customerdata to CustomerGetData, create table rows row for rendering
-        if ((i + 1) == customerdata.length) {
-          createOrderSummary();
-        }
-      };
+    const rowsToAdd = [];
 
-      // for (let i = 0; i < data.length; i++) {
-      //   rowsToAdd.push(createOrderRow(data[i], i));
+    //Sorting by Customer
+    for (let i = 0; i < data.length; i++) {
+      data.sort(compare);
+    }
 
-      //   console.log("i: ", i);
-      //   console.log("data.length: ", data.length);
-      //   if ((i + 1) == data.length) {
-      //     // rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
-      //   }
-      // }
+    // Populating prioritiesPull array and Priorities dropdown
+    for (let i = 0; i < data.length; i++) {
+      customersPull.push(data[i]);
+      console.log("customersPull[", i, "]: ", customersPull[i]);
+    }
 
-      // renderOrderList(rowsToAdd);
-      // firstnameInput.val('');
-      // lastnameInput.val('');
-      // orderdateInput.val('');
-      // cakethemeInput.val('');
+    customersToAdd.length = 0;
 
-    })
+    console.log("BUILDING CUSTOMERS DROPDOWN");
+    console.log("customersPull.length: ", customersPull.length);
+
+    for (let j = 0; j < customersPull.length; j++) {
+      if (j == 0) {
+        console.log("j == 0 !!!")
+        const selectAll = $('<li>');
+        selectAll.append('<a class="dropdown-item customerDropdown" value="#" href="#">Select All</a></li>');
+        customersToAdd.push(selectAll)
+
+        // const dropdownDivider = $('<li>');
+        // dropdownDivider.append('<hr class="dropdown-divider">');
+        // customersToAdd.push(dropdownDivider)
+      }
+
+      customersToAdd.push(createCustomersDropDown(customersPull[j], j));
+    };
+
+        //Building priority select dropdown (in Add Asset form)
+        for (let l = 0; l < customersPull.length; l++) {
+          // console.log("Building priority dropdown row ", k)
+    
+          // console.log("prioritiesPull[", l, "].asset_type: ", prioritiesPull[l].asset_type)
+          customerOptionsToAdd.push(createCustomersSelect(customersPull[l], l));
+    
+          console.log("customerOptionsToAdd: ", customerOptionsToAdd[l]);
+        };
+    
+        console.log("customersToAdd: ", customersToAdd);
+        console.log("customerOptionsToAdd: ", customerOptionsToAdd);
+
+        renderCustomersDropdown(customersToAdd);
+        renderCustomersSelect(customerOptionsToAdd);
+    
+  };
+
+  function createCustomersDropDown(customerPull, i) {
+    console.log("Building customer dropdown rows components")
+    console.log("customerPull: ", customerPull)
+
+    const newCustomerli = $('<li>');
+    newCustomerli.data('customer', customerPull);
+    newCustomerli.append('<a class="dropdown-item customerDropdown" value=' + customerPull.customer + ' href="#">' + customerPull.customer + '</a></li>');
+    return newCustomerli;
+  };
+
+  function createCustomersSelect(customersPull, i) {
+    console.log("customersPull: ", customersPull)
+
+    newCustomerselect.data('customertype', customersPull);
+
+    const spacer = ", ";
+    const nameConcat = customersPull.last_name + spacer + customersPull.first_name;
+    console.log("nameConcat: ", nameConcat);
+    // console.log("customersPull[", i, "].customer: :", customersPull.customer);
+    newCustomerselect.append('<option value=' + nameConcat + '>' + nameConcat + '</option>');
+    console.log("newCustomerselect: ", newCustomerselect);
+
+    return newCustomerselect;
+  };
+
+
+  //Sort by priority
+  function compare(a, b) {
+
+    const aVal = a.last_name + a.first_name;
+    // console.log("aVal: ", aVal);
+
+    const bVal = b.last_name + b.first_name;
+    // console.log("bVal: ", bVal);
+
+    // if (a.customer < b.customer) {
+      if (aVal < bVal) {
+        return -1;
+    }
+    // if (a.customer > b.customer) {
+      if (aVal > bVal) {
+        return 1;
+    }
+    return 0;
   }
+
+  function renderCustomersDropdown(customers) {
+    console.log("Rendering latest customers!");
+    customersList.children().not(':last').remove();
+    customersContainer.children('.alert').remove();
+    customersList.prepend(customers);
+  };
+
+  function renderCustomersSelect(customers) {
+    console.log("********************Rendering latest customers!*******************");
+    console.log("customers: ", customers)
+    customerSelect.children().not(':last').remove();
+    customerSelectContainer.children('.alert').remove();
+    customerSelect.prepend(customers);
+  };
+
+
+
+  //4/6/22 - Commented out to replace with async function above
+  // function getCustomers() {
+
+  //   $.get('/api/customers', function (customerdata) {
+
+  //     //Copy customerdata to CustomerGetData array (to build TR)     
+  //     for (let i = 0; i < customerdata.length; i++) {
+  //       CustomerGetData.push(customerdata[i]);
+  //       // After copying customerdata to CustomerGetData, create table rows row for rendering
+  //       if ((i + 1) == customerdata.length) {
+  //         createOrderSummary();
+  //       }
+  //     };
+  //   })
   // }
 
   function createOrderSummary() {

@@ -62,11 +62,18 @@
 								<!-- </div> -->
 							</div>
 							<!-- <td colspan="8" class="add_order" style="background-color: yellow;"> -->
-							<div>
+							<div class="name_plate col-lg-6 col-md-6 col-sm-12">
+								<label for="CustomerSelect">Select Customer</label>
+								<div class="customer-name-field" id="CustomerSelect" name="CustomerSelect">
+								</div>
+							</div>
+
+							<!-- <div>
 								<input placeholder="Customer Name" id="order-namesearch" type="text" />
 								<button class="btn btn-info" type="button" href="#find-customer">Search</button>
 
-							</div>
+							</div> -->
+
 							<div>
 								<input placeholder="First name" class="gc_order_entry" id="order-firstname"
 									type="text" />
@@ -80,7 +87,8 @@
 									type="text" />
 								<input placeholder="Phone" class="gc_order_entry" id="order-customer_phone"
 									type="phone" />
-								<button class="btn btn-success" type="button" href="#add-customer">&#x271A &nbsp New
+								<!-- <button class="btn btn-success" id="add-customer" type="button" href="#add-customer">&#x271A &nbsp New -->
+								<button class="btn btn-success" id="add-customer" type="button">&#x271A &nbsp New
 									customer</button>
 							</div>
 						</form>
@@ -91,7 +99,7 @@
 					<div class="card card-body">
 						<form class="order-form">
 							<div class="card-header">
-							<!-- <div class="order-header"> -->
+								<!-- <div class="order-header"> -->
 								<h3>Order Details</h3>
 							</div>
 							<div class="gc_order_entry">
@@ -102,10 +110,14 @@
 									type="text" />
 								<input placeholder="Delivery / pickup date" id="order-delivery_date" type="text" />
 							</div>
+						</form>
+
+						<form class="order-form">
 
 							<div class="order-header">
 								<h3>Cake Details</h3>
 							</div>
+
 							<div class="gc_order_entry">
 								<input placeholder="Cake theme" id="order-cake_theme" type="text" />
 								<input placeholder="Cake description" id="order-cake_description" type="text" />

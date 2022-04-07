@@ -21,10 +21,38 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 160],
       },
     },
-    order_date: {
-      type: DataTypes.DATE,
+    address: {
+      type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        len: [1, 160],
+      },
     },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [1, 160],
+      },
+    },
+    zip: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [1, 10],
+      },
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [1, 20],
+      },
+    },
+    // order_date: {
+    //   type: DataTypes.DATE,
+    //   allowNull: true,
+    // },
   });
 
   Customer.associate = function(models) {
