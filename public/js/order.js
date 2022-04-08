@@ -69,6 +69,7 @@ $(document).ready(function () {
   $(document).on('submit', '.order-form', handleOrderFormSubmit);
   $(document).on('click', '.delete-order', handleDeleteButtonPress);
   $(document).on('click', '.update', handleUpdateButtonPress);
+  $(document).on('change', '#CustomerSelect', handleDisplayCustomerInfo);
 
   // Getting the initial list of Orders
   getOrders();
@@ -417,9 +418,13 @@ $(document).ready(function () {
     for (let j = 0; j < customersPull.length; j++) {
       if (j == 0) {
         console.log("j == 0 !!!")
-        const selectAll = $('<li>');
-        selectAll.append('<a class="dropdown-item customerDropdown" value="#" href="#">Select All</a></li>');
-        customersToAdd.push(selectAll)
+        const selectCustomer = $('<li>');
+        selectCustomer.data(customersPull[j]);
+
+        console.log("selectCustomer.data", selectCustomer.data);
+
+        selectCustomer.append('<a class="dropdown-item customerDropdown" value="#" href="#">Select All</a></li>');
+        customersToAdd.push(selectCustomer)
 
         // const dropdownDivider = $('<li>');
         // dropdownDivider.append('<hr class="dropdown-divider">');
@@ -429,22 +434,22 @@ $(document).ready(function () {
       customersToAdd.push(createCustomersDropDown(customersPull[j], j));
     };
 
-        //Building priority select dropdown (in Add Asset form)
-        for (let l = 0; l < customersPull.length; l++) {
-          // console.log("Building priority dropdown row ", k)
-    
-          // console.log("prioritiesPull[", l, "].asset_type: ", prioritiesPull[l].asset_type)
-          customerOptionsToAdd.push(createCustomersSelect(customersPull[l], l));
-    
-          console.log("customerOptionsToAdd: ", customerOptionsToAdd[l]);
-        };
-    
-        console.log("customersToAdd: ", customersToAdd);
-        console.log("customerOptionsToAdd: ", customerOptionsToAdd);
+    //Building priority select dropdown (in Add Asset form)
+    for (let l = 0; l < customersPull.length; l++) {
+      // console.log("Building priority dropdown row ", k)
 
-        renderCustomersDropdown(customersToAdd);
-        renderCustomersSelect(customerOptionsToAdd);
-    
+      // console.log("prioritiesPull[", l, "].asset_type: ", prioritiesPull[l].asset_type)
+      customerOptionsToAdd.push(createCustomersSelect(customersPull[l], l));
+
+      console.log("customerOptionsToAdd: ", customerOptionsToAdd[l]);
+    };
+
+    console.log("customersToAdd: ", customersToAdd);
+    console.log("customerOptionsToAdd: ", customerOptionsToAdd);
+
+    renderCustomersDropdown(customersToAdd);
+    renderCustomersSelect(customerOptionsToAdd);
+
   };
 
   function createCustomersDropDown(customerPull, i) {
@@ -462,14 +467,45 @@ $(document).ready(function () {
 
     newCustomerselect.data('customertype', customersPull);
 
-    const spacer = ", ";
-    const nameConcat = customersPull.last_name + spacer + customersPull.first_name;
+    const comma = ", ";
+    const spacer = "&nbsp &nbsp";
+    const nameConcat = customersPull.last_name + comma + customersPull.first_name + spacer + "(" + customersPull.address + ")";
     console.log("nameConcat: ", nameConcat);
     // console.log("customersPull[", i, "].customer: :", customersPull.customer);
     newCustomerselect.append('<option value=' + nameConcat + '>' + nameConcat + '</option>');
     console.log("newCustomerselect: ", newCustomerselect);
 
     return newCustomerselect;
+  };
+
+  function handleDisplayCustomerInfo() {
+    console.log("customersPull: ", customersPull);
+
+    const IDconcat = $(CustomerSelect).find("option:selected").text().trim();
+    console.log("IDconcat: ", IDconcat);
+
+    const last_nameSelected = IDconcat.substring(0, IDconcat.indexOf(","));
+    const first_nameSelected = IDconcat.substring((IDconcat.indexOf(",") + 2), (IDconcat.indexOf("(") - 3));
+    const addressSelected = IDconcat.substring((IDconcat.indexOf("(") + 1), (IDconcat.indexOf(")")));
+    console.log("first_nameSelected: ", first_nameSelected);
+    console.log("last_nameSelected: ", last_nameSelected);
+    console.log("addressSelected: ", addressSelected);
+
+    for (let k = 0; k < customersPull.length; k++) {
+      // console.log("customersPull[", k, "].first_name: ", customersPull[k].first_name);
+      // console.log("customersPull[", k, "].last_name: ", customersPull[k].last_name);
+      // console.log("customersPull[", k, "].address: ", customersPull[k].address);
+      if ((customersPull[k].first_name == first_nameSelected) && (customersPull[k].last_name == last_nameSelected) && (customersPull[k].address == addressSelected)) {
+        console.log("***MATCH***");
+        $('#order-firstname').val(customersPull[k].first_name);
+        $('#order-lastname').val(customersPull[k].last_name);
+        $('#order-customer_address').val(customersPull[k].address);
+        $('#order-customer_city').val(customersPull[k].city);
+        $('#order-customer_zip').val(customersPull[k].zip);
+        $('#order-customer_phone').val(customersPull[k].phone);
+      };
+    };
+
   };
 
 
@@ -483,12 +519,12 @@ $(document).ready(function () {
     // console.log("bVal: ", bVal);
 
     // if (a.customer < b.customer) {
-      if (aVal < bVal) {
-        return -1;
+    if (aVal < bVal) {
+      return -1;
     }
     // if (a.customer > b.customer) {
-      if (aVal > bVal) {
-        return 1;
+    if (aVal > bVal) {
+      return 1;
     }
     return 0;
   }
