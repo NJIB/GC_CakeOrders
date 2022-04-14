@@ -1,12 +1,12 @@
 $(document).ready(function () {
   // Getting references to the name inputs and order date
-  const firstnameInput = $('#newcustomer-firstname');
-  const lastnameInput = $('#newcustomer-lastname');
-  const orderdateInput = $('#order-order_date');
-  const address = $('#newcustomer-customer_address');
-  const city = $('#newcustomer-customer_city');
-  const zip = $('#newcustomer-customer_zip');
-  const phone = $('#newcustomer-customer_phone');
+  const firstnameInput = $('#order-firstname');
+  const lastnameInput = $('#order-lastname');
+  const orderdateInput = $('#order-delivery_date');
+  const address = $('#order-customer_address');
+  const city = $('#order-customer_city');
+  const zip = $('#order-customer_zip');
+  const phone = $('#order-customer_phone');
 
   let customersPull = [];
   let rowsToBeAdded = [];
@@ -126,6 +126,11 @@ $(document).ready(function () {
   // A function to handle what happens when the form is submitted to create a new Order
   function handleOrderFormSubmit(event) {
     event.preventDefault();
+
+    console.log("Order submitted!")
+    console.log("firstnameInput: ", firstnameInput.val().trim());
+    console.log("lastnameInput: ", lastnameInput.val().trim());
+    console.log("orderdateInput: ", orderdateInput.val().trim());
 
     // Don't do anything if the name fields hasn't been filled out
     if (!firstnameInput.val().trim()) {
