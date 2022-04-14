@@ -1,12 +1,12 @@
 $(document).ready(function () {
   // Getting references to the name inputs and order date
-  const firstnameInput = $('#order-firstname');
-  const lastnameInput = $('#order-lastname');
+  const firstnameInput = $('#newcustomer-firstname');
+  const lastnameInput = $('#newcustomer-lastname');
   const orderdateInput = $('#order-order_date');
-  const address = $('#order-customer_address');
-  const city = $('#order-customer_city');
-  const zip = $('#order-customer_zip');
-  const phone = $('#order-customer_phone');
+  const address = $('#newcustomer-customer_address');
+  const city = $('#newcustomer-customer_city');
+  const zip = $('#newcustomer-customer_zip');
+  const phone = $('#newcustomer-customer_phone');
 
   let customersPull = [];
   let rowsToBeAdded = [];
@@ -83,13 +83,13 @@ $(document).ready(function () {
 
     console.log("Create Customer button clicked");
 
+    console.log("firstnameInput: ", firstnameInput.val().trim());
+    console.log("lastnameInput: ", lastnameInput.val().trim());
+
     // Don't do anything if the name fields hasn't been filled out
     if (!firstnameInput.val().trim()) {
       return;
     }
-
-    console.log("firstnameInput: ", firstnameInput.val().trim());
-    console.log("lastnameInput: ", lastnameInput.val().trim());
 
     let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0, 1);
     console.log("customerId: ", customerId);

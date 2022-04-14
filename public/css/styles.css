@@ -130,34 +130,6 @@ button.edit {
   padding: 10px;
 }
 
-#order-order_date {
-  width: 30%;
-  height: 35px;
-  margin: 5px;
-  padding: 10px;
-}
-
-#order-revenue {
-  width: 30%;
-  height: 35px;
-  margin: 5px;
-  padding: 10px;
-}
-
-#deal_size_yoy {
-  height: 25px;
-  width: 80px;
-  margin: 5px;
-  padding: 10px;
-}
-
-#deal_count_yoy {
-  height: 25px;
-  width: 80px;
-  margin: 5px;
-  padding: 10px;
-}
-
 .add_order {
   margin-top: 50px;
   margin-bottom: 100px;
