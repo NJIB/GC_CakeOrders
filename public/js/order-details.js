@@ -1,391 +1,161 @@
 $(document).ready(function () {
-  // Getting references to the name input and order container, as well as the table body
-  const firstnameInput = $('#order-firstname');
-  const dealsizeInput = $('#order-lastname');
-  const orderdateInput = $('#order-order_date');
 
-  const orderList = $('tbody');
-  const orderTotals = $('tfooter');
-  const orderContainer = $('.order-container');
-  let orderRevTotal = 0;
+  // Getting references to the name input and report container, as well as the table body
+  // const reportDate = $('#report-date');
+  let prioritySelected = ('#LinkPrioritySelect');
+  let assetTypeSelected = ('#LinkAssetTypeSelect');
+  let assetName = $('#link-asset-name-input');
+  let assetURL = $('#link-asset-url-input');
 
-  // const chart1Area = $('#myBubbleChart1');
-  // const chart2Area = $('#myBubbleChart2');
-  // var ctx = $('#myBubbleChart');
-  let chart1Data = [{}];
-  let chart2Data = [{}];
+  let order_id;
+
+  let getResults = {
+    assetId: '',
+    priority: '',
+    priority_code: '',
+    asset_type: '',
+    asset_name: '',
+    asset_url: '',
+    create_date: '',
+    update_date: '',
+  };
+
+  let linkData = {
+    id: '',
+    priority: '',
+    priority_code: '',
+    asset_type: '',
+    asset_name: '',
+    asset_url: '',
+  };
+
 
   // Adding event listeners to the form to create a new object, and the button to delete
-  // an Order
-  $(document).on('submit', '#order-form', handleOrderFormSubmit);
-  $(document).on('click', '.delete-order', handleDeleteButtonPress);
-  $(document).on('click', '.update', handleUpdateButtonPress);
+  // an report
 
-  // Getting the initial list of Orders
-  getOrders();
+  $(document).on('click', '#UpdateLink', handleUpdateClick);
+  $(document).on('click', '#headertitle', goHome);
 
-  // A function to handle what happens when the form is submitted to create a new Order
-  function handleOrderFormSubmit(event) {
+  getOrderDetail();
+
+  function getOrderDetail() {
+    const pageURL = window.location.href;
+    console.log("pageURL: ", pageURL);
+
+    const eqIndex = pageURL.indexOf("=") + 1;
+    console.log("eqIndex: ", eqIndex);
+
+    const urlLength = pageURL.length;
+    console.log("urlLength: ", urlLength);
+
+    order_id = (pageURL.substring(eqIndex, urlLength) / 1);
+    console.log("order_id: ", order_id);
+
+    $.get('/api/orderdetail/' + order_id, function (data) {
+      console.log("data: ", data);
+      // getResults.priority = data.priority.trim();
+      // getResults.priority = getResults.priority.replace(/\s\s+/g, ' ');
+      // getResults.priority = data.priority.replace(/\n/g, '');
+      // getResults.priority_code = data.priority_code;
+      // getResults.asset_type = data.asset_type.replace(/\n/g, '');
+      // getResults.asset_type = getResults.asset_type.replace(/\s\s+/g, ' ');
+
+      // getResults.asset_name = data.asset_name;
+      // getResults.asset_url = data.asset_url;
+      // getResults.create_date = moment(data.createdAt).format('MMMM Do YYYY, h:mma');;
+      // getResults.update_date = moment(data.updatedAt).format('MMMM Do YYYY, h:mma');;
+
+      // console.log(" getResults.asset_type: ", getResults.asset_type);
+      // console.log(" getResults.asset_type.length: ", getResults.asset_type.length);
+
+      // $('#LinkPrioritySelect').val(getResults.priority);
+      // $('#LinkAssetTypeSelect').val(getResults.asset_type);
+      // $('#link-asset-name-input').val(getResults.asset_name);
+      // $('#link-asset-url-input').val(getResults.asset_url);
+      // renderDateDetails(getResults.create_date, getResults.update_date);
+    });
+  }
+
+  function handleUpdateClick(event) {
     event.preventDefault();
 
-    // Don't do anything if the name fields hasn't been filled out
-    if (!firstnameInput.val().trim().trim()) {
+    // console.log("UPDATING ASSET DATA!")
+
+    var selectedPriority = $("#LinkPrioritySelect").find("option:selected").text();
+    var selectedAssetType = $("#LinkAssetTypeSelect").find("option:selected").text();
+    // console.log(selectedPriority);
+    // console.log(selectedAssetType);
+
+    // if (!assetName.val().trim()) {
+    if (!assetName) {
       return;
     }
 
-    console.log("firstnameInput: ", firstnameInput.val().trim());
-    console.log("dealsizeInput: ", dealsizeInput.val().trim());
-    console.log("orderdateInput: ", orderdateInput.val().trim());
+    // if (!assetURL.val().trim()) {
+    if (!assetURL) {
+      return;
+    }
 
-    const orderData = {
-      name: firstnameInput
+    // console.log("assetName: ", assetName.val());
+    // console.log("assetURL: ", assetURL.val());
+
+    linkData = {
+      id: assetId,
+      priority: selectedPriority,
+      priority_code: selectedPriority.replace(/\s+/g, ''),
+      asset_type: selectedAssetType,
+      asset_name: assetName
         .val()
         .trim(),
-      deal_size: dealsizeInput
+      asset_url: assetURL
         .val()
-        .trim(),
-      order_date: orderdateInput
-        .val()
-        .trim()
-    }
-
-    console.log("orderData object: ", orderData)
-
-    upsertOrder(orderData);
-
-  }
-
-  // A function for creating an order. Calls getOrders upon completion
-  function upsertOrder(orderData) {
-    $.post('/api/orders', orderData)
-      .then(getOrders);
-  }
-
-  // Function for creating a new list row for orders
-  function createOrderRow(orderData) {
-
-    // console.log('orderData: ', orderData);
-    // const deal_size_yoy_id = "deal_size_yoy" + (i + 1);
-    const deal_size_yoy_id = "deal_size_yoy" + orderData.id;
-    // const deal_count_yoy_id = "deal_count_yoy" + (i + 1);
-    const deal_count_yoy_id = "deal_count_yoy" + orderData.id;
-
-    const newTr = $('<tr>');
-    newTr.data('order', orderData);
-    newTr.append('<td>' + orderData.name + '</td>');
-    newTr.append('<td>$' + orderData.deal_size + '</td>');
-    newTr.append('<td>' + orderData.order_date + '</td>');
-    newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
-
-    if (orderData.deal_size_yoy) {
-      newTr.append('<td>' + '<input placeholder=' + orderData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    } else {
-      newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    }
-
-    if (orderData.deal_count_yoy) {
-      newTr.append('<td>' + '<input placeholder=' + orderData.deal_count_yoy + ' id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    } else {
-      newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    }
-
-    // Potentially only show button, if change field is populated?
-    newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
-
-    if (!orderData.next_year_deal_size) {
-      newTr.append('<td>$' + orderData.deal_size + '</td>');
-    }
-    else {
-    newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
-    }
-
-    if (!orderData.next_year_deal_count) {
-      newTr.append('<td>$' + orderData.order_date + '</td>');
-    }
-    else {
-    newTr.append('<td>$' + orderData.next_year_deal_count + '</td>');
-    }
-
-    if (!orderData.next_year_sgmt_rev) {
-      newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
-    }
-    else {
-      newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
     };
 
-    if (orderData.OrderDetails) {
-      newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
-    } else {
-      newTr.append('<td>0</td>');
-    }
-    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
-    newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/sms?order_id=' + orderData.id + '\'>+</a></td>');
-    newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
+    // console.log("linkData object: ", linkData)
 
-    console.log("orderData: ", orderData);
-
-    buildChartObject(orderData);
-
-    return newTr;
+    updateAsset(linkData);
   }
 
-  // Function for creating a new list row for orders
-  function createOrderTotals(title, orderTotals, nextyearSgmtTotals) {
-
-    const totalTr = $('<tr>');
-    // totalTr.data('totals', orderTotals);
-    totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + orderTotals + '</b></h4></td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + nextyearSgmtTotals + '</b></h4></td>');
-    return totalTr;
-  }
-
-
-  // Function for retrieving orders and getting them ready to be rendered to the page
-  function getOrders() {
-
-    chart1Data = [{}];
-    chart2Data = [{}];
-
-    $.get('/api/orders', function (data) {
-
-      // console.log('data: ', data);
-
-      orderRevTotal = 0;
-      nextyearSgmtRevTotal = 0;
-      const rowsToAdd = [];
-
-      for (let i = 0; i < data.length; i++) {
-        // rowsToAdd.push(createOrderRow(data[i]));
-        rowsToAdd.push(createOrderRow(data[i], i));
-
-        // Calculating total order revenue
-        orderRevTotal += data[i].sgmt_rev;
-        if (!data[i].next_year_sgmt_rev) {
-          nextyearSgmtRevTotal += data[i].sgmt_rev;
-        }
-        else {
-          nextyearSgmtRevTotal += data[i].next_year_sgmt_rev;
-        };
-
-        console.log("i: ", i);
-        console.log("data.length: ", data.length);
-        if ((i + 1) == data.length) {
-          rowsToAdd.push(createOrderTotals("TOTAL", orderRevTotal, nextyearSgmtRevTotal));
-        }
-      }
-
-      console.log("orderRevTotal: ", orderRevTotal);
-      // console.log("rowsToAdd: ", rowsToAdd);
-
-      renderOrderList(rowsToAdd);
-      firstnameInput.val('');
-      dealsizeInput.val('');
-      orderdateInput.val('');
-    });
-
-  }
-
-  // A function for rendering the list of orders to the page
-  function renderOrderList(rows) {
-    orderList.children().not(':last').remove();
-    orderContainer.children('.alert').remove();
-    if (rows.length) {
-      // console.log("rows: ", rows);
-      orderList.prepend(rows);
-    } else {
-      renderEmpty();
-    }
-  }
-
-  // This populates the object for the Revenue Bubble Chart(s)
-  function buildChartObject(orderData) {
-
-    chart1Data.push({
-      x: orderData.deal_size,
-      y: orderData.order_date,
-      r: (orderData.sgmt_rev / 100)
-    });
-
-    chart2Data.push({
-      x: orderData.next_year_deal_size,
-      y: orderData.next_year_deal_count,
-      r: (orderData.next_year_sgmt_rev / 100)
-    });
-
-    renderChart1(chart1Data);
-    renderChart2(chart2Data);
-
-  }
-
-  // This creates the display object for the Revenue Bubble Chart(s)
-  function renderChart1(chartData) {
-    var ctx = $('#myBubbleChart1');
-
-    var myBubbleChart = new Chart(ctx, {
-      type: 'bubble',
-      data: {
-        "datasets": [{
-          label: "Order Revenue - This Year",
-          data: chart1Data,
-          backgroundColor:
-            'red'
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Size ($)',
-            },
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Count (#)',
-            },
-            ticks: {
-              beginAtZero: false
-            },
-          }],
-        }
-      }
-    });
-
-    ctx.prepend(myBubbleChart);
-  }
-
-  // This creates the display object for the Revenue Bubble Chart(s)
-  function renderChart2(chartData) {
-    var ctx = $('#myBubbleChart2');
-
-    var myBubbleChart = new Chart(ctx, {
-      type: 'bubble',
-      data: {
-        "datasets": [{
-          label: "Next Year Order Revenue Plan",
-          data: chart2Data,
-          backgroundColor:
-            'green'
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Size ($)',
-            },
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Count (#)',
-            },
-            ticks: {
-              beginAtZero: false
-            }
-          }],
-        }
-      }
-    });
-
-    ctx.prepend(myBubbleChart);
-  }
-
-
-  // Function for handling what to render when there are no orders
-  function renderEmpty() {
-    const alertDiv = $('<div>');
-    alertDiv.addClass('alert alert-danger');
-    alertDiv.text('You must create a Order before you can create a OrderDetail.');
-    orderContainer.append(alertDiv);
-  }
-
-  // Function for handling what happens when the delete button is pressed
-  function handleDeleteButtonPress() {
-    const listItemData = $(this).parent('td').parent('tr').data('order');
-
-    const id = listItemData.id;
-    $.ajax({
-      method: 'DELETE',
-      url: '/api/orders/' + id,
-    })
-      .then(getOrders);
-  }
-
-  function handleUpdateButtonPress() {
-
-    const listItemData = $(this).parent('td').parent('tr').data('order');
-    // console.log("listItemData: ", listItemData);
-
-    const id = listItemData.id;
-    // console.log("listItemData.id: ", listItemData.id);
-
-    let nextyearDealsize = 0;
-    let nextyearDealcount = 0;
-
-    const dealsizeyoychangeInput = $('#deal_size_yoy' + listItemData.id);
-    const dealcountyoychangeInput = $('#deal_count_yoy' + listItemData.id);
-
-    // console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
-    if (dealsizeyoychangeInput === '') {
-      nextyearDealsize = listItemData.deal_size;
-      // console.log("nextyearDealsize: ", nextyearDealsize);
-    } else {
-      nextyearDealsize = (listItemData.deal_size * (1 + (dealsizeyoychangeInput.val() / 100)));
-      // console.log("nextyearDealsize: ", nextyearDealsize);
-    }
-
-    // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
-    if (dealcountyoychangeInput === '') {
-      nextyearDealcount = listItemData.order_date;
-      // console.log("nextyearDealcount: ", nextyearDealcount);
-    } else {
-      nextyearDealcount = (listItemData.order_date * (1 + (dealcountyoychangeInput.val() / 100)));
-      // console.log("nextyearDealcount: ", nextyearDealcount);
-    }
-
-    const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
-    // console.log("nextyearSgmtrev: ", nextyearSgmtrev);
-
-
-    const orderData = {
-      id: listItemData.id,
-      name: listItemData.name,
-      deal_size: listItemData.deal_size,
-      order_date: listItemData.order_date,
-      deal_size_yoy: dealsizeyoychangeInput.val() * 1,
-      deal_count_yoy: dealcountyoychangeInput.val() * 1,
-      next_year_deal_size: nextyearDealsize,
-      next_year_deal_count: nextyearDealcount,
-      next_year_sgmt_rev: nextyearSgmtrev
-    }
-
-    console.log("orderData object: ", orderData)
-
-
+  // A function for updating a link's details.
+  function updateAsset(linkData) {
     $.ajax({
       method: 'PUT',
-      url: '/api/orders',
-      data: orderData,
+      url: '/api/linkDetail',
+      data: linkData,
     })
-      .then(getOrders);
+      .then(renderUpdateConf);
+    // .then(function () {
+    //   $.get('/main', function () {});
+    // });
+  };
+
+  function renderDateDetails(linkCreate, linkUpdate) {
+    $('#link-create-date').append(linkCreate);
+    $('#link-update-date').append(linkUpdate);    
   }
 
+  function renderUpdateConf() {
+    const updateConf = $('<div>');
+    updateConf.addClass('alert alert-success');
+    updateConf.addClass('update-conf-msg');
+    updateConf.addClass('update-conf-column');
+    updateConf.text('Document details updated.');
+    // updateConf.append('</div>');
+
+    // console.log("updateConf: ", updateConf);
+    updateConf.append('<div><a class="btn btn-success update-conf-dismiss" type="button" href="/main"> Dismiss </a></div>');
+    $('.card-body').append(updateConf);
+  }
+
+
+  // A function for updating a link's details.
+  function goHome() {
+    console.log("TRYING TO GO HOME!")
+    // $.get('/main', function () {});
+    $.ajax({
+      method: 'GET',
+      url: '/main',
+    })
+  };
 
 });

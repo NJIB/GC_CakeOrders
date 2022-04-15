@@ -25,7 +25,7 @@ module.exports = function(app) {
     // We set the value to an array of the models we want to include in a left outer join
     // In this case, just db.Order
     try {
-      const data = await db.OrderDetail.findAll({
+      const data = await db.Order.findAll({
         where: query,
         include: [db.Order],
       });
@@ -53,9 +53,9 @@ module.exports = function(app) {
     // We set the value to an array of the models we want to include in a left outer join
     // In this case, just db.Order
     try {
-      const data = await db.OrderDetail.findAll({
+      const data = await db.Order.findAll({
         where: query,
-        include: [db.Order],
+        // include: [db.Order],
       });
       res.json(data);
     } catch (error) {
@@ -64,17 +64,19 @@ module.exports = function(app) {
   });
 
   // Get route for retrieving a single comment
-  app.get('/api/orderdetails/:id', async (req, res) => {
-    // Add sequelize code to find a single comment where the id is equal to req.params.id,
-    // return the result to the user with res.json
-    // We add an "include" property to our options in our findAll query
+  app.get('/api/orderdetail/:id', async (req, res) => {
+    // Find one Report with the id in req.params.id and return them to the user with res.json
+    // Here we add an "include" property to our options in our findOne query
     // We set the value to an array of the models we want to include in a left outer join
-    // In this case, just db.Order
+    // In this case, just db.SubReport
+    console.log('req.params: ',req.params)
     try {
-      const data = await db.OrderDetail.findOne({
-        where: {id: req.params.id},
-        include: [db.Order],
-      });
+      const data = await db.Order.findOne( // findOne returns a single object.  findAll returns an array of objects
+          {
+            where: {id: req.params.id},
+            // include: [db.SubReport],
+          },
+      );
       res.json(data);
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
@@ -89,7 +91,7 @@ module.exports = function(app) {
     
     try {
       console.log("req.body: ", req.body);
-      const result = await db.OrderDetail.create(req.body);
+      const result = await db.Order.create(req.body);
       res.json({created: result.dataValues});
     } catch (error) {
       res.status(400).json({error: {name: error.name, msg: error.message}});
@@ -113,7 +115,7 @@ module.exports = function(app) {
     // Add sequelize code to delete a comment where the id is equal to req.params.id,
     // then return the result to the user using res.json
     try {
-      const result = await db.OrderDetail.destroy(
+      const result = await db.Order.destroy(
           {
             // where: {id: req.params.id},
             where: {id: req.params.id},
@@ -139,7 +141,7 @@ module.exports = function(app) {
 
     try {
       // const result = await db.OrderDetail.update(
-        const result = await db.OrderDetail.update(
+        const result = await db.Order.update(
           // {hurdle, markets, buyers, offerings, productivity, acquisition},
           {hurdle, markets, buyers, offerings, productivity, acquisition, RouteId, OrderId},
           {where: {id}},

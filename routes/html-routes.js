@@ -44,8 +44,8 @@ module.exports = function (app) {
   });
 
   // orderdetail route loads orderdetail.html
-  app.get('/orderdetail', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/orderdetail.html'));
+  app.get('/order-details', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public/order-details.html'));
   });
 
   // sgmt_rev_goals route loads sgmt_rev_goals.html

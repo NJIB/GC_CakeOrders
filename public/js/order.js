@@ -331,7 +331,7 @@ $(document).ready(function () {
     // };
     //10.05 Testing change to button class
 
-    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/orderdetail?order_id=' + orderData.id + '\' /a> >> </button></td>');
+    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/order-details?order_id=' + orderData.id + '\' /a> >> </button></td>');
 
     // if (orderData.OrderDetails) {
     //   newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
@@ -346,25 +346,6 @@ $(document).ready(function () {
 
     return newTr;
   }
-
-  // Function for creating a new list row for orders
-  function createOrderTotals(title, orderTotals, nextyearSgmtTotals) {
-
-    const totalTr = $('<tr>');
-    // totalTr.data('totals', orderTotals);
-    totalTr.append('<td><h4><b>' + title + '</b></h4></td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + orderTotals + '</b></h4></td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td>' + '</td>');
-    totalTr.append('<td><h4><b>$' + nextyearSgmtTotals + '</b></h4></td>');
-    return totalTr;
-  }
-
 
   // Function for retrieving orders and getting them ready to be rendered to the page
   function getOrders() {
@@ -599,8 +580,6 @@ $(document).ready(function () {
     });
 
     renderChart1(chart1Data);
-    renderChart2(chart2Data);
-
   }
 
   // This creates the display object for the Revenue Bubble Chart(s)
@@ -644,49 +623,6 @@ $(document).ready(function () {
 
     ctx.prepend(myBubbleChart);
   }
-
-  // This creates the display object for the Revenue Bubble Chart(s)
-  function renderChart2(chartData) {
-    console.log("chart2 data: ", chartData);
-    var ctx = $('#myBubbleChart2');
-
-    var myBubbleChart = new Chart(ctx, {
-      type: 'bubble',
-      data: {
-        "datasets": [{
-          label: "Next Year Order Revenue Plan",
-          data: chartData,
-          backgroundColor:
-            'green'
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Size ($)',
-            },
-            ticks: {
-              beginAtZero: true
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Count (#)',
-            },
-            ticks: {
-              beginAtZero: true
-            }
-          }],
-        }
-      }
-    });
-
-    ctx.prepend(myBubbleChart);
-  }
-
 
   // Function for handling what to render when there are no orders
   function renderEmpty() {
