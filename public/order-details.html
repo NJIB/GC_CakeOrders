@@ -104,16 +104,43 @@
             <div>&nbsp</div>
 
             <form class="order-form">
-                <!-- <div id="order-order_ref" type="text">Order #: </div> -->
-                <!-- <input placeholder="Order Date" class="gc_order_entry" id="order-order_date" type="date" /> -->
-                <label for="order-delivery_date">Date / Time Cake Required:&nbsp&nbsp </label>
-                <input placeholder="Delivery / pickup date" class="gc_order_entry" id="order-delivery_date"
-                    type="date" />
-                <input placeholder="Delivery or pickup time" class="gc_order_entry" id="order-delivery_pickup_time"
-                    type="time" />
-                <input placeholder="Delivery or pickup" class="gc_order_entry" id="order-delivery_pickup" type="text" />
-            </form>
+                <div class="row">
+                    <!-- <div id="order-order_ref" type="text">Order #: </div> -->
+                    <!-- <input placeholder="Order Date" class="gc_order_entry" id="order-order_date" type="date" /> -->
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                    <label for="order-delivery_date">Date / Time Cake Required:&nbsp&nbsp </label>
+                    <input placeholder="Delivery / pickup date" class="gc_order_entry" id="order-delivery_date"
+                        type="date" />
+                   </div>
+                   <div class="col-lg-4 col-md-4 col-sm-12">
+                        <label for="order-delivery_pickup_time">Ready Time:&nbsp&nbsp </label>
+                    <input placeholder="Delivery or pickup time" class="gc_order_entry" id="order-delivery_pickup_time"
+                        type="time" />
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <label for="order-delivery_pickup">Delivery or Pickup:&nbsp&nbsp </label>
+                    <input placeholder="Delivery or pickup" class="gc_order_entry" id="order-delivery_pickup"
+                        type="text" />
+                    </div>
+                </div>
+                <div>&nbsp</div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                    <label for="order-cake_price">Price: &nbsp &nbsp$</label>
+                    <input placeholder="Price" id="order-cake_price" type="integer" />
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                    <label for="order-cake_price">Paid: &nbsp &nbsp</label>
+                    <input placeholder="Price" id="order-paid_conf" type="integer" />
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <label for="order-date_paid">Date Paid: &nbsp &nbsp</label>
+                    <input placeholder="Delivery / pickup date" class="gc_order_entry" id="order-paid_date">
+                </div>
+            </div>
+        </form>
 
+            <div>&nbsp</div>
             <div>&nbsp</div>
 
             <form class="order-form">
@@ -126,34 +153,44 @@
 
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-12">
+                        <label for="order-cake_theme">Cake Theme:</label>
                         <input placeholder="Cake theme" class="gc_cake_desc" id="order-cake_theme" type="text" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12">
+                        <label for="order-cake_desc">Cake Description:</label>
                         <input placeholder="Cake description" class="gc_cake_desc" id="order-cake_description"
                             type="text" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12">
+                        <label for="order-cake_special">Notes, Requests, Dietary Reqs., etc.:</label>
                         <input placeholder="Special requests / dietary restrictions" class="gc_cake_desc"
                             id="order-cake_special" type="text" />
                     </div>
                 </div>
 
+                <div>&nbsp</div>
+
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-sm-6">
+                        <label for="order-cake_name">Name / Text on Cake:</label>
                         <input placeholder="Name on cake" class="gc_order_details" id="order-cake_name" type="text" />
                     </div>
                     <div class="col-lg-2 col-md-6 col-sm-6">
+                        <label for="order-cake_age">Age on Cake:</label>
                         <input placeholder="Age on cake" class="gc_order_details" id="order-cake_age" type="text" />
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4">
+                        <label for="order-cake_boygirl">Boy / Girl:</label>
                         <input placeholder="Girl / boy" class="gc_order_details" id="order-cake_boygirl" type="text" />
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4">
+                        <label for="order-cake_servings">Servings:</label>
                         <input placeholder="Cake servings" class="gc_order_details" id="order-cake_servings"
                             type="text" />
                         <!-- <input placeholder="Occasion" class="gc_order_details" id="order-cake_occasion" type="text" /> -->
                     </div>
                     <div class="col-lg-2 col-md-4 col-sm-4">
+                        <label for="order-cake_layers"># Layers:</label>
                         <input placeholder="Cake layers" class="gc_order_details" id="order-cake_layers" type="text" />
                     </div>
                 </div>
@@ -163,7 +200,7 @@
                 <div>
                     <table class="table">
                         <!-- <thead> -->
-                            <!-- <tr>
+                        <!-- <tr>
                                 <th>Layer</th>
                                 <th>Cake Size</th>
                                 <th>Cake Shape</th>
@@ -211,17 +248,13 @@
 
                     </table>
 
-                    <div>&nbsp</div>
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-4">Price: &nbsp &nbsp &nbsp
-                            <input placeholder="Price" id="order-cake_price" type="integer" />
-                        </div>
 
-                        <div class="col-lg-7 col-md-5 col-sm-6"></div>
+                    <div class="col-lg-10 col-md-9 col-sm-8">
 
-                        <div class="col-lg-2 col-md-3 col-sm-2">
-                            <button type="submit" class="btn btn-primary order-form">Update Order > </button>
-                        </div>                        
+                    </div>
+
+                    <div class="col-lg-2 col-md-3 col-sm-4">
+                        <button type="submit" class="btn btn-primary order-form">Update Order > </button>
                     </div>
                 </div>
             </form>
