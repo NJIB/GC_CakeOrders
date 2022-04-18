@@ -14,6 +14,16 @@ module.exports = function(sequelize, DataTypes) {
       //   len: [1, 160],
       // },
     },
+    order_time: {
+      type: DataTypes.DATE,
+    },
+    delivery_pickup: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        len: [1, 160],
+      },
+    },
     cake_theme: {
       type: DataTypes.STRING,
       allowNull: false,

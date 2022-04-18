@@ -4,6 +4,8 @@ $(document).ready(function () {
   const firstnameInput = $('#order-firstname');
   const lastnameInput = $('#order-lastname');
   const orderdateInput = $('#order-delivery_date');
+  const ordertimeInput = $('#order-delivery_pickup_time');
+  const orderdeliverypickupInput = $('#order-delivery_pickup');
   const address = $('#order-customer_address');
   const city = $('#order-customer_city');
   const zip = $('#order-customer_zip');
@@ -168,6 +170,12 @@ $(document).ready(function () {
     const orderData = {
       customer_id: customerId,
       order_date: orderdateInput
+        .val()
+        .trim(),
+     order_time: ordertimeInput
+        .val()
+        .trim(),
+      delivery_pickup: orderdeliverypickupInput
         .val()
         .trim(),
       cake_theme: cakethemeInput
@@ -554,7 +562,7 @@ $(document).ready(function () {
 
   // A function for rendering the list of orders to the page
   function renderOrderList(rows) {
-    // orderList.children().not(':last').remove();
+    orderList.children().not(':last').remove();
     orderContainer.children('.alert').remove();
     if (rows.length) {
       // orderList.prepend(rows);

@@ -69,12 +69,31 @@ module.exports = function(app) {
     // Here we add an "include" property to our options in our findOne query
     // We set the value to an array of the models we want to include in a left outer join
     // In this case, just db.SubReport
-    console.log('req.params: ',req.params)
+    // console.log('req.params: ',req.params)
     try {
       const data = await db.Order.findOne( // findOne returns a single object.  findAll returns an array of objects
           {
             where: {id: req.params.id},
             // include: [db.SubReport],
+          },
+      );
+      res.json(data);
+    } catch (error) {
+      res.status(400).json({error: {name: error.name, msg: error.message}});
+    }
+  });
+
+  app.get('/api/customerdetail/:customer_id', async (req, res) => {
+    // Find one Order with the id in req.params.id and return them to the user with res.json
+    // Here we add an "include" property to our options in our findOne query
+    // We set the value to an array of the models we want to include in a left outer join
+    // In this case, just db.OrderDetail
+    try {
+      console.log("req.params.customer_id", req.params.customer_id);
+      const data = await db.Customer.findOne( // findOne returns a single object.  findAll returns an array of objects
+          {
+            where: {customer_id: req.params.customer_id},
+            // include: [db.Order],
           },
       );
       res.json(data);

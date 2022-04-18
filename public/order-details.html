@@ -66,26 +66,33 @@
             <form class="customer-form">
 
                 <div class="card-header">
-                    <h3>Customer Details</h3>
+                    <div class="row">
+                        <div class="col-lg-9 col-md-8 col-sm-6">
+                            <h3>Customer Details</h3>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <button type="submit" class="btn btn-light order-form">Update Customer Details > </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div>&nbsp</div>
 
-                <div class="name_plate col-lg-12 col-md-12 col-sm-12">
-                    <div class="gc_order_entry" id="order-firstname">First name</div>
-                    <div class="gc_order_entry" id="order-lastname">Last name</div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div id="order-customername">First name</div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div id="order-customer_address">Address</div>
+                        <div id="order-customer_city">City</div>
+                        <div id="order-customer_zip">Zip</div>
+                        <div id="order-customer_phone">Phone</div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div id="order-customer_notes">Customer Notes</div>
+                    </div>
                 </div>
-                <div>
-                    <div class="gc_order_entry" id="order-address">(Address details)</div>
 
-                    <!-- <input placeholder="Address" class="gc_order_entry" id="order-customer_address" type="text" />
-                    <input placeholder="City" class="gc_order_entry" id="order-customer_city" type="text" />
-                    <input placeholder="Zip code" class="gc_order_entry" id="order-customer_zip" type="text" />
-                    <input placeholder="Phone" class="gc_order_entry" id="order-customer_phone" type="tel" /> -->
-                    <!-- <input placeholder="Customer notes" class="gc_customer_notes" id="order-customer_notes"
-                        type="text" /> -->
-
-                </div>
             </form>
 
             <div>&nbsp</div>
@@ -155,28 +162,37 @@
 
                 <div>
                     <table class="table">
-                        <!-- <thead>
-							<tr>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
-								<th>4</th>
-								<th>5</th>
-								<th>6</th>
-							</tr>
-						</thead> -->
+                        <!-- <thead> -->
+                            <!-- <tr>
+                                <th>Layer</th>
+                                <th>Cake Size</th>
+                                <th>Cake Shape</th>
+                                <th>Flavor</th>
+                                <th>Filling</th>
+                                <th>Notes</th>
+                            </tr> -->
+                        <!-- </thead> -->
 
                         <tbody>
                             <tr>
-                                <td>Layer 1:</td>
-                                <td><input placeholder="Cake size - layer 1" id="order-cake_size1" type="text" /></td>
+                                <th>Layer</th>
+                                <th>Cake Size</th>
+                                <th>Cake Shape</th>
+                                <th>Flavor</th>
+                                <th>Filling</th>
+                                <th>Notes</th>
+                            </tr>
+
+                            <tr>
+                                <th>1:</th>
+                                <td><input placeholder="(Cake size - layer 1)" id="order-cake_size1" type="text" /></td>
                                 <td><input placeholder="Cake shape - layer 1" id="order-cake_shape1" type="text" /></td>
                                 <td><input placeholder="Flavor - layer 1" id="order-cake_flavor1" type="text" /></td>
                                 <td><input placeholder="Filling - layer 1" id="order-cake_filling1" type="text" /></td>
                                 <td><input placeholder="Layer 1 notes" id="order-cake_notes1" type="text" /></td>
                             </tr>
                             <tr>
-                                <td>Layer 2:</td>
+                                <th>2:</th>
                                 <td><input placeholder="Cake size - layer 2" id="order-cake_size2" type="text" /></td>
                                 <td><input placeholder="Cake shape - layer 2" id="order-cake_shape2" type="text" /></td>
                                 <td><input placeholder="Flavor - layer 2" id="order-cake_flavor2" type="text" /></td>
@@ -184,7 +200,7 @@
                                 <td><input placeholder="Layer 2 notes" id="order-cake_notes2" type="text" /></td>
                             </tr>
                             <tr>
-                                <td>Layer 3:</td>
+                                <th>3:</th>
                                 <td><input placeholder="Cake size - layer 3" id="order-cake_size3" type="text" /></td>
                                 <td><input placeholder="Cake shape - layer 3" id="order-cake_shape3" type="text" /></td>
                                 <td><input placeholder="Flavor - layer 3" id="order-cake_flavor3" type="text" /></td>
@@ -195,90 +211,24 @@
 
                     </table>
 
+                    <div>&nbsp</div>
                     <div class="row">
-                        <div class="col-lg-10 col-md-10 col-sm-10">
+                        <div class="col-lg-3 col-md-4 col-sm-4">Price: &nbsp &nbsp &nbsp
                             <input placeholder="Price" id="order-cake_price" type="integer" />
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2">
-                            <button type="submit" class="btn btn-success order-form">Create Order > </button>
-                        </div>
+
+                        <div class="col-lg-7 col-md-5 col-sm-6"></div>
+
+                        <div class="col-lg-2 col-md-3 col-sm-2">
+                            <button type="submit" class="btn btn-primary order-form">Update Order > </button>
+                        </div>                        
                     </div>
+                </div>
             </form>
         </div>
     </div>
 
     <div>&nbsp</div>
-
-    <div class="card card-body">
-        <div class="card-header">
-            <h3>Current Orders</h3>
-        </div>
-
-        <div>&nbsp</div>
-
-        <table class="table table-striped">
-            <thead id="orderList">
-                <tr>
-                    <th>Delivery Date</th>
-                    <th>Cake Theme</th>
-                    <th>Customer ID</th>
-                    <th>Order Details</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- <tr id="form-row">
-								<form id="order-form">
-									<td colspan="8" class="add_order" style="background-color: yellow;">
-										<input placeholder="New order name" id="order-firstname" type="text" />
-										<input placeholder="Deal size" id="order-lastname" type="text" />
-										<input placeholder="Deal count" id="order-order_date" type="text" />
-									</td>
-									<td><button type="submit" class="btn btn-success">Create Order > </button>
-									</td>
-								</form>
-							</tr> -->
-            </tbody>
-            <!-- <tfooter>
-							<tr id="form-row">
-							</tr>
-						</tfooter> -->
-        </table>
-
-        <!-- <div class="row add_order">
-						<div class="col-md-3 col-sm-12">
-							<h4>Add a new order:</h4>
-						</div>
-						<div class="col-md-9 col-sm-12">
-							<input placeholder="Order" id="order-firstname" type="text" style="width: 200px" />
-							<input placeholder="Deal size" id="order-lastname" type="text" style="width: 200px" />
-							<input placeholder="Deal count" id="order-order_date" type="text" style="width: 200px" />
-							<button type="submit" class="btn btn-success">Create Order</button>
-						</div>
-					</div> -->
-
-
-
-        <!-- </div>
-		</div> -->
-    </div>
-
-    <!-- <div class="row">
-			<div class="col-md-5 col-sm-12">
-				<canvas id="myBubbleChart1" width="200" height="200"></canvas>
-			</div>
-			<div class="col-md-2 col-sm-12">
-				<img src='./images/right_arrow.png' alt='right arrow' style="width:100px;
-				 height:100px;
-				 margin-top: 150px;
-				 margin-bottom: 150px;
-				 margin-left: 50px;
-				 margin-right: 50px;">
-			</div>
-			<div class="col-md-5 col-sm-12">
-				<canvas id="myBubbleChart2" width="200" height="200"></canvas>
-			</div>
-		</div> -->
 
     </div>
 

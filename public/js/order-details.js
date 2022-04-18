@@ -9,25 +9,8 @@ $(document).ready(function () {
 
   let order_id;
 
-  let getResults = {
-    assetId: '',
-    priority: '',
-    priority_code: '',
-    asset_type: '',
-    asset_name: '',
-    asset_url: '',
-    create_date: '',
-    update_date: '',
-  };
-
-  let linkData = {
-    id: '',
-    priority: '',
-    priority_code: '',
-    asset_type: '',
-    asset_name: '',
-    asset_url: '',
-  };
+  let orderGetData = {};
+  let customerGetData = {};
 
 
   // Adding event listeners to the form to create a new object, and the button to delete
@@ -53,26 +36,60 @@ $(document).ready(function () {
 
     $.get('/api/orderdetail/' + order_id, function (data) {
       console.log("data: ", data);
-      // getResults.priority = data.priority.trim();
-      // getResults.priority = getResults.priority.replace(/\s\s+/g, ' ');
-      // getResults.priority = data.priority.replace(/\n/g, '');
-      // getResults.priority_code = data.priority_code;
-      // getResults.asset_type = data.asset_type.replace(/\n/g, '');
-      // getResults.asset_type = getResults.asset_type.replace(/\s\s+/g, ' ');
 
-      // getResults.asset_name = data.asset_name;
-      // getResults.asset_url = data.asset_url;
-      // getResults.create_date = moment(data.createdAt).format('MMMM Do YYYY, h:mma');;
-      // getResults.update_date = moment(data.updatedAt).format('MMMM Do YYYY, h:mma');;
+      orderGetData = data;
+      console.log("orderGetData: ", orderGetData);
 
-      // console.log(" getResults.asset_type: ", getResults.asset_type);
-      // console.log(" getResults.asset_type.length: ", getResults.asset_type.length);
+      console.log("data.customer_id:", data.customer_id);
 
-      // $('#LinkPrioritySelect').val(getResults.priority);
-      // $('#LinkAssetTypeSelect').val(getResults.asset_type);
-      // $('#link-asset-name-input').val(getResults.asset_name);
-      // $('#link-asset-url-input').val(getResults.asset_url);
+      $.get('/api/customerdetail/' + data.customer_id, function (data) {
+        console.log("data: ", data);
+
+        customerGetData = data;
+        console.log("customerGetData: ", customerGetData);
+
+      const customername = [customerGetData.first_name, customerGetData.last_name];
+      const customername_concat = customername.join(" ");
+      console.log("customername_concat:", customername_concat);
+
+      $('#order-customername').text(customername_concat);
+      $('#order-customer_address').text(customerGetData.address);
+      $('#order-customer_city').text(customerGetData.city);
+      $('#order-customer_zip').text(customerGetData.zip);
+      $('#order-customer_phone').text(customerGetData.phone);
+      $('#order-customer_notes').text(customerGetData.customer_notes);
+      
+      $('#order-delivery_date').val(moment(orderGetData.order_date).format('YYYY-MM-DD'));
+      $('#order-delivery_pickup_time').val(moment(orderGetData.order_date).format('HH:mm:ss'));
+      $('#order-delivery_pickup').text(orderGetData.delivery_pickup);
+      $('#order-cake_theme').val(orderGetData.cake_theme);
+      $('#order-cake_description').val(orderGetData.cake_description);
+      $('#order-cake_special').val(orderGetData.cake_special);
+      $('#order-cake_name').val(orderGetData.cake_name);
+      $('#order-cake_boygirl').val(orderGetData.cake_boygirl);
+      $('#order-cake_servings').val(orderGetData.cake_servings);
+      $('#order-cake_layers').val(orderGetData.cake_layers);
+      $('#order-cake_age').val(orderGetData.cake_age);
+      $('#order-cake_size1').val(orderGetData.cake_size1);
+      $('#order-cake_shape1').val(orderGetData.cake_shape1);
+      $('#order-cake_flavor1').val(orderGetData.cake_flavor1);
+      $('#order-cake_filling1').val(orderGetData.cake_filling1);
+      $('#order-cake_notes1').val(orderGetData.cake_notes1);
+      $('#order-cake_size2').val(orderGetData.cake_size2);
+      $('#order-cake_shape2').val(orderGetData.cake_shape2);
+      $('#order-cake_flavor2').val(orderGetData.cake_flavor2);
+      $('#order-cake_filling2').val(orderGetData.cake_filling2);
+      $('#order-cake_notes2').val(orderGetData.cake_notes2);
+      $('#order-cake_size3').val(orderGetData.cake_size3);
+      $('#order-cake_shape3').val(orderGetData.cake_shape3);
+      $('#order-cake_flavor3').val(orderGetData.cake_flavor3);
+      $('#order-cake_filling3').val(orderGetData.cake_filling3);
+      $('#order-cake_notes3').val(orderGetData.cake_notes3);
+      $('#order-cake_price').val(orderGetData.cake_price);
+
       // renderDateDetails(getResults.create_date, getResults.update_date);
+      });
+
     });
   }
 
@@ -131,7 +148,7 @@ $(document).ready(function () {
 
   function renderDateDetails(linkCreate, linkUpdate) {
     $('#link-create-date').append(linkCreate);
-    $('#link-update-date').append(linkUpdate);    
+    $('#link-update-date').append(linkUpdate);
   }
 
   function renderUpdateConf() {

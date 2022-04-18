@@ -52,6 +52,8 @@ module.exports = function (app) {
     // const {name, deal_size, order_date} = req.body;
     const { customer_id,
       order_date,
+      order_time,
+      delivery_pickup,
       cake_theme,
       cake_description,
       cake_special,
