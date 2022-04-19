@@ -1,11 +1,38 @@
 $(document).ready(function () {
 
   // Getting references to the name input and report container, as well as the table body
-  // const reportDate = $('#report-date');
-  let prioritySelected = ('#LinkPrioritySelect');
-  let assetTypeSelected = ('#LinkAssetTypeSelect');
-  let assetName = $('#link-asset-name-input');
-  let assetURL = $('#link-asset-url-input');
+  const firstnameInput = $('#order-firstname');
+  const lastnameInput = $('#order-lastname');
+  const orderdateInput = $('#order-delivery_date');
+  const ordertimeInput = $('#order-delivery_pickup_time');
+  const orderdeliverypickupInput = $('#order-delivery_pickup');
+
+    // Getting references to the cake detail inputs
+    const cakethemeInput = $('#order-cake_theme');
+    const cakedescriptionInput = $('#order-cake_description');
+    const cakespecialInput = $('#order-cake_special');
+    const cakenameInput = $('#order-cake_name');
+    const cakeageInput = $('#order-cake_age');
+    const cakeboygirlInput = $('#order-cake_boygirl');
+    const cakeoccasionInput = $('#order-cake_occasion');
+    const cakeservingsInput = $('#order-cake_servings');
+    const cakelayersInput = $('#order-cake_layers');
+    const cakesize1Input = $('#order-cake_size1');
+    const cakeshape1Input = $('#order-cake_shape1');
+    const cakeflavor1Input = $('#order-cake_flavor1');
+    const cakefilling1Input = $('#order-cake_filling1');
+    const cakenotes1Input = $('#order-cake_notes1');
+    const cakesize2Input = $('#order-cake_size2');
+    const cakeshape2Input = $('#order-cake_shape2');
+    const cakeflavor2Input = $('#order-cake_flavor2');
+    const cakefilling2Input = $('#order-cake_filling2');
+    const cakenotes2Input = $('#order-cake_notes2');
+    const cakesize3Input = $('#order-cake_size3');
+    const cakeshape3Input = $('#order-cake_shape3');
+    const cakeflavor3Input = $('#order-cake_flavor3');
+    const cakefilling3Input = $('#order-cake_filling3');
+    const cakenotes3Input = $('#order-cake_notes3');
+    const cakepriceInput = $('#order-cake_price'); 
 
   let order_id;
 
@@ -16,8 +43,8 @@ $(document).ready(function () {
   // Adding event listeners to the form to create a new object, and the button to delete
   // an report
 
-  $(document).on('click', '#UpdateLink', handleUpdateClick);
   $(document).on('click', '#headertitle', goHome);
+  $(document).on('click', '.order-update', handleUpdateClick);
 
   getOrderDetail();
 
@@ -98,47 +125,111 @@ $(document).ready(function () {
 
     // console.log("UPDATING ASSET DATA!")
 
-    var selectedPriority = $("#LinkPrioritySelect").find("option:selected").text();
-    var selectedAssetType = $("#LinkAssetTypeSelect").find("option:selected").text();
-    // console.log(selectedPriority);
-    // console.log(selectedAssetType);
+    // if (!assetName) {
+    //   return;
+    // }
 
-    // if (!assetName.val().trim()) {
-    if (!assetName) {
-      return;
-    }
+    // if (!assetURL) {
+    //   return;
+    // }
 
-    // if (!assetURL.val().trim()) {
-    if (!assetURL) {
-      return;
-    }
-
-    // console.log("assetName: ", assetName.val());
-    // console.log("assetURL: ", assetURL.val());
-
-    linkData = {
-      id: assetId,
-      priority: selectedPriority,
-      priority_code: selectedPriority.replace(/\s+/g, ''),
-      asset_type: selectedAssetType,
-      asset_name: assetName
+    const orderData = {
+      id: orderGetData.id,
+      customer_id: orderGetData.customer_id,
+      order_date: orderdateInput
         .val()
         .trim(),
-      asset_url: assetURL
+     order_time: ordertimeInput
         .val()
-    };
+        .trim(),
+      delivery_pickup: orderdeliverypickupInput
+        .val()
+        .trim(),
+      cake_theme: cakethemeInput
+        .val()
+        .trim(),
+      cake_description: cakedescriptionInput
+        .val()
+        .trim(),
+      cake_special: cakespecialInput
+        .val()
+        .trim(),
+      cake_name: cakenameInput
+        .val()
+        .trim(),
+      cake_age: cakeageInput
+        .val()
+        .trim(),
+      cake_boygirl: cakeboygirlInput
+        .val()
+        .trim(),
+      cake_servings: cakeservingsInput
+        .val()
+        .trim(),
+      cake_layers: cakelayersInput
+        .val()
+        .trim(),
+      cake_size1: cakesize1Input
+        .val()
+        .trim(),
+      cake_shape1: cakeshape1Input
+        .val()
+        .trim(),
+      cake_flavor1: cakeflavor1Input
+        .val()
+        .trim(),
+      cake_filling1: cakefilling1Input
+        .val()
+        .trim(),
+      cake_notes1: cakenotes1Input
+        .val()
+        .trim(),
+      cake_size2: cakesize2Input
+        .val()
+        .trim(),
+      cake_shape2: cakeshape2Input
+        .val()
+        .trim(),
+      cake_flavor2: cakeflavor2Input
+        .val()
+        .trim(),
+      cake_filling2: cakefilling2Input
+        .val()
+        .trim(),
+      cake_notes2: cakenotes2Input
+        .val()
+        .trim(),
+      cake_size3: cakesize3Input
+        .val()
+        .trim(),
+      cake_shape3: cakeshape3Input
+        .val()
+        .trim(),
+      cake_flavor3: cakeflavor3Input
+        .val()
+        .trim(),
+      cake_filling3: cakefilling3Input
+        .val()
+        .trim(),
+      cake_notes3: cakenotes3Input
+        .val()
+        .trim(),
+      cake_price: cakepriceInput
+        .val()
+        .trim()
+    }
 
-    // console.log("linkData object: ", linkData)
+    console.log("orderData object: ", orderData)
 
-    updateAsset(linkData);
+    updateOrder(orderData);
   }
 
   // A function for updating a link's details.
-  function updateAsset(linkData) {
+  function updateOrder(orderData) {
     $.ajax({
       method: 'PUT',
-      url: '/api/linkDetail',
-      data: linkData,
+      url: '/api/orders',
+      data: orderData,
     })
       .then(renderUpdateConf);
     // .then(function () {
@@ -146,20 +237,12 @@ $(document).ready(function () {
     // });
   };
 
-  function renderDateDetails(linkCreate, linkUpdate) {
-    $('#link-create-date').append(linkCreate);
-    $('#link-update-date').append(linkUpdate);
-  }
-
   function renderUpdateConf() {
     const updateConf = $('<div>');
     updateConf.addClass('alert alert-success');
     updateConf.addClass('update-conf-msg');
     updateConf.addClass('update-conf-column');
-    updateConf.text('Document details updated.');
-    // updateConf.append('</div>');
-
-    // console.log("updateConf: ", updateConf);
+    updateConf.text('Order details updated.');
     updateConf.append('<div><a class="btn btn-success update-conf-dismiss" type="button" href="/main"> Dismiss </a></div>');
     $('.card-body').append(updateConf);
   }

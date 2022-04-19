@@ -9,24 +9,24 @@ module.exports = function(sequelize, DataTypes) {
     },
     order_date: {
       type: DataTypes.DATE,
-      // allowNull: false,
+      // allowNull: true,
       // validate: {
       //   len: [1, 160],
       // },
     },
     order_time: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
     delivery_pickup: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        len: [1, 160],
-      },
+      // validate: {
+      //   len: [1, 160],
+      // },
     },
     cake_theme: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         len: [1, 160],
       },

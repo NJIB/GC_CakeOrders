@@ -28,6 +28,27 @@ module.exports = function (app) {
     }
   });
 
+    // Get route for retrieving a single order
+  app.get('/api/orderdetail/:id', async (req, res) => {
+    // Find one Report with the id in req.params.id and return them to the user with res.json
+    // Here we add an "include" property to our options in our findOne query
+    // We set the value to an array of the models we want to include in a left outer join
+    // In this case, just db.SubReport
+    // console.log('req.params: ',req.params)
+    try {
+      const data = await db.Order.findOne( // findOne returns a single object.  findAll returns an array of objects
+        {
+          where: { id: req.params.id },
+          // include: [db.SubReport],
+        },
+      );
+      res.json(data);
+    } catch (error) {
+      res.status(400).json({ error: { name: error.name, msg: error.message } });
+    }
+  });
+
+
   app.get('/api/orders/:id', async (req, res) => {
     // Find one Order with the id in req.params.id and return them to the user with res.json
     // Here we add an "include" property to our options in our findOne query
@@ -138,23 +159,182 @@ module.exports = function (app) {
   });
 
   // PUT route for updating orderdetails
-  app.put('/api/orders', async (req, res) => {
-    // Add code here to update a order using the values in req.body, where the id is equal to
-    // req.body.id and return the result to the user using res.json
-    // const {id, name} = req.body;
-    const { id, name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev } = req.body;
-    console.log("name: ", name);
+  // app.put('/api/orders', async (req, res) => {
+  //   // Add code here to update a order using the values in req.body, where the id is equal to
+  //   // req.body.id and return the result to the user using res.json
+  //   // const {id, name} = req.body;
+  //   const { id, name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev } = req.body;
+  //   console.log("name: ", name);
 
-    try {
-      const result = await db.Order.update(
-        { name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev },
-        { where: { id } },
-      );
-      const affectedRowCount = result[0];
-      const status = affectedRowCount > 0 ? 200 : 404;
-      res.status(status).json({ affectedRowCount });
-    } catch (error) {
-      res.status(400).json({ error: { name: error.name, msg: error.message } });
-    }
-  });
+  //   try {
+  //     const result = await db.Order.update(
+  //       { name, deal_size, order_date, deal_size_yoy, deal_count_yoy, next_year_deal_size, next_year_deal_count, next_year_sgmt_rev },
+  //       { where: { id } },
+  //     );
+  //     const affectedRowCount = result[0];
+  //     const status = affectedRowCount > 0 ? 200 : 404;
+  //     res.status(status).json({ affectedRowCount });
+  //   } catch (error) {
+  //     res.status(400).json({ error: { name: error.name, msg: error.message } });
+  //   }
+  // });
+
+      // PUT route for updating orders
+      app.put('/api/orders', async (req, res) => {
+        // Add code here to update a comment using the values in req.body, where the id is equal to
+        // req.body.id and return the result to the user using res.json
+        const {
+          id,
+          customer_id,
+          order_date,
+          order_time,
+          delivery_pickup,
+          cake_theme,
+          cake_description,
+          cake_special,
+          cake_name,
+          cake_age,
+          cake_boygirl,
+          cake_servings,
+          cake_layers,
+          cake_size1,
+          cake_shape1,
+          cake_flavor1,
+          cake_filling1,
+          cake_notes1,
+          cake_size2,
+          cake_shape2,
+          cake_flavor2,
+          cake_filling2,
+          cake_notes2,
+          cake_size3,
+          cake_shape3,
+          cake_flavor3,
+          cake_filling3,
+          cake_notes3,
+          cake_price
+        } = req.body;
+        console.log("req.body: ",req.body);
+    
+        try {
+          console.log("***   UPDATING!!!   ***")
+          // const result = await db.OrderDetail.update(
+            const result = await db.Order.update(
+              { order_date,
+                order_time,
+                delivery_pickup,
+                cake_theme,
+                cake_description,
+                cake_special,
+                cake_name,
+                cake_age,
+                cake_boygirl,
+                cake_servings,
+                cake_layers,
+                cake_size1,
+                cake_shape1,
+                cake_flavor1,
+                cake_filling1,
+                cake_notes1,
+                cake_size2,
+                cake_shape2,
+                cake_flavor2,
+                cake_filling2,
+                cake_notes2,
+                cake_size3,
+                cake_shape3,
+                cake_flavor3,
+                cake_filling3,
+                cake_notes3,
+                cake_price
+              },
+                    {where: {id}},
+          );
+          const affectedRowCount = result[0];
+          const status = affectedRowCount > 0 ? 200 : 404;
+          res.status(status).json({affectedRowCount});
+        } catch (error) {
+          res.status(400).json({error: {name: error.name, msg: error.message}});
+        }
+      });
+  
+
+    // PUT route for updating orders
+    app.put('/api/orderdetails', async (req, res) => {
+      // Add code here to update a comment using the values in req.body, where the id is equal to
+      // req.body.id and return the result to the user using res.json
+      const {
+        id,
+        customer_id,
+        order_date,
+        order_time,
+        delivery_pickup,
+        cake_theme,
+        cake_description,
+        cake_special,
+        cake_name,
+        cake_age,
+        cake_boygirl,
+        cake_servings,
+        cake_layers,
+        cake_size1,
+        cake_shape1,
+        cake_flavor1,
+        cake_filling1,
+        cake_notes1,
+        cake_size2,
+        cake_shape2,
+        cake_flavor2,
+        cake_filling2,
+        cake_notes2,
+        cake_size3,
+        cake_shape3,
+        cake_flavor3,
+        cake_filling3,
+        cake_notes3,
+        cake_price
+      } = req.body;
+      console.log("req.body: ",req.body);
+  
+      try {
+        // const result = await db.OrderDetail.update(
+          const result = await db.Order.update(
+            { order_date,
+              order_time,
+              delivery_pickup,
+              cake_theme,
+              cake_description,
+              cake_special,
+              cake_name,
+              cake_age,
+              cake_boygirl,
+              cake_servings,
+              cake_layers,
+              cake_size1,
+              cake_shape1,
+              cake_flavor1,
+              cake_filling1,
+              cake_notes1,
+              cake_size2,
+              cake_shape2,
+              cake_flavor2,
+              cake_filling2,
+              cake_notes2,
+              cake_size3,
+              cake_shape3,
+              cake_flavor3,
+              cake_filling3,
+              cake_notes3,
+              cake_price
+            },
+                  {where: {id}},
+        );
+        const affectedRowCount = result[0];
+        const status = affectedRowCount > 0 ? 200 : 404;
+        res.status(status).json({affectedRowCount});
+      } catch (error) {
+        res.status(400).json({error: {name: error.name, msg: error.message}});
+      }
+    });
+  
 };

@@ -36,8 +36,9 @@
 				data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
 				aria-controls="collapseExample">&#x271A &nbsp New customer</button> -->
 
-			<button class="btn btn-primary" type="button" href="#order-summary">
-				Order Summary
+			<button class="btn btn-primary" type="button" href="#add-customer-section" data-bs-toggle="collapse"
+				data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				&#x271A &nbsp Add New Customer
 			</button>
 
 			<!-- <a class="btn btn-dark" href="/orders"> 1. ... </a>
@@ -55,55 +56,12 @@
 		<!-- <div class="row">
 			<div class="col-md-12"> -->
 
-		<div class="collapse" id="collapseExample">
-			<div class="card card-body">
-				<form class="customer-form">
-					<div class="card-header">
-						<!-- <div class="order-header"> -->
-						<h3>Add New Customer</h3>
-						<!-- </div> -->
-					</div>
-
-					<div>
-						<input placeholder="First name" class="gc_order_entry" id="newcustomer-firstname" type="text" />
-						<input placeholder="Last name" class="gc_order_entry" id="newcustomer-lastname" type="text" />
-					</div>
-
-					<div>
-						<input placeholder="Address" class="gc_order_entry" id="newcustomer-customer_address"
-							type="text" />
-						<input placeholder="City" class="gc_order_entry" id="newcustomer-customer_city" type="text" />
-						<input placeholder="Zip code" class="gc_order_entry" id="newcustomer-customer_zip"
-							type="text" />
-						<input placeholder="Phone" class="gc_order_entry" id="newcustomer-customer_phone"
-							type="phone" />
-						<button class="btn btn-success" type="button" id="add-customer">Save</button>
-					</div>
-				</form>
-			</div>
-
-		</div>
-
-
-		<div>&nbsp</div>
-
 		<div class="card card-body">
 
 			<form class="customer-form">
 
 				<div class="card-header">
-					<div class="row">
-						<div class="col-lg-10 col-md-9 col-sm-7">
-							<h3>Customer Details</h3>
-						</div>
-						<div class="col-lg-2 col-md-3 col-sm-5">
-							<button class="btn btn-success" type="button" href="#add-customer-section"
-								data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-								aria-controls="collapseExample">
-								&#x271A &nbsp New Customer
-							</button>
-						</div>
-					</div>
+					<h3>Customer Details</h3>
 				</div>
 
 				<div>&nbsp</div>
@@ -116,7 +74,7 @@
 
 				<div>&nbsp</div>
 
-				<!-- <div>
+				<div>
 					<input placeholder="First name" class="gc_order_entry" id="order-firstname" type="text" />
 					<input placeholder="Last name" class="gc_order_entry" id="order-lastname" type="text" />
 				</div>
@@ -129,27 +87,7 @@
 					<input placeholder="Customer notes" class="gc_customer_notes" id="order-customer_notes"
 						type="text" />
 
-				</div> -->
-
-				<div class="row">
-					<div class="col-lg-4 col-md-4 col-sm-12">
-						<div class="row">
-							<div id="order-customername">Full name</div>
-							<div id="order-firstname">First name</div>
-							<div id="order-lastname">Last name</div>
-						</div>
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-12">
-						<div id="order-customer_address">Address</div>
-						<div id="order-customer_city">City</div>
-						<div id="order-customer_zip">Zip</div>
-						<div id="order-customer_phone">Phone</div>
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-12">
-						<div id="order-customer_notes">Customer Notes</div>
-					</div>
 				</div>
-
 			</form>
 
 			<div>&nbsp</div>
@@ -347,7 +285,7 @@
 	</div>
 
 	<!-- Custom Script -->
-	<script src="js/order.js" type="text/javascript"></script>
+	<script src="js/order-summary.js" type="text/javascript"></script>
 	<script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 
 

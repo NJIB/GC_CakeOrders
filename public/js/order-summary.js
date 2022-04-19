@@ -485,26 +485,12 @@ $(document).ready(function () {
       // console.log("customersPull[", k, "].address: ", customersPull[k].address);
       if ((customersPull[k].first_name == first_nameSelected) && (customersPull[k].last_name == last_nameSelected) && (customersPull[k].address == addressSelected)) {
         // console.log("***MATCH***");
-        // $('#order-firstname').val(customersPull[k].first_name);
-        // $('#order-lastname').val(customersPull[k].last_name);
-        // $('#order-customer_address').val(customersPull[k].address);
-        // $('#order-customer_city').val(customersPull[k].city);
-        // $('#order-customer_zip').val(customersPull[k].zip);
-        // $('#order-customer_phone').val(customersPull[k].phone);
-
-        const customername = [customersPull[k].first_name, customersPull[k].last_name];
-        const customername_concat = customername.join(" ");
-        // console.log("customername_concat:", customername_concat);
-
-        $('#order-customername').text(customername_concat);
-        $('#order-firstname').text(customersPull[k].first_name);
-        $('#order-lastname').text(customersPull[k].last_name);
-        $('#order-customer_address').text(customersPull[k].address);
-        $('#order-customer_city').text(customersPull[k].city);
-        $('#order-customer_zip').text(customersPull[k].zip);
-        $('#order-customer_phone').text(customersPull[k].phone);
-        // $('#order-customer_notes').text(customersPull[k].notes);
-        $('#order-customer_notes').text("*** Customer notes here ***");
+        $('#order-firstname').val(customersPull[k].first_name);
+        $('#order-lastname').val(customersPull[k].last_name);
+        $('#order-customer_address').val(customersPull[k].address);
+        $('#order-customer_city').val(customersPull[k].city);
+        $('#order-customer_zip').val(customersPull[k].zip);
+        $('#order-customer_phone').val(customersPull[k].phone);
       };
     };
 
