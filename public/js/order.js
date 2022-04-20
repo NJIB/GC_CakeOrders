@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
   // Getting references to the name inputs and order date
-  const firstnameInput = $('#order-firstname');
-  const lastnameInput = $('#order-lastname');
-  const orderdateInput = $('#order-delivery_date');
+  let firstnameInput = $('#order-firstname');
+  let lastnameInput = $('#order-lastname');
+  let orderdateInput = $('#order-delivery_date');
   const ordertimeInput = $('#order-delivery_pickup_time');
   const orderdeliverypickupInput = $('#order-delivery_pickup');
   const address = $('#order-customer_address');
@@ -27,6 +27,7 @@ $(document).ready(function () {
   const customersContainer = $('customerDropdown');
   const customerSelect = $('#CustomerSelect');
   const customerSelectContainer = $('CustomerSelect')
+  let customerSelected = {};
 
   // Getting references to the cake detail inputs
   const cakethemeInput = $('#order-cake_theme');
@@ -137,31 +138,23 @@ $(document).ready(function () {
   function handleOrderFormSubmit(event) {
     event.preventDefault();
 
-    console.log("Order submitted!")
-    console.log("firstnameInput: ", firstnameInput.val().trim());
-    console.log("lastnameInput: ", lastnameInput.val().trim());
-    console.log("orderdateInput: ", orderdateInput.val().trim());
+    console.log("Order submitted!");
+    console.log("customerSelected: ", customerSelected);
 
     // Don't do anything if the name fields hasn't been filled out
-    if (!firstnameInput.val().trim()) {
-      return;
+    // if (!firstnameInput.val().trim()) {
+      if (!customerSelected.first_name) {
+        return;
     }
 
-    console.log("firstnameInput: ", firstnameInput.val().trim());
-    console.log("lastnameInput: ", lastnameInput.val().trim());
-    console.log("orderdateInput: ", orderdateInput.val().trim());
-
-    let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0, 1);
+    // let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0, 1);
+    let customerId = customerSelected.last_name + customerSelected.first_name.substr(0, 1);
     console.log("customerId: ", customerId);
 
     const customerData = {
       customer_id: customerId,
-      first_name: firstnameInput
-        .val()
-        .trim(),
-      last_name: lastnameInput
-        .val()
-        .trim(),
+      first_name: customerSelected.first_name,
+      last_name: customerSelected.last_name,
       order_date: orderdateInput
         .val()
         .trim()
@@ -495,6 +488,12 @@ $(document).ready(function () {
         const customername = [customersPull[k].first_name, customersPull[k].last_name];
         const customername_concat = customername.join(" ");
         // console.log("customername_concat:", customername_concat);
+
+        customerSelected.first_name = customersPull[k].first_name;
+        customerSelected.last_name = customersPull[k].last_name;
+
+        console.log("customerSelected: ", customerSelected);
+    
 
         $('#order-customername').text(customername_concat);
         $('#order-firstname').text(customersPull[k].first_name);

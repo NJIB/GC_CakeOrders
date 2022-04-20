@@ -43,7 +43,7 @@ $(document).ready(function () {
   // Adding event listeners to the form to create a new object, and the button to delete
   // an report
 
-  $(document).on('click', '#headertitle', goHome);
+  $(document).on('click', '.goHome', goHome);
   $(document).on('click', '.order-update', handleUpdateClick);
 
   getOrderDetail();
@@ -251,10 +251,10 @@ $(document).ready(function () {
   // A function for updating a link's details.
   function goHome() {
     console.log("TRYING TO GO HOME!")
-    // $.get('/main', function () {});
+    // $.get('/', function () {});
     $.ajax({
       method: 'GET',
-      url: '/main',
+      url: '/',
     })
   };
 

@@ -1,22 +1,6 @@
 $(document).ready(function () {
 
   // Getting references to the name inputs and order date
-  const firstnameInput = $('#order-firstname');
-  const lastnameInput = $('#order-lastname');
-  const orderdateInput = $('#order-delivery_date');
-  const ordertimeInput = $('#order-delivery_pickup_time');
-  const orderdeliverypickupInput = $('#order-delivery_pickup');
-  const address = $('#order-customer_address');
-  const city = $('#order-customer_city');
-  const zip = $('#order-customer_zip');
-  const phone = $('#order-customer_phone');
-
-  const newCustomerfirstname = $('#newcustomer-firstname');
-  const newCustomerlastname = $('#newcustomer-lastname');
-  const newCustomeraddress = $('#newcustomer-customer_address');
-  const newCustomercity = $('#newcustomer-customer_city');
-  const newCustomerzip = $('#newcustomer-customer_zip');
-  const newCustomerphone = $('#newcustomer-customer_phone');
 
   let customersPull = [];
   let rowsToBeAdded = [];
@@ -27,33 +11,6 @@ $(document).ready(function () {
   const customersContainer = $('customerDropdown');
   const customerSelect = $('#CustomerSelect');
   const customerSelectContainer = $('CustomerSelect')
-
-  // Getting references to the cake detail inputs
-  const cakethemeInput = $('#order-cake_theme');
-  const cakedescriptionInput = $('#order-cake_description');
-  const cakespecialInput = $('#order-cake_special');
-  const cakenameInput = $('#order-cake_name');
-  const cakeageInput = $('#order-cake_age');
-  const cakeboygirlInput = $('#order-cake_boygirl');
-  const cakeoccasionInput = $('#order-cake_occasion');
-  const cakeservingsInput = $('#order-cake_servings');
-  const cakelayersInput = $('#order-cake_layers');
-  const cakesize1Input = $('#order-cake_size1');
-  const cakeshape1Input = $('#order-cake_shape1');
-  const cakeflavor1Input = $('#order-cake_flavor1');
-  const cakefilling1Input = $('#order-cake_filling1');
-  const cakenotes1Input = $('#order-cake_notes1');
-  const cakesize2Input = $('#order-cake_size2');
-  const cakeshape2Input = $('#order-cake_shape2');
-  const cakeflavor2Input = $('#order-cake_flavor2');
-  const cakefilling2Input = $('#order-cake_filling2');
-  const cakenotes2Input = $('#order-cake_notes2');
-  const cakesize3Input = $('#order-cake_size3');
-  const cakeshape3Input = $('#order-cake_shape3');
-  const cakeflavor3Input = $('#order-cake_flavor3');
-  const cakefilling3Input = $('#order-cake_filling3');
-  const cakenotes3Input = $('#order-cake_notes3');
-  const cakepriceInput = $('#order-cake_price');
 
   // const orderList = $('tbody');
   const orderList = $('#orderList');
@@ -66,12 +23,6 @@ $(document).ready(function () {
   let CustomerGetData = [];
   let rowsToAdd = [];
   let rowsAdded;
-
-  // const chart1Area = $('#myBubbleChart1');
-  // const chart2Area = $('#myBubbleChart2');
-  // var ctx = $('#myBubbleChart');
-  // let chart1Data = [{}];
-  // let chart2Data = [{}];
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Order
@@ -90,8 +41,6 @@ $(document).ready(function () {
   // A function to handle what happens when the form is submitted to create a new Order
   function handleCustomerCreateSubmit(event) {
     event.preventDefault();
-
-    console.log("Create Customer button clicked");
 
     console.log("newCustomerfirstname: ", newCustomerfirstname.val().trim());
     console.log("newCustomerlastname: ", newCustomerlastname.val().trim());

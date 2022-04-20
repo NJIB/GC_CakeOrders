@@ -23,6 +23,10 @@ module.exports = function (app) {
     res.sendFile(path.join(__dirname, '../public/order-manager.html'));
   });
 
+  app.get('/main', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public/order-manager.html'));
+  });
+
   // Route to the cms page
   app.get('/cms', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/cms.html'));
@@ -46,11 +50,6 @@ module.exports = function (app) {
   // orderdetail route loads orderdetail.html
   app.get('/order-details', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/order-details.html'));
-  });
-
-  // sgmt_rev_goals route loads sgmt_rev_goals.html
-  app.get('/sgmt_rev_goals', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/sgmt_rev_goals.html'));
   });
 
   // persons route loads person-manager.html
