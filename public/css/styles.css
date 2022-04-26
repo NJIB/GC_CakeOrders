@@ -39,6 +39,11 @@ form#sms {
   resize: none;
 }
 
+.main-section {
+  position: relative;
+  margin-top: 100px;
+}
+
 .gc_order_entry {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -163,6 +168,7 @@ button.edit {
 
 header {
   position: relative;
+  /* position: fixed; */
   height: 100px;
   width: 100%;
   margin-bottom: 50px;
@@ -183,8 +189,9 @@ footer {
   margin-top: 100px;
   text-align: center;
   padding-top: 20px;
-  background-color: lightgray;
+  background-color: white;
   font-family: 'Courier New', Courier, monospace;
+  color: lightgray;
 }
 
 .form-check-input {

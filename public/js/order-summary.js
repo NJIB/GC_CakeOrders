@@ -31,6 +31,8 @@ $(document).ready(function () {
   $(document).on('click', '.delete-order', handleDeleteButtonPress);
   $(document).on('click', '.update', handleUpdateButtonPress);
   $(document).on('change', '#CustomerSelect', handleDisplayCustomerInfo);
+  $(document).on('change', '#order-paid', handleOrderPaidSubmit);
+
 
   // Getting the initial list of Orders
   getOrders();
@@ -121,7 +123,7 @@ $(document).ready(function () {
       order_date: orderdateInput
         .val()
         .trim(),
-     order_time: ordertimeInput
+      order_time: ordertimeInput
         .val()
         .trim(),
       delivery_pickup: orderdeliverypickupInput
@@ -222,84 +224,29 @@ $(document).ready(function () {
 
   // Function for creating a new list row for orders
   function createOrderRow(orderData, i, rowsAdded) {
-    let dupCounter = 0;
+    // let dupCounter = 0;
+
+console.log("orderData", orderData);
 
     const newTr = $('<tr>');
     newTr.data('order', orderData);
-    const orderDate = moment(orderData.order_date).format('dddd MMMM Do YYYY');
+    // console.log("newTr.data: ",newTr.data('order'));
+    const orderDate = (moment(orderData.order_date).format('L'));
+    console.log("orderDate: ",orderDate);
+
     newTr.append('<td>' + orderDate + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
     newTr.append('<td>' + orderData.customer_id + '</td>');
+    newTr.append('<td><a style=\'cursor:pointer;color:white;\' href=\'/order-details?order_id=' + orderData.id + '\' /a> &#x1F4CB </td>');
+   
+    if(orderData.paid_flag == "true"){
+    newTr.append('<td><input class="form-check-input" type="checkbox" value="true id="flexCheckChecked" checked id="order-paid"></td>');
+    } else {
+      newTr.append('<td><input class="form-check-input" type="checkbox" value="true id="flexCheckDefault" id="order-paid"></td>');
+    }
 
-    //Paste in CustomerGetData for each order - keyed on customer_id
-    // for (let j = 0; j < customersPull.length; j++) {
-    //   console.log("customersPull[j].customer_id", customersPull[j].customer_id)
-    //   console.log("orderData.customer_id", orderData.customer_id)
-    //   if (orderData.customer_id == customersPull[j].customer_id) {
-    //     dupCounter++;
-    //     if (dupCounter == 1) {
-    //       newTr.append('<td>' + customersPull[j].first_name + " " + customersPull[j].last_name + '</td>');
-    //     };
-    //   };
-    // };
-
-    // 9-27-21 Commented out
-    // newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
-    // 9-27-21 End of commenting out 
-
-    // newTr.append('<td>' + orderData.first_name + '</td>');
-    // newTr.append('<td>' + orderData.last_name + '</td>');
-
-    // console.log("orderData.deal_size_yoy: ", orderData.deal_size_yoy);
-    // if (orderData.deal_size_yoy) {
-    //   newTr.append('<td>' + '<input placeholder=' + orderData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    // } else {
-    //   newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    // }
-
-    // if (orderData.deal_count_yoy) {
-    //   newTr.append('<td>' + '<input placeholder=' + orderData.deal_count_yoy + ' id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    // } else {
-    //   newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    // }
-
-    // Potentially only show button, if change field is populated?
-    // newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
-
-    // if (!orderData.next_year_deal_size) {
-    //   newTr.append('<td>$' + orderData.deal_size + '</td>');
-    // }
-    // else {
-    //   newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
-    // }
-
-    // if (!orderData.next_year_deal_count) {
-    //   newTr.append('<td>$' + orderData.order_date + '</td>');
-    // }
-    // else {
-    //   newTr.append('<td>' + orderData.next_year_deal_count + '</td>');
-    // }
-
-    // if (!orderData.next_year_sgmt_rev) {
-    //   newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
-    // }
-    // else {
-    //   newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
-    // };
-    //10.05 Testing change to button class
-
-    newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/order-details?order_id=' + orderData.id + '\' /a> >> </button></td>');
-
-    // if (orderData.OrderDetails) {
-    //   newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
-    // } else {
-    //   newTr.append('<td>0</td>');
-    // }
-    // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
-
+    newTr.append('<td><input placeholder="Date paid" value=orderDate id="order-paid_date" type="date" ></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
-
-    // buildChartObject(orderData);
 
     return newTr;
   }
@@ -312,6 +259,8 @@ $(document).ready(function () {
 
     $.get('/api/orders', function (orderdata) {
 
+      console.log("orderdata", orderdata);
+
       const rowsToAdd = [];
 
       //Copy orderdata to OrderGetData array (to build TR)
@@ -323,10 +272,10 @@ $(document).ready(function () {
       };
 
       // renderOrderList(rowsToAdd);
-      firstnameInput.val('');
-      lastnameInput.val('');
-      orderdateInput.val('');
-      cakethemeInput.val('');
+      // firstnameInput.val('');
+      // lastnameInput.val('');
+      // orderdateInput.val('');
+      // cakethemeInput.val('');
     });
   }
 
@@ -334,7 +283,7 @@ $(document).ready(function () {
     customersPull.length = 0;
 
     const data = await $.get('/api/customers', function () { });
-    console.log('data: ', data);
+    // console.log('data: ', data);
 
     const rowsToAdd = [];
 
@@ -659,4 +608,63 @@ $(document).ready(function () {
     })
       .then(getOrders);
   }
+
+  function handleOrderPaidSubmit(event) {
+    event.preventDefault();
+
+    console.log("Marking as paid!");
+
+    // if (!assetName) {
+    //   return;
+    // }
+
+    // if (!assetURL) {
+    //   return;
+    // }
+
+    let listItemData = $(this).parent('td').parent('tr').data('order');
+    console.log("listItemData: ", listItemData);
+    console.log("listItemData.id: ", listItemData.id);
+
+    var paid_checkbox_value = $('#order-paid')[0].checked;
+    console.log("paid_checkbox_value: ", paid_checkbox_value);
+
+    const paid_date = new Date();
+    console.log("paid_date: ", paid_date);
+    $('#order-paid_date').val(moment(paid_date).format('YYYY-MM-DD'));
+
+    const paidData = {
+      id: listItemData.id,
+      customer_id: listItemData.customer_id,
+      paid_flag: paid_checkbox_value,
+      paid_date: paid_date,
+    };
+
+    console.log("paidData object: ", paidData);
+    console.log("paidData.id: ", paidData.id);
+
+    payOrder(paidData);
+  }
+
+    // A function for updating a link's details.
+    function payOrder(paidData) {
+      $.ajax({
+        method: 'PUT',
+        url: '/api/payorder',
+        data: paidData,
+      })
+        .then(getOrders);
+    };
+  
+    function renderPaidConf() {
+      const paidConf = $('<div>');
+      updateConf.addClass('alert alert-success');
+      updateConf.addClass('update-conf-msg');
+      updateConf.addClass('update-conf-column');
+      updateConf.text('Order paid.');
+      updateConf.append('<div><a class="btn btn-success update-conf-dismiss" type="button" href="/main"> Dismiss </a></div>');
+      $('.card-body').append(paidConf);
+    }
+  
+
 });

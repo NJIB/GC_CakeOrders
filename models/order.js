@@ -24,6 +24,12 @@ module.exports = function(sequelize, DataTypes) {
       //   len: [1, 160],
       // },
     },
+    paid_flag: {
+      type: DataTypes.STRING,
+    },
+    paid_date: {
+      type: DataTypes.STRING,
+    },
     cake_theme: {
       type: DataTypes.STRING,
       allowNull: true,

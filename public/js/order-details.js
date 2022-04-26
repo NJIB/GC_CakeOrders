@@ -88,7 +88,7 @@ $(document).ready(function () {
       
       $('#order-delivery_date').val(moment(orderGetData.order_date).format('YYYY-MM-DD'));
       $('#order-delivery_pickup_time').val(moment(orderGetData.order_date).format('HH:mm:ss'));
-      $('#order-delivery_pickup').text(orderGetData.delivery_pickup);
+      $('#order-delivery_pickup').val(orderGetData.delivery_pickup);
       $('#order-cake_theme').val(orderGetData.cake_theme);
       $('#order-cake_description').val(orderGetData.cake_description);
       $('#order-cake_special').val(orderGetData.cake_special);

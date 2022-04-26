@@ -16,7 +16,7 @@ module.exports = function (app) {
     }
   });
 
-  
+
   app.get('/api/orders', async (req, res) => {
     try {
       const data = await db.Order.findAll({
@@ -28,7 +28,7 @@ module.exports = function (app) {
     }
   });
 
-    // Get route for retrieving a single order
+  // Get route for retrieving a single order
   app.get('/api/orderdetail/:id', async (req, res) => {
     // Find one Report with the id in req.params.id and return them to the user with res.json
     // Here we add an "include" property to our options in our findOne query
@@ -179,13 +179,48 @@ module.exports = function (app) {
   //   }
   // });
 
-      // PUT route for updating orders
-      app.put('/api/orders', async (req, res) => {
-        // Add code here to update a comment using the values in req.body, where the id is equal to
-        // req.body.id and return the result to the user using res.json
-        const {
-          id,
-          customer_id,
+  // PUT route for updating orders
+  app.put('/api/orders', async (req, res) => {
+    // Add code here to update a comment using the values in req.body, where the id is equal to
+    // req.body.id and return the result to the user using res.json
+    const {
+      id,
+      customer_id,
+      order_date,
+      order_time,
+      delivery_pickup,
+      cake_theme,
+      cake_description,
+      cake_special,
+      cake_name,
+      cake_age,
+      cake_boygirl,
+      cake_servings,
+      cake_layers,
+      cake_size1,
+      cake_shape1,
+      cake_flavor1,
+      cake_filling1,
+      cake_notes1,
+      cake_size2,
+      cake_shape2,
+      cake_flavor2,
+      cake_filling2,
+      cake_notes2,
+      cake_size3,
+      cake_shape3,
+      cake_flavor3,
+      cake_filling3,
+      cake_notes3,
+      cake_price
+    } = req.body;
+    console.log("req.body: ", req.body);
+
+    try {
+      console.log("***   UPDATING!!!   ***")
+      // const result = await db.OrderDetail.update(
+      const result = await db.Order.update(
+        {
           order_date,
           order_time,
           delivery_pickup,
@@ -213,128 +248,125 @@ module.exports = function (app) {
           cake_filling3,
           cake_notes3,
           cake_price
-        } = req.body;
-        console.log("req.body: ",req.body);
-    
-        try {
-          console.log("***   UPDATING!!!   ***")
-          // const result = await db.OrderDetail.update(
-            const result = await db.Order.update(
-              { order_date,
-                order_time,
-                delivery_pickup,
-                cake_theme,
-                cake_description,
-                cake_special,
-                cake_name,
-                cake_age,
-                cake_boygirl,
-                cake_servings,
-                cake_layers,
-                cake_size1,
-                cake_shape1,
-                cake_flavor1,
-                cake_filling1,
-                cake_notes1,
-                cake_size2,
-                cake_shape2,
-                cake_flavor2,
-                cake_filling2,
-                cake_notes2,
-                cake_size3,
-                cake_shape3,
-                cake_flavor3,
-                cake_filling3,
-                cake_notes3,
-                cake_price
-              },
-                    {where: {id}},
-          );
-          const affectedRowCount = result[0];
-          const status = affectedRowCount > 0 ? 200 : 404;
-          res.status(status).json({affectedRowCount});
-        } catch (error) {
-          res.status(400).json({error: {name: error.name, msg: error.message}});
-        }
-      });
-  
+        },
+        { where: { id } },
+      );
+      const affectedRowCount = result[0];
+      const status = affectedRowCount > 0 ? 200 : 404;
+      res.status(status).json({ affectedRowCount });
+    } catch (error) {
+      res.status(400).json({ error: { name: error.name, msg: error.message } });
+    }
+  });
 
-    // PUT route for updating orders
-    app.put('/api/orderdetails', async (req, res) => {
-      // Add code here to update a comment using the values in req.body, where the id is equal to
-      // req.body.id and return the result to the user using res.json
-      const {
-        id,
-        customer_id,
-        order_date,
-        order_time,
-        delivery_pickup,
-        cake_theme,
-        cake_description,
-        cake_special,
-        cake_name,
-        cake_age,
-        cake_boygirl,
-        cake_servings,
-        cake_layers,
-        cake_size1,
-        cake_shape1,
-        cake_flavor1,
-        cake_filling1,
-        cake_notes1,
-        cake_size2,
-        cake_shape2,
-        cake_flavor2,
-        cake_filling2,
-        cake_notes2,
-        cake_size3,
-        cake_shape3,
-        cake_flavor3,
-        cake_filling3,
-        cake_notes3,
-        cake_price
-      } = req.body;
-      console.log("req.body: ",req.body);
-  
-      try {
-        // const result = await db.OrderDetail.update(
-          const result = await db.Order.update(
-            { order_date,
-              order_time,
-              delivery_pickup,
-              cake_theme,
-              cake_description,
-              cake_special,
-              cake_name,
-              cake_age,
-              cake_boygirl,
-              cake_servings,
-              cake_layers,
-              cake_size1,
-              cake_shape1,
-              cake_flavor1,
-              cake_filling1,
-              cake_notes1,
-              cake_size2,
-              cake_shape2,
-              cake_flavor2,
-              cake_filling2,
-              cake_notes2,
-              cake_size3,
-              cake_shape3,
-              cake_flavor3,
-              cake_filling3,
-              cake_notes3,
-              cake_price
-            },
-                  {where: {id}},
-        );
-        const affectedRowCount = result[0];
-        const status = affectedRowCount > 0 ? 200 : 404;
-        res.status(status).json({affectedRowCount});
-      } catch (error) {
-        res.status(400).json({error: {name: error.name, msg: error.message}});
-      }
-    });
-  
+
+  // PUT route for updating orders
+  app.put('/api/orderdetails', async (req, res) => {
+    // Add code here to update a comment using the values in req.body, where the id is equal to
+    // req.body.id and return the result to the user using res.json
+    const {
+      id,
+      customer_id,
+      order_date,
+      order_time,
+      delivery_pickup,
+      cake_theme,
+      cake_description,
+      cake_special,
+      cake_name,
+      cake_age,
+      cake_boygirl,
+      cake_servings,
+      cake_layers,
+      cake_size1,
+      cake_shape1,
+      cake_flavor1,
+      cake_filling1,
+      cake_notes1,
+      cake_size2,
+      cake_shape2,
+      cake_flavor2,
+      cake_filling2,
+      cake_notes2,
+      cake_size3,
+      cake_shape3,
+      cake_flavor3,
+      cake_filling3,
+      cake_notes3,
+      cake_price
+    } = req.body;
+    console.log("req.body: ", req.body);
+
+    try {
+      // const result = await db.OrderDetail.update(
+      const result = await db.Order.update(
+        {
+          order_date,
+          order_time,
+          delivery_pickup,
+          cake_theme,
+          cake_description,
+          cake_special,
+          cake_name,
+          cake_age,
+          cake_boygirl,
+          cake_servings,
+          cake_layers,
+          cake_size1,
+          cake_shape1,
+          cake_flavor1,
+          cake_filling1,
+          cake_notes1,
+          cake_size2,
+          cake_shape2,
+          cake_flavor2,
+          cake_filling2,
+          cake_notes2,
+          cake_size3,
+          cake_shape3,
+          cake_flavor3,
+          cake_filling3,
+          cake_notes3,
+          cake_price
+        },
+        { where: { id } },
+      );
+      const affectedRowCount = result[0];
+      const status = affectedRowCount > 0 ? 200 : 404;
+      res.status(status).json({ affectedRowCount });
+    } catch (error) {
+      res.status(400).json({ error: { name: error.name, msg: error.message } });
+    }
+  });
+
+  // PUT route for marking prder as paid
+  app.put('/api/payorder', async (req, res) => {
+    // Add code here to update a comment using the values in req.body, where the id is equal to
+    // req.body.id and return the result to the user using res.json
+    const {
+      id,
+      customer_id,
+      paid_flag,
+      paid_date
+    } = req.body;
+    console.log("req.body: ", req.body);
+
+    try {
+      // const result = await db.OrderDetail.update(
+      const result = await db.Order.update(
+        {
+         paid_flag,
+         paid_date
+        },
+        { where: { id } },
+      );
+      const affectedRowCount = result[0];
+      const status = affectedRowCount > 0 ? 200 : 404;
+      res.status(status).json({ affectedRowCount });
+    } catch (error) {
+      res.status(400).json({ error: { name: error.name, msg: error.message } });
+    }
+  });
+
+
 };

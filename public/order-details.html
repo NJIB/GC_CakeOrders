@@ -129,8 +129,14 @@
                         <input placeholder="Price" id="order-cake_price" type="integer" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12">
-                        <label for="order-cake_price">Paid: &nbsp &nbsp</label>
-                        <input placeholder="Price" id="order-paid_conf" type="integer" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="order-paid">
+                            <label class="form-check-label" for="order-paid">
+                              Paid:
+                            </label>
+                          </div>
+                        <!-- <label for="order-cake_price">Paid: &nbsp &nbsp</label>
+                        <input placeholder="Price" id="order-paid_conf" type="integer" /> -->
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <label for="order-date_paid">Date Paid: &nbsp &nbsp</label>
