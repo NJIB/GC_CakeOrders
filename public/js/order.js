@@ -261,7 +261,7 @@ $(document).ready(function () {
   function upsertCustomer(customerData) {
     console.log("customerData: ", customerData)
     $.post('/api/customers', customerData)
-      .then(getCustomers);
+    .then(getCustomers);
   }
 
   // Function for creating a new list row for orders

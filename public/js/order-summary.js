@@ -226,26 +226,42 @@ $(document).ready(function () {
   function createOrderRow(orderData, i, rowsAdded) {
     // let dupCounter = 0;
 
-console.log("orderData", orderData);
+    console.log("orderData", orderData);
 
     const newTr = $('<tr>');
     newTr.data('order', orderData);
     // console.log("newTr.data: ",newTr.data('order'));
-    const orderDate = (moment(orderData.order_date).format('L'));
-    console.log("orderDate: ",orderDate);
+    // const orderDate = (moment(orderData.order_date).format('L'));
+    const orderDate = moment(orderData.order_date).format('YYYY-MM-DD');
+    console.log("orderDate: ", orderDate);
 
-    newTr.append('<td>' + orderDate + '</td>');
+    const todaysDate = moment(Date()).format('YYYY-MM-DD');
+    console.log("todaysDate: ", todaysDate);
+
+    newTr.append('<td>' + moment(orderData.order_date).format('YYYY-MM-DD') + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
     newTr.append('<td>' + orderData.customer_id + '</td>');
     newTr.append('<td><a style=\'cursor:pointer;color:white;\' href=\'/order-details?order_id=' + orderData.id + '\' /a> &#x1F4CB </td>');
-   
-    if(orderData.paid_flag == "true"){
-    newTr.append('<td><input class="form-check-input" type="checkbox" value="true id="flexCheckChecked" checked id="order-paid"></td>');
+
+    if (orderData.paid_flag == "true") {
+      newTr.append('<td><input class="form-check-input" type="checkbox" value="true id="flexCheckChecked" checked id="order-paid"></td>');
     } else {
       newTr.append('<td><input class="form-check-input" type="checkbox" value="true id="flexCheckDefault" id="order-paid"></td>');
+      // newTr.append('<td>', "", '</td>');
     }
 
-    newTr.append('<td><input placeholder="Date paid" value=orderDate id="order-paid_date" type="date" ></td>');
+    // if (orderData.paid_flag == "true" && !orderData.paid_date) {
+    //   newTr.append('<td>', todaysDate, '</td>');
+    // } else {
+      if (orderData.paid_date) {
+        newTr.append('<td>'+ moment(orderData.paid_date).format('YYYY-MM-DD') + '</td>');
+      } else {
+        newTr.append('<td>' + "n/a" + '</td>');
+      }
+    // };
+
+
+    // newTr.append('<td><input placeholder="Date paid" value=orderDate id="order-paid_date" type="date" ></td>');
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
 
     return newTr;
@@ -262,6 +278,7 @@ console.log("orderData", orderData);
       console.log("orderdata", orderdata);
 
       const rowsToAdd = [];
+      OrderGetData.length = 0;
 
       //Copy orderdata to OrderGetData array (to build TR)
       for (let i = 0; i < orderdata.length; i++) {
@@ -626,6 +643,7 @@ console.log("orderData", orderData);
     console.log("listItemData: ", listItemData);
     console.log("listItemData.id: ", listItemData.id);
 
+    console.log($('#order-paid'));
     var paid_checkbox_value = $('#order-paid')[0].checked;
     console.log("paid_checkbox_value: ", paid_checkbox_value);
 
@@ -646,25 +664,25 @@ console.log("orderData", orderData);
     payOrder(paidData);
   }
 
-    // A function for updating a link's details.
-    function payOrder(paidData) {
-      $.ajax({
-        method: 'PUT',
-        url: '/api/payorder',
-        data: paidData,
-      })
-        .then(getOrders);
-    };
-  
-    function renderPaidConf() {
-      const paidConf = $('<div>');
-      updateConf.addClass('alert alert-success');
-      updateConf.addClass('update-conf-msg');
-      updateConf.addClass('update-conf-column');
-      updateConf.text('Order paid.');
-      updateConf.append('<div><a class="btn btn-success update-conf-dismiss" type="button" href="/main"> Dismiss </a></div>');
-      $('.card-body').append(paidConf);
-    }
-  
+  // A function for updating a link's details.
+  function payOrder(paidData) {
+    $.ajax({
+      method: 'PUT',
+      url: '/api/payorder',
+      data: paidData,
+    })
+      .then(getOrders);
+  };
+
+  function renderPaidConf() {
+    const paidConf = $('<div>');
+    updateConf.addClass('alert alert-success');
+    updateConf.addClass('update-conf-msg');
+    updateConf.addClass('update-conf-column');
+    updateConf.text('Order paid.');
+    updateConf.append('<div><a class="btn btn-success update-conf-dismiss" type="button" href="/main"> Dismiss </a></div>');
+    $('.card-body').append(paidConf);
+  }
+
 
 });

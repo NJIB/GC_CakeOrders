@@ -43,7 +43,7 @@ $(document).ready(function () {
   // Adding event listeners to the form to create a new object, and the button to delete
   // an report
 
-  $(document).on('click', '.goHome', goHome);
+  // $(document).on('click', '.goHome', goHome);
   $(document).on('click', '.order-update', handleUpdateClick);
 
   getOrderDetail();
@@ -244,18 +244,21 @@ $(document).ready(function () {
     updateConf.addClass('update-conf-column');
     updateConf.text('Order details updated.');
     updateConf.append('<div><a class="btn btn-success update-conf-dismiss" type="button" href="/main"> Dismiss </a></div>');
+    
+    $('.card-body').children().not(':last').remove();
+    // $('.card-body').children('.alert').remove();
     $('.card-body').append(updateConf);
   }
 
 
-  // A function for updating a link's details.
-  function goHome() {
-    console.log("TRYING TO GO HOME!")
-    // $.get('/', function () {});
-    $.ajax({
-      method: 'GET',
-      url: '/',
-    })
-  };
+  // A function for navigating to another page.
+  // function goHome() {
+  //   console.log("TRYING TO GO HOME!")
+  //   // $.get('/', function () {});
+  //   $.ajax({
+  //     method: 'GET',
+  //     url: '/',
+  //   })
+  // };
 
 });
