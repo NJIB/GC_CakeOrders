@@ -557,7 +557,9 @@ $(document).ready(function () {
 
   // Function for handling what happens when the delete button is pressed
   function handleDeleteButtonPress() {
+    
     const listItemData = $(this).parent('td').parent('tr').data('order');
+    console.log("listItemData: ", listItemData);
 
     const id = listItemData.id;
     $.ajax({

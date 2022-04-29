@@ -82,10 +82,8 @@ $(document).ready(function () {
   $(document).on('click', '.update', handleUpdateButtonPress);
   $(document).on('change', '#CustomerSelect', handleDisplayCustomerInfo);
 
-  // Getting the initial list of Orders
+  // Getting the initial list of Customers and Orders
   getOrders();
-
-  // Getting the initial list of Orders
   getCustomers();
 
   // A function to handle what happens when the form is submitted to create a new Order
@@ -143,8 +141,8 @@ $(document).ready(function () {
 
     // Don't do anything if the name fields hasn't been filled out
     // if (!firstnameInput.val().trim()) {
-      if (!customerSelected.first_name) {
-        return;
+    if (!customerSelected.first_name) {
+      return;
     }
 
     // let customerId = lastnameInput.val().trim() + firstnameInput.val().trim().substr(0, 1);
@@ -165,7 +163,7 @@ $(document).ready(function () {
       order_date: orderdateInput
         .val()
         .trim(),
-     order_time: ordertimeInput
+      order_time: ordertimeInput
         .val()
         .trim(),
       delivery_pickup: orderdeliverypickupInput
@@ -261,7 +259,7 @@ $(document).ready(function () {
   function upsertCustomer(customerData) {
     console.log("customerData: ", customerData)
     $.post('/api/customers', customerData)
-    .then(getCustomers);
+      .then(getCustomers);
   }
 
   // Function for creating a new list row for orders
@@ -366,6 +364,8 @@ $(document).ready(function () {
         }
       };
 
+      // console.log("OrderGetData: ", OrderGetData);
+
       // renderOrderList(rowsToAdd);
       firstnameInput.val('');
       lastnameInput.val('');
@@ -378,7 +378,7 @@ $(document).ready(function () {
     customersPull.length = 0;
 
     const data = await $.get('/api/customers', function () { });
-    console.log('data: ', data);
+    // console.log('data: ', data);
 
     const rowsToAdd = [];
 
@@ -443,11 +443,14 @@ $(document).ready(function () {
     return newCustomerli;
   };
 
-  function createCustomersSelect(customersPull, i) {
+  function createCustomersSelect(customersPull, l) {
     // console.log("customersPull: ", customersPull)
 
     newCustomerselect.data('customertype', customersPull);
 
+    if (l == 0) {
+      newCustomerselect.append('<option>Select Customer... </option>');
+    }
     const comma = ", ";
     const spacer = "&nbsp &nbsp";
     const nameConcat = customersPull.last_name + comma + customersPull.first_name + spacer + "(" + customersPull.address + ")";
@@ -477,23 +480,10 @@ $(document).ready(function () {
       // console.log("customersPull[", k, "].last_name: ", customersPull[k].last_name);
       // console.log("customersPull[", k, "].address: ", customersPull[k].address);
       if ((customersPull[k].first_name == first_nameSelected) && (customersPull[k].last_name == last_nameSelected) && (customersPull[k].address == addressSelected)) {
-        // console.log("***MATCH***");
-        // $('#order-firstname').val(customersPull[k].first_name);
-        // $('#order-lastname').val(customersPull[k].last_name);
-        // $('#order-customer_address').val(customersPull[k].address);
-        // $('#order-customer_city').val(customersPull[k].city);
-        // $('#order-customer_zip').val(customersPull[k].zip);
-        // $('#order-customer_phone').val(customersPull[k].phone);
-
         const customername = [customersPull[k].first_name, customersPull[k].last_name];
         const customername_concat = customername.join(" ");
-        // console.log("customername_concat:", customername_concat);
-
         customerSelected.first_name = customersPull[k].first_name;
         customerSelected.last_name = customersPull[k].last_name;
-
-        console.log("customerSelected: ", customerSelected);
-    
 
         $('#order-customername').text(customername_concat);
         $('#order-firstname').text(customersPull[k].first_name);
@@ -506,7 +496,7 @@ $(document).ready(function () {
         $('#order-customer_notes').text("*** Customer notes here ***");
       };
     };
-
+    createOrderSummary();
   };
 
 
@@ -563,11 +553,21 @@ $(document).ready(function () {
 
   function createOrderSummary() {
     // Display Current Order Summary Table
+    const selectedCustomerId = lastnameInput[0].childNodes[0].data + (firstnameInput[0].childNodes[0].data.substr(0, 1));
+    console.log("selectedCustomerId: ", selectedCustomerId);
+
     const rowsToAdd = [];
     for (let i = 0; i < OrderGetData.length; i++) {
-
       rowsAdded = i;
-      rowsToAdd.push(createOrderRow(OrderGetData[i], i, rowsAdded));
+
+      console.log("OrderGetData[i].customer_id: ", OrderGetData[i].customer_id);
+
+      if (OrderGetData[i].customer_id == selectedCustomerId) {
+        console.log("Match - line ", i)
+        rowsToAdd.push(createOrderRow(OrderGetData[i], i, rowsAdded));
+        ;
+      }
+
       renderOrderList(rowsToAdd);
     };
     rowsToAdd.length = 0;
