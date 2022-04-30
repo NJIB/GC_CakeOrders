@@ -245,9 +245,8 @@ $(document).ready(function () {
 
     console.log("orderData object: ", orderData)
 
-    // upsertCustomer(customerData);
-    upsertOrder(orderData);
     rowsToAdd.length = 0;
+    upsertOrder(orderData);
   }
 
   // A function for creating an order. Calls getOrders upon completion
@@ -263,8 +262,8 @@ $(document).ready(function () {
   }
 
   // Function for creating a new list row for orders
-  function createOrderRow(orderData, i, rowsAdded) {
-    let dupCounter = 0;
+  function createOrderRow(orderData) {
+    // let dupCounter = 0;
 
     const newTr = $('<tr>');
     newTr.data('order', orderData);
@@ -272,89 +271,15 @@ $(document).ready(function () {
     newTr.append('<td>' + orderDate + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
     newTr.append('<td>' + orderData.customer_id + '</td>');
-
-    //Paste in CustomerGetData for each order - keyed on customer_id
-    // for (let j = 0; j < customersPull.length; j++) {
-    //   console.log("customersPull[j].customer_id", customersPull[j].customer_id)
-    //   console.log("orderData.customer_id", orderData.customer_id)
-    //   if (orderData.customer_id == customersPull[j].customer_id) {
-    //     dupCounter++;
-    //     if (dupCounter == 1) {
-    //       newTr.append('<td>' + customersPull[j].first_name + " " + customersPull[j].last_name + '</td>');
-    //     };
-    //   };
-    // };
-
-    // 9-27-21 Commented out
-    // newTr.append('<td>' + orderData.first_name + ' ' + orderData.last_name + '</td>');
-    // 9-27-21 End of commenting out 
-
-    // newTr.append('<td>' + orderData.first_name + '</td>');
-    // newTr.append('<td>' + orderData.last_name + '</td>');
-
-    // console.log("orderData.deal_size_yoy: ", orderData.deal_size_yoy);
-    // if (orderData.deal_size_yoy) {
-    //   newTr.append('<td>' + '<input placeholder=' + orderData.deal_size_yoy + ' id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    // } else {
-    //   newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_size_yoy_id + ' type="text" />' + '</td>');
-    // }
-
-    // if (orderData.deal_count_yoy) {
-    //   newTr.append('<td>' + '<input placeholder=' + orderData.deal_count_yoy + ' id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    // } else {
-    //   newTr.append('<td>' + '<input placeholder="+/-  %"' + 'id=' + deal_count_yoy_id + ' type="text" />' + '</td>');
-    // }
-
-    // Potentially only show button, if change field is populated?
-    // newTr.append('<td>' + '<button class="btn btn-success update">></button>' + '</td>');
-
-    // if (!orderData.next_year_deal_size) {
-    //   newTr.append('<td>$' + orderData.deal_size + '</td>');
-    // }
-    // else {
-    //   newTr.append('<td>$' + orderData.next_year_deal_size + '</td>');
-    // }
-
-    // if (!orderData.next_year_deal_count) {
-    //   newTr.append('<td>$' + orderData.order_date + '</td>');
-    // }
-    // else {
-    //   newTr.append('<td>' + orderData.next_year_deal_count + '</td>');
-    // }
-
-    // if (!orderData.next_year_sgmt_rev) {
-    //   newTr.append('<td>$' + orderData.sgmt_rev + '</td>');
-    // }
-    // else {
-    //   newTr.append('<td>$' + orderData.next_year_sgmt_rev + '</td>');
-    // };
-    //10.05 Testing change to button class
-
     newTr.append('<td> <button class="btn btn-success"><a style=\'cursor:pointer;color:white;\' href=\'/order-details?order_id=' + orderData.id + '\' /a> >> </button></td>');
-
-    // if (orderData.OrderDetails) {
-    //   newTr.append('<td> ' + orderData.OrderDetails.length + '</td>');
-    // } else {
-    //   newTr.append('<td>0</td>');
-    // }
-    // newTr.append('<td><a style=\'cursor:pointer;color:green;font-size:24px\' href=\'/orderdetail?order_id=' + orderData.id + '\'>...</a></td>');
-
     newTr.append('<td><a style=\'cursor:pointer;color:red\' class=\'delete-order\'>X</a></td>');
-
-    // buildChartObject(orderData);
-
     return newTr;
   }
 
   // Function for retrieving orders and getting them ready to be rendered to the page
   function getOrders() {
 
-    // chart1Data = [{}];
-    // chart2Data = [{}];
-
     $.get('/api/orders', function (orderdata) {
-
-      const rowsToAdd = [];
 
       //Copy orderdata to OrderGetData array (to build TR)
       for (let i = 0; i < orderdata.length; i++) {
@@ -370,7 +295,6 @@ $(document).ready(function () {
       firstnameInput.val('');
       lastnameInput.val('');
       orderdateInput.val('');
-      cakethemeInput.val('');
     });
   }
 
@@ -397,330 +321,325 @@ $(document).ready(function () {
 
     // console.log("customersPull.length: ", customersPull.length);
 
-    for (let j = 0; j < customersPull.length; j++) {
-      if (j == 0) {
-        // console.log("j == 0 !!!")
-        const selectCustomer = $('<li>');
-        selectCustomer.data(customersPull[j]);
+    // for (let j = 0; j < customersPull.length; j++) {
+    //   if (j == 0) {
+    //     // console.log("j == 0 !!!")
+    //     const selectCustomer = $('<li>');
+    //     selectCustomer.data(customersPull[j]);
 
-        // console.log("selectCustomer.data", selectCustomer.data);
+    // console.log("selectCustomer.data", selectCustomer.data);
 
-        selectCustomer.append('<a class="dropdown-item customerDropdown" value="#" href="#">Select All</a></li>');
-        customersToAdd.push(selectCustomer)
+    // selectCustomer.append('<a class="dropdown-item customerDropdown" value="#" href="#">Select All</a></li>');
+    // customersToAdd.push(selectCustomer)
 
-        // const dropdownDivider = $('<li>');
-        // dropdownDivider.append('<hr class="dropdown-divider">');
-        // customersToAdd.push(dropdownDivider)
-      }
+    // const dropdownDivider = $('<li>');
+    // dropdownDivider.append('<hr class="dropdown-divider">');
+    // customersToAdd.push(dropdownDivider)
+    //   }
 
-      customersToAdd.push(createCustomersDropDown(customersPull[j], j));
-    };
+    //   customersToAdd.push(createCustomersDropDown(customersPull[j], j));
+    // };
 
     //Building priority select dropdown (in Add Asset form)
     for (let l = 0; l < customersPull.length; l++) {
-      // console.log("Building priority dropdown row ", k)
-
-      // console.log("prioritiesPull[", l, "].asset_type: ", prioritiesPull[l].asset_type)
       customerOptionsToAdd.push(createCustomersSelect(customersPull[l], l));
+      renderCustomersDropdown(customersToAdd);
+      renderCustomersSelect(customerOptionsToAdd);
 
-      // console.log("customerOptionsToAdd: ", customerOptionsToAdd[l]);
     };
 
-    // console.log("customersToAdd: ", customersToAdd);
-    // console.log("customerOptionsToAdd: ", customerOptionsToAdd);
+    // function createCustomersDropDown(customerPull, i) {
+    //   // console.log("customerPull: ", customerPull)
 
-    renderCustomersDropdown(customersToAdd);
-    renderCustomersSelect(customerOptionsToAdd);
+    //   const newCustomerli = $('<li>');
+    //   newCustomerli.data('customer', customerPull);
+    //   newCustomerli.append('<a class="dropdown-item customerDropdown" value=' + customerPull.customer + ' href="#">' + customerPull.customer + '</a></li>');
+    //   return newCustomerli;
+    };
 
-  };
+    function createCustomersSelect(customersPull, l) {
+      // console.log("customersPull: ", customersPull)
 
-  function createCustomersDropDown(customerPull, i) {
-    // console.log("customerPull: ", customerPull)
+      newCustomerselect.data('customertype', customersPull);
 
-    const newCustomerli = $('<li>');
-    newCustomerli.data('customer', customerPull);
-    newCustomerli.append('<a class="dropdown-item customerDropdown" value=' + customerPull.customer + ' href="#">' + customerPull.customer + '</a></li>');
-    return newCustomerli;
-  };
+      if (l == 0) {
+        newCustomerselect.append('<option>Select Customer... </option>');
+      }
+      const comma = ", ";
+      const spacer = "&nbsp &nbsp";
+      const nameConcat = customersPull.last_name + comma + customersPull.first_name + spacer + "(" + customersPull.address + ")";
+      // console.log("nameConcat: ", nameConcat);
+      // console.log("customersPull[", i, "].customer: :", customersPull.customer);
+      newCustomerselect.append('<option value=' + nameConcat + '>' + nameConcat + '</option>');
+      // console.log("newCustomerselect: ", newCustomerselect);
 
-  function createCustomersSelect(customersPull, l) {
-    // console.log("customersPull: ", customersPull)
+      return newCustomerselect;
+    };
 
-    newCustomerselect.data('customertype', customersPull);
+    function handleDisplayCustomerInfo() {
+      // console.log("customersPull: ", customersPull);
 
-    if (l == 0) {
-      newCustomerselect.append('<option>Select Customer... </option>');
-    }
-    const comma = ", ";
-    const spacer = "&nbsp &nbsp";
-    const nameConcat = customersPull.last_name + comma + customersPull.first_name + spacer + "(" + customersPull.address + ")";
-    // console.log("nameConcat: ", nameConcat);
-    // console.log("customersPull[", i, "].customer: :", customersPull.customer);
-    newCustomerselect.append('<option value=' + nameConcat + '>' + nameConcat + '</option>');
-    // console.log("newCustomerselect: ", newCustomerselect);
+      const IDconcat = $(CustomerSelect).find("option:selected").text().trim();
+      // console.log("IDconcat: ", IDconcat);
 
-    return newCustomerselect;
-  };
+      const last_nameSelected = IDconcat.substring(0, IDconcat.indexOf(","));
+      const first_nameSelected = IDconcat.substring((IDconcat.indexOf(",") + 2), (IDconcat.indexOf("(") - 3));
+      const addressSelected = IDconcat.substring((IDconcat.indexOf("(") + 1), (IDconcat.indexOf(")")));
+      // console.log("first_nameSelected: ", first_nameSelected);
+      // console.log("last_nameSelected: ", last_nameSelected);
+      // console.log("addressSelected: ", addressSelected);
 
-  function handleDisplayCustomerInfo() {
-    console.log("customersPull: ", customersPull);
+      for (let k = 0; k < customersPull.length; k++) {
+        // console.log("customersPull[", k, "].first_name: ", customersPull[k].first_name);
+        // console.log("customersPull[", k, "].last_name: ", customersPull[k].last_name);
+        // console.log("customersPull[", k, "].address: ", customersPull[k].address);
+        if ((customersPull[k].first_name == first_nameSelected) && (customersPull[k].last_name == last_nameSelected) && (customersPull[k].address == addressSelected)) {
+          const customername = [customersPull[k].first_name, customersPull[k].last_name];
+          const customername_concat = customername.join(" ");
+          customerSelected.first_name = customersPull[k].first_name;
+          customerSelected.last_name = customersPull[k].last_name;
 
-    const IDconcat = $(CustomerSelect).find("option:selected").text().trim();
-    // console.log("IDconcat: ", IDconcat);
-
-    const last_nameSelected = IDconcat.substring(0, IDconcat.indexOf(","));
-    const first_nameSelected = IDconcat.substring((IDconcat.indexOf(",") + 2), (IDconcat.indexOf("(") - 3));
-    const addressSelected = IDconcat.substring((IDconcat.indexOf("(") + 1), (IDconcat.indexOf(")")));
-    // console.log("first_nameSelected: ", first_nameSelected);
-    // console.log("last_nameSelected: ", last_nameSelected);
-    // console.log("addressSelected: ", addressSelected);
-
-    for (let k = 0; k < customersPull.length; k++) {
-      // console.log("customersPull[", k, "].first_name: ", customersPull[k].first_name);
-      // console.log("customersPull[", k, "].last_name: ", customersPull[k].last_name);
-      // console.log("customersPull[", k, "].address: ", customersPull[k].address);
-      if ((customersPull[k].first_name == first_nameSelected) && (customersPull[k].last_name == last_nameSelected) && (customersPull[k].address == addressSelected)) {
-        const customername = [customersPull[k].first_name, customersPull[k].last_name];
-        const customername_concat = customername.join(" ");
-        customerSelected.first_name = customersPull[k].first_name;
-        customerSelected.last_name = customersPull[k].last_name;
-
-        $('#order-customername').text(customername_concat);
-        $('#order-firstname').text(customersPull[k].first_name);
-        $('#order-lastname').text(customersPull[k].last_name);
-        $('#order-customer_address').text(customersPull[k].address);
-        $('#order-customer_city').text(customersPull[k].city);
-        $('#order-customer_zip').text(customersPull[k].zip);
-        $('#order-customer_phone').text(customersPull[k].phone);
-        // $('#order-customer_notes').text(customersPull[k].notes);
-        $('#order-customer_notes').text("*** Customer notes here ***");
+          $('#order-customername').text(customername_concat);
+          $('#order-firstname').text(customersPull[k].first_name);
+          $('#order-lastname').text(customersPull[k].last_name);
+          $('#order-customer_address').text(customersPull[k].address);
+          $('#order-customer_city').text(customersPull[k].city);
+          $('#order-customer_zip').text(customersPull[k].zip);
+          $('#order-customer_phone').text(customersPull[k].phone);
+          // $('#order-customer_notes').text(customersPull[k].notes);
+          $('#order-customer_notes').text("*** Customer notes here ***");
+        };
       };
+      createOrderSummary();
     };
-    createOrderSummary();
-  };
 
 
-  //Sort by priority
-  function compare(a, b) {
+    //Sort by priority
+    function compare(a, b) {
 
-    const aVal = a.last_name + a.first_name;
-    // console.log("aVal: ", aVal);
+      const aVal = a.last_name + a.first_name;
+      // console.log("aVal: ", aVal);
 
-    const bVal = b.last_name + b.first_name;
-    // console.log("bVal: ", bVal);
+      const bVal = b.last_name + b.first_name;
+      // console.log("bVal: ", bVal);
 
-    // if (a.customer < b.customer) {
-    if (aVal < bVal) {
-      return -1;
-    }
-    // if (a.customer > b.customer) {
-    if (aVal > bVal) {
-      return 1;
-    }
-    return 0;
-  }
-
-  function renderCustomersDropdown(customers) {
-    customersList.children().not(':last').remove();
-    customersContainer.children('.alert').remove();
-    customersList.prepend(customers);
-  };
-
-  function renderCustomersSelect(customers) {
-    // console.log("customers: ", customers)
-    customerSelect.children().not(':last').remove();
-    customerSelectContainer.children('.alert').remove();
-    customerSelect.prepend(customers);
-  };
-
-
-
-  //4/6/22 - Commented out to replace with async function above
-  // function getCustomers() {
-
-  //   $.get('/api/customers', function (customerdata) {
-
-  //     //Copy customerdata to CustomerGetData array (to build TR)     
-  //     for (let i = 0; i < customerdata.length; i++) {
-  //       CustomerGetData.push(customerdata[i]);
-  //       // After copying customerdata to CustomerGetData, create table rows row for rendering
-  //       if ((i + 1) == customerdata.length) {
-  //         createOrderSummary();
-  //       }
-  //     };
-  //   })
-  // }
-
-  function createOrderSummary() {
-    // Display Current Order Summary Table
-    const selectedCustomerId = lastnameInput[0].childNodes[0].data + (firstnameInput[0].childNodes[0].data.substr(0, 1));
-    console.log("selectedCustomerId: ", selectedCustomerId);
-
-    const rowsToAdd = [];
-    for (let i = 0; i < OrderGetData.length; i++) {
-      rowsAdded = i;
-
-      console.log("OrderGetData[i].customer_id: ", OrderGetData[i].customer_id);
-
-      if (OrderGetData[i].customer_id == selectedCustomerId) {
-        console.log("Match - line ", i)
-        rowsToAdd.push(createOrderRow(OrderGetData[i], i, rowsAdded));
-        ;
+      // if (a.customer < b.customer) {
+      if (aVal < bVal) {
+        return -1;
       }
-
-      renderOrderList(rowsToAdd);
-    };
-    rowsToAdd.length = 0;
-  };
-
-  // A function for rendering the list of orders to the page
-  function renderOrderList(rows) {
-    orderList.children().not(':last').remove();
-    orderContainer.children('.alert').remove();
-    if (rows.length) {
-      // orderList.prepend(rows);
-      orderList.append(rows);
-    } else {
-      renderEmpty();
+      // if (a.customer > b.customer) {
+      if (aVal > bVal) {
+        return 1;
+      }
+      return 0;
     }
-  }
 
-  // This populates the object for the Revenue Bubble Chart(s)
-  function buildChartObject(orderData) {
+    function renderCustomersDropdown(customers) {
+      customersList.children().not(':last').remove();
+      customersContainer.children('.alert').remove();
+      customersList.prepend(customers);
+    };
 
-    chart1Data.push({
-      x: orderData.deal_size,
-      y: orderData.order_date,
-      r: (orderData.sgmt_rev / 100)
-    });
+    function renderCustomersSelect(customers) {
+      // console.log("customers: ", customers)
+      customerSelect.children().not(':last').remove();
+      customerSelectContainer.children('.alert').remove();
+      customerSelect.prepend(customers);
+    };
 
-    chart2Data.push({
-      x: orderData.next_year_deal_size,
-      y: orderData.next_year_deal_count,
-      r: (orderData.next_year_sgmt_rev / 100)
-    });
 
-    renderChart1(chart1Data);
-  }
 
-  // This creates the display object for the Revenue Bubble Chart(s)
-  function renderChart1(chartData) {
-    console.log("chart1 data: ", chartData);
-    var ctx = $('#myBubbleChart1');
+    //4/6/22 - Commented out to replace with async function above
+    // function getCustomers() {
 
-    var myBubbleChart = new Chart(ctx, {
-      type: 'bubble',
-      data: {
-        "datasets": [{
-          label: "Order Revenue - This Year",
-          data: chartData,
-          backgroundColor:
-            'red'
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Size ($)',
-            },
-            ticks: {
-              beginAtZero: true
-            }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Deal Count (#)',
-            },
-            ticks: {
-              beginAtZero: true
-            },
-          }],
+    //   $.get('/api/customers', function (customerdata) {
+
+    //     //Copy customerdata to CustomerGetData array (to build TR)     
+    //     for (let i = 0; i < customerdata.length; i++) {
+    //       CustomerGetData.push(customerdata[i]);
+    //       // After copying customerdata to CustomerGetData, create table rows row for rendering
+    //       if ((i + 1) == customerdata.length) {
+    //         createOrderSummary();
+    //       }
+    //     };
+    //   })
+    // }
+
+    function createOrderSummary() {
+      // Display Current Order Summary Table
+      const selectedCustomerId = lastnameInput[0].childNodes[0].data + (firstnameInput[0].childNodes[0].data.substr(0, 1));
+      console.log("selectedCustomerId: ", selectedCustomerId);
+
+      rowsToAdd.length = 0;
+      for (let i = 0; i < OrderGetData.length; i++) {
+        rowsAdded = i;
+
+        if (OrderGetData[i].customer_id == selectedCustomerId) {
+          rowsToAdd.push(createOrderRow(OrderGetData[i]));
         }
+
+        renderOrderList(rowsToAdd);
+      };
+
+      rowsToAdd.length = 0;
+    };
+
+    // A function for rendering the list of orders to the page
+    function renderOrderList(rows) {
+      orderList.children().not(':last').remove();
+      orderContainer.children('.alert').remove();
+      if (rows.length) {
+        // orderList.prepend(rows);
+        orderList.append(rows);
+      } else {
+        renderEmpty();
       }
-    });
-
-    ctx.prepend(myBubbleChart);
-  }
-
-  // Function for handling what to render when there are no orders
-  function renderEmpty() {
-    const alertDiv = $('<div>');
-    alertDiv.addClass('alert alert-danger');
-    alertDiv.text('You must create a Order before you can create a OrderDetail.');
-    orderContainer.append(alertDiv);
-  }
-
-  // Function for handling what happens when the delete button is pressed
-  function handleDeleteButtonPress() {
-    const listItemData = $(this).parent('td').parent('tr').data('order');
-
-    const id = listItemData.id;
-    $.ajax({
-      method: 'DELETE',
-      url: '/api/orders/' + id,
-    })
-      .then(getOrders);
-  }
-
-  function handleUpdateButtonPress() {
-
-    const listItemData = $(this).parent('td').parent('tr').data('order');
-    // console.log("listItemData: ", listItemData);
-
-    const id = listItemData.id;
-    // console.log("listItemData.id: ", listItemData.id);
-
-    let nextyearDealsize = 0;
-    let nextyearDealcount = 0;
-
-    const dealsizeyoychangeInput = $('#deal_size_yoy' + listItemData.id);
-    const dealcountyoychangeInput = $('#deal_count_yoy' + listItemData.id);
-
-    // console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
-    if (dealsizeyoychangeInput === '') {
-      nextyearDealsize = listItemData.deal_size;
-      // console.log("nextyearDealsize: ", nextyearDealsize);
-    } else {
-      nextyearDealsize = (listItemData.deal_size * (1 + (dealsizeyoychangeInput.val() / 100)));
-      // console.log("nextyearDealsize: ", nextyearDealsize);
     }
 
-    // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
-    if (dealcountyoychangeInput === '') {
-      nextyearDealcount = listItemData.order_date;
-      // console.log("nextyearDealcount: ", nextyearDealcount);
-    } else {
-      nextyearDealcount = (listItemData.order_date * (1 + (dealcountyoychangeInput.val() / 100)));
-      // console.log("nextyearDealcount: ", nextyearDealcount);
+    // This populates the object for the Revenue Bubble Chart(s)
+    function buildChartObject(orderData) {
+
+      chart1Data.push({
+        x: orderData.deal_size,
+        y: orderData.order_date,
+        r: (orderData.sgmt_rev / 100)
+      });
+
+      chart2Data.push({
+        x: orderData.next_year_deal_size,
+        y: orderData.next_year_deal_count,
+        r: (orderData.next_year_sgmt_rev / 100)
+      });
+
+      renderChart1(chart1Data);
     }
 
-    const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
-    // console.log("nextyearSgmtrev: ", nextyearSgmtrev);
+    // This creates the display object for the Revenue Bubble Chart(s)
+    function renderChart1(chartData) {
+      console.log("chart1 data: ", chartData);
+      var ctx = $('#myBubbleChart1');
 
+      var myBubbleChart = new Chart(ctx, {
+        type: 'bubble',
+        data: {
+          "datasets": [{
+            label: "Order Revenue - This Year",
+            data: chartData,
+            backgroundColor:
+              'red'
+          }]
+        },
+        options: {
+          scales: {
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Deal Size ($)',
+              },
+              ticks: {
+                beginAtZero: true
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Deal Count (#)',
+              },
+              ticks: {
+                beginAtZero: true
+              },
+            }],
+          }
+        }
+      });
 
-    const orderData = {
-      id: listItemData.id,
-      name: listItemData.name,
-      deal_size: listItemData.deal_size,
-      order_date: listItemData.order_date,
-      deal_size_yoy: dealsizeyoychangeInput.val() * 1,
-      deal_count_yoy: dealcountyoychangeInput.val() * 1,
-      next_year_deal_size: nextyearDealsize,
-      next_year_deal_count: nextyearDealcount,
-      next_year_sgmt_rev: nextyearSgmtrev
+      ctx.prepend(myBubbleChart);
     }
 
-    console.log("orderData object: ", orderData)
+    // Function for handling what to render when there are no orders
+    function renderEmpty() {
+      const alertDiv = $('<div>');
+      alertDiv.addClass('alert alert-danger');
+      alertDiv.text('You must create a Order before you can create a OrderDetail.');
+      orderContainer.append(alertDiv);
+    }
+
+    // Function for handling what happens when the delete button is pressed
+    function handleDeleteButtonPress() {
+
+      console.log("$(this): ", $(this));
+      console.log("$(this).parent('td'): ", $(this).parent('td'));
+      console.log("$(this).parent('td').parent('tr'): ", $(this).parent('td').parent('tr'));
+      console.log("$(this).parent('td').parent('tr').data('order'): ", $(this).parent('td').parent('tr').data('order'));
 
 
-    $.ajax({
-      method: 'PUT',
-      url: '/api/orders',
-      data: orderData,
-    })
-      .then(getOrders);
-  }
-});
+      const listItemData = $(this).parent('td').parent('tr').data('order');
+      console.log("listItemData: ", listItemData);
+
+      const id = listItemData.id;
+      $.ajax({
+        method: 'DELETE',
+        url: '/api/orders/' + id,
+      })
+        .then(getOrders);
+    }
+
+    function handleUpdateButtonPress() {
+
+      const listItemData = $(this).parent('td').parent('tr').data('order');
+      // console.log("listItemData: ", listItemData);
+
+      const id = listItemData.id;
+      // console.log("listItemData.id: ", listItemData.id);
+
+      let nextyearDealsize = 0;
+      let nextyearDealcount = 0;
+
+      const dealsizeyoychangeInput = $('#deal_size_yoy' + listItemData.id);
+      const dealcountyoychangeInput = $('#deal_count_yoy' + listItemData.id);
+
+      // console.log('dealsizeyoychangeInput: ', dealsizeyoychangeInput.val());
+      if (dealsizeyoychangeInput === '') {
+        nextyearDealsize = listItemData.deal_size;
+        // console.log("nextyearDealsize: ", nextyearDealsize);
+      } else {
+        nextyearDealsize = (listItemData.deal_size * (1 + (dealsizeyoychangeInput.val() / 100)));
+        // console.log("nextyearDealsize: ", nextyearDealsize);
+      }
+
+      // console.log('dealcountyoychangeInput: ', dealcountyoychangeInput.val());
+      if (dealcountyoychangeInput === '') {
+        nextyearDealcount = listItemData.order_date;
+        // console.log("nextyearDealcount: ", nextyearDealcount);
+      } else {
+        nextyearDealcount = (listItemData.order_date * (1 + (dealcountyoychangeInput.val() / 100)));
+        // console.log("nextyearDealcount: ", nextyearDealcount);
+      }
+
+      const nextyearSgmtrev = (nextyearDealsize * nextyearDealcount);
+      // console.log("nextyearSgmtrev: ", nextyearSgmtrev);
+
+
+      const orderData = {
+        id: listItemData.id,
+        name: listItemData.name,
+        deal_size: listItemData.deal_size,
+        order_date: listItemData.order_date,
+        deal_size_yoy: dealsizeyoychangeInput.val() * 1,
+        deal_count_yoy: dealcountyoychangeInput.val() * 1,
+        next_year_deal_size: nextyearDealsize,
+        next_year_deal_count: nextyearDealcount,
+        next_year_sgmt_rev: nextyearSgmtrev
+      }
+
+      console.log("orderData object: ", orderData)
+
+
+      $.ajax({
+        method: 'PUT',
+        url: '/api/orders',
+        data: orderData,
+      })
+        .then(getOrders);
+    }
+  });
