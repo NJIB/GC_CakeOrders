@@ -223,21 +223,23 @@ $(document).ready(function () {
   }
 
   // Function for creating a new list row for orders
-  function createOrderRow(orderData, i, rowsAdded) {
-    // let dupCounter = 0;
+  function createOrderRow(orderData) {
+    // function createOrderRow(orderData) {
+      // let dupCounter = 0;
 
-    console.log("orderData", orderData);
+    // console.log("orderData", orderData);
 
     const newTr = $('<tr>');
     newTr.data('order', orderData);
     // console.log("newTr.data: ",newTr.data('order'));
     // const orderDate = (moment(orderData.order_date).format('L'));
     const orderDate = moment(orderData.order_date).format('YYYY-MM-DD');
-    console.log("orderDate: ", orderDate);
+    // console.log("orderDate: ", orderDate);
 
     const todaysDate = moment(Date()).format('YYYY-MM-DD');
-    console.log("todaysDate: ", todaysDate);
+    // console.log("todaysDate: ", todaysDate);
 
+    newTr.append('<td>' + orderData.id + '</td>');
     newTr.append('<td>' + moment(orderData.order_date).format('YYYY-MM-DD') + '</td>');
     newTr.append('<td>' + orderData.cake_theme + '</td>');
     newTr.append('<td>' + orderData.customer_id + '</td>');
@@ -253,11 +255,11 @@ $(document).ready(function () {
     // if (orderData.paid_flag == "true" && !orderData.paid_date) {
     //   newTr.append('<td>', todaysDate, '</td>');
     // } else {
-      if (orderData.paid_date) {
-        newTr.append('<td>'+ moment(orderData.paid_date).format('YYYY-MM-DD') + '</td>');
-      } else {
-        newTr.append('<td>' + "n/a" + '</td>');
-      }
+    if (orderData.paid_date) {
+      newTr.append('<td>' + moment(orderData.paid_date).format('YYYY-MM-DD') + '</td>');
+    } else {
+      newTr.append('<td>' + "n/a" + '</td>');
+    }
     // };
 
 
@@ -464,12 +466,16 @@ $(document).ready(function () {
   // }
 
   function createOrderSummary() {
+    
+    console.log("OrderGetData: ", OrderGetData)
+
     // Display Current Order Summary Table
     const rowsToAdd = [];
     for (let i = 0; i < OrderGetData.length; i++) {
 
       rowsAdded = i;
-      rowsToAdd.push(createOrderRow(OrderGetData[i], i, rowsAdded));
+
+      rowsToAdd.push(createOrderRow(OrderGetData[i]));
       renderOrderList(rowsToAdd);
     };
     rowsToAdd.length = 0;
@@ -557,7 +563,7 @@ $(document).ready(function () {
 
   // Function for handling what happens when the delete button is pressed
   function handleDeleteButtonPress() {
-    
+
     const listItemData = $(this).parent('td').parent('tr').data('order');
     console.log("listItemData: ", listItemData);
 
@@ -631,39 +637,40 @@ $(document).ready(function () {
   function handleOrderPaidSubmit(event) {
     event.preventDefault();
 
-    console.log("Marking as paid!");
-
-    // if (!assetName) {
-    //   return;
-    // }
-
-    // if (!assetURL) {
-    //   return;
-    // }
-
     let listItemData = $(this).parent('td').parent('tr').data('order');
     console.log("listItemData: ", listItemData);
     console.log("listItemData.id: ", listItemData.id);
 
-    console.log($('#order-paid'));
     var paid_checkbox_value = $('#order-paid')[0].checked;
     console.log("paid_checkbox_value: ", paid_checkbox_value);
 
-    const paid_date = new Date();
-    console.log("paid_date: ", paid_date);
-    $('#order-paid_date').val(moment(paid_date).format('YYYY-MM-DD'));
+    if (paid_checkbox_value == true) {
+      const paid_date = new Date();
+      console.log("paid_date: ", paid_date);
+      $('#order-paid_date').val(moment(paid_date).format('YYYY-MM-DD'));
 
-    const paidData = {
-      id: listItemData.id,
-      customer_id: listItemData.customer_id,
-      paid_flag: paid_checkbox_value,
-      paid_date: paid_date,
-    };
+      const paidData = {
+        id: listItemData.id,
+        customer_id: listItemData.customer_id,
+        paid_flag: paid_checkbox_value,
+        paid_date: paid_date,
+      };
 
-    console.log("paidData object: ", paidData);
-    console.log("paidData.id: ", paidData.id);
+      payOrder(paidData);
+    } else {
+      console.log("paid_checkbox_value: ", paid_checkbox_value);
 
-    payOrder(paidData);
+      let paid_date;
+
+      const paidData = {
+        id: listItemData.id,
+        customer_id: listItemData.customer_id,
+        paid_flag: paid_checkbox_value,
+        paid_date: paid_date,
+      };
+
+      payOrder(paidData);
+    }
   }
 
   // A function for updating a link's details.
