@@ -23,6 +23,7 @@ $(document).ready(function () {
   let CustomerGetData = [];
   let rowsToAdd = [];
   let rowsAdded;
+  let confirmText;
 
   // Adding event listeners to the form to create a new object, and the button to delete
   // an Order
@@ -225,14 +226,11 @@ $(document).ready(function () {
   // Function for creating a new list row for orders
   function createOrderRow(orderData) {
     // function createOrderRow(orderData) {
-      // let dupCounter = 0;
-
-    // console.log("orderData", orderData);
+    // let dupCounter = 0;
 
     const newTr = $('<tr>');
     newTr.data('order', orderData);
     // console.log("newTr.data: ",newTr.data('order'));
-    // const orderDate = (moment(orderData.order_date).format('L'));
     const orderDate = moment(orderData.order_date).format('YYYY-MM-DD');
     // console.log("orderDate: ", orderDate);
 
@@ -270,32 +268,30 @@ $(document).ready(function () {
   }
 
   // Function for retrieving orders and getting them ready to be rendered to the page
-  function getOrders() {
+  async function getOrders() {
 
-    // chart1Data = [{}];
-    // chart2Data = [{}];
+    const orderdata = await $.get('/api/orders', function () { });
 
-    $.get('/api/orders', function (orderdata) {
+    console.log("orderdata", orderdata);
 
-      console.log("orderdata", orderdata);
+    const rowsToAdd = [];
+    OrderGetData.length = 0;
 
-      const rowsToAdd = [];
-      OrderGetData.length = 0;
+    //Copy orderdata to OrderGetData array (to build TR)
+    for (let i = 0; i < orderdata.length; i++) {
+      OrderGetData.push(orderdata[i]);
+      if ((i + 1) == orderdata.length) {
+        createOrderSummary();
+      }
+    };
 
-      //Copy orderdata to OrderGetData array (to build TR)
-      for (let i = 0; i < orderdata.length; i++) {
-        OrderGetData.push(orderdata[i]);
-        if ((i + 1) == orderdata.length) {
-          createOrderSummary();
-        }
-      };
+    // renderOrderList(rowsToAdd);
+    // firstnameInput.val('');
+    // lastnameInput.val('');
+    // orderdateInput.val('');
+    // cakethemeInput.val('');
+    // });
 
-      // renderOrderList(rowsToAdd);
-      // firstnameInput.val('');
-      // lastnameInput.val('');
-      // orderdateInput.val('');
-      // cakethemeInput.val('');
-    });
   }
 
   async function getCustomers() {
@@ -465,8 +461,8 @@ $(document).ready(function () {
   //   })
   // }
 
-  function createOrderSummary() {
-    
+  async function createOrderSummary() {
+
     console.log("OrderGetData: ", OrderGetData)
 
     // Display Current Order Summary Table
@@ -475,7 +471,10 @@ $(document).ready(function () {
 
       rowsAdded = i;
 
-      rowsToAdd.push(createOrderRow(OrderGetData[i]));
+      const ordergetdata = await createOrderRow(OrderGetData[i])
+      rowsToAdd.push(ordergetdata);
+
+      // rowsToAdd.push(createOrderRow(OrderGetData[i]));
       renderOrderList(rowsToAdd);
     };
     rowsToAdd.length = 0;
@@ -483,8 +482,8 @@ $(document).ready(function () {
 
   // A function for rendering the list of orders to the page
   function renderOrderList(rows) {
-    orderList.children().not(':last').remove();
-    orderContainer.children('.alert').remove();
+    // orderList.children().not(':last').remove();
+    // orderContainer.children('.alert').remove();
     if (rows.length) {
       // orderList.prepend(rows);
       orderList.append(rows);
@@ -634,41 +633,57 @@ $(document).ready(function () {
       .then(getOrders);
   }
 
+
+function confirmPay() {
+  text = "Mark as paid?";
+  if (confirm(text) == true) {
+    confirmText = "Paid.";
+  } else {
+    confirmText = "Not paid.";
+  }
+}
+
   function handleOrderPaidSubmit(event) {
     event.preventDefault();
+
+    confirmPay();
 
     let listItemData = $(this).parent('td').parent('tr').data('order');
     console.log("listItemData: ", listItemData);
     console.log("listItemData.id: ", listItemData.id);
 
-    var paid_checkbox_value = $('#order-paid')[0].checked;
+    // var paid_checkbox_value = $('#order-paid')[0].checked;
+    // var paid_checkbox_value = listItemData.paid_flag;
+    var paid_checkbox_value = $(this)[0].checked;
     console.log("paid_checkbox_value: ", paid_checkbox_value);
 
-    if (paid_checkbox_value == true) {
+    if (paid_checkbox_value == false) {
+      console.log("Unchecked");
+      // $('#order-paid').removeAttr('checked');
+      $(this).parent('td').parent('tr').children('td')[6].innerText = "n/a";
+
+      const paidData = {
+        id: listItemData.id,
+        customer_id: listItemData.customer_id,
+        paid_flag: paid_checkbox_value,
+        paid_date: "",
+      };
+      console.log("paidData: ", paidData)
+      payOrder(paidData);
+
+    } else {
       const paid_date = new Date();
       console.log("paid_date: ", paid_date);
-      $('#order-paid_date').val(moment(paid_date).format('YYYY-MM-DD'));
+      $(this).parent('td').parent('tr').children('td')[6].innerText = (moment(paid_date).format('YYYY-MM-DD'));
 
       const paidData = {
         id: listItemData.id,
         customer_id: listItemData.customer_id,
-        paid_flag: paid_checkbox_value,
+        paid_flag: "true",
         paid_date: paid_date,
       };
-
-      payOrder(paidData);
-    } else {
-      console.log("paid_checkbox_value: ", paid_checkbox_value);
-
-      let paid_date;
-
-      const paidData = {
-        id: listItemData.id,
-        customer_id: listItemData.customer_id,
-        paid_flag: paid_checkbox_value,
-        paid_date: paid_date,
-      };
-
+      console.log("paidData: ", paidData)
+      listItemData = "";
       payOrder(paidData);
     }
   }
