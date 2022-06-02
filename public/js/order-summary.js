@@ -634,32 +634,30 @@ $(document).ready(function () {
   }
 
 
-function confirmPay() {
-  text = "Mark as paid?";
-  if (confirm(text) == true) {
-    confirmText = "Paid.";
-  } else {
-    confirmText = "Not paid.";
+  function confirmPay() {
   }
-}
 
   function handleOrderPaidSubmit(event) {
     event.preventDefault();
-
-    confirmPay();
 
     let listItemData = $(this).parent('td').parent('tr').data('order');
     console.log("listItemData: ", listItemData);
     console.log("listItemData.id: ", listItemData.id);
 
-    // var paid_checkbox_value = $('#order-paid')[0].checked;
-    // var paid_checkbox_value = listItemData.paid_flag;
     var paid_checkbox_value = $(this)[0].checked;
     console.log("paid_checkbox_value: ", paid_checkbox_value);
 
     if (paid_checkbox_value == false) {
+      if (confirm("Mark as NOT paid?")) {
+        // $(this).removeAttr('checked');
+        $(this).parent('td').parent('tr').children('td')[6].innerText = "n/a";
+      } else {
+        // Cancels pay request
+        $(this).prop('checked', true);
+        return;
+      }
+
       console.log("Unchecked");
-      // $('#order-paid').removeAttr('checked');
       $(this).parent('td').parent('tr').children('td')[6].innerText = "n/a";
 
       const paidData = {
@@ -672,6 +670,13 @@ function confirmPay() {
       payOrder(paidData);
 
     } else {
+      if (confirm("Mark as paid?")) {
+      } else {
+        // Cancels pay request
+        $(this).removeAttr('checked');
+        return;
+      }
+
       const paid_date = new Date();
       console.log("paid_date: ", paid_date);
       $(this).parent('td').parent('tr').children('td')[6].innerText = (moment(paid_date).format('YYYY-MM-DD'));
